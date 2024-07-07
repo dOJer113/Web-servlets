@@ -7,6 +7,8 @@
 <body>
 <h2>Adding new user</h2>
 <form action="addUser" method="post">
+    <label for="id">ID:</label>
+    <input type="number" id="id" name="id" required><br>
     <label for="login">LOGIN:</label>
     <input type="text" id="login" name="login" required><br>
     <label for="password">PASSWORD:</label>

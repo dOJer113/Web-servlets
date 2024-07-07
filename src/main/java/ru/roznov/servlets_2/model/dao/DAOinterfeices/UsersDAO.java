@@ -8,5 +8,7 @@ import java.sql.SQLException;
 public interface UsersDAO {
     DynamicResult getUsers() throws SQLException;
 
-    void insertNewUser(String login, int password, String role) throws SQLException;
+    void insertNewUser(int id, String login, int password, String role) throws SQLException;
+
+    void deleteUser(String login) throws SQLException;
 }

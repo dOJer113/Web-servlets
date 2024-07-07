@@ -4,14 +4,15 @@ import ru.roznov.servlets_2.model.dao.DAOinterfeices.DAOFactory;
 import ru.roznov.servlets_2.model.dao.DBType;
 import ru.roznov.servlets_2.model.dao.DynamicResult;
 import ru.roznov.servlets_2.model.dao.ExceptionHandler;
+import ru.roznov.servlets_2.objects.Client;
 import ru.roznov.servlets_2.objects.RoleEnum;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.IntStream;
+
 
 public class UsersSearcher {
     private static DynamicResult result;
@@ -25,9 +26,19 @@ public class UsersSearcher {
     }
 
     public static boolean isExistsUser(String login) {
+        UsersSearcher.getValuesFromOracleDB();
         if (result.containsField("LOGIN")) {
             List logins = result.getField("LOGIN");
             return logins.contains(login);
+        }
+        return false;
+    }
+
+    public static boolean isExistsUser(int id) {
+        UsersSearcher.getValuesFromOracleDB();
+        if (result.containsField("ID")) {
+            List ids = result.getField("ID");
+            return ids.contains(id);
         }
         return false;
     }
@@ -45,4 +56,20 @@ public class UsersSearcher {
         }
         return RoleEnum.UNKNOWN;
     }
+
+    public static List<Client> getClientsListByDynamicResult() {
+        UsersSearcher.getValuesFromOracleDB();
+        List<Client> clients = new ArrayList<>();
+        Iterator<BigDecimal> ids = result.getField("ID").iterator();
+        Iterator<String> logins = result.getField("LOGIN").iterator();
+        Iterator<BigDecimal> passwords = result.getField("PASSWORD").iterator();
+        Iterator<String> roles = result.getField("ROLE").iterator();
+        while (ids.hasNext()) {
+            int id = ids.next().intValue();
+            int password = passwords.next().intValue();
+            clients.add(new Client(id, logins.next(), password, RoleEnum.valueOf(roles.next().toUpperCase())));
+        }
+        return clients;
+    }
+
 }

@@ -49,8 +49,11 @@
             <version>19.8.0.0</version>
         </dependency>
 
-
-
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
     </dependencies>
 
     <build>

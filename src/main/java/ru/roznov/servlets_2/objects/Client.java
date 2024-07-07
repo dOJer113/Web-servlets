@@ -1,12 +1,20 @@
 package ru.roznov.servlets_2.objects;
 
+
+import ru.roznov.servlets_2.model.UsersSearcher;
+import ru.roznov.servlets_2.model.dao.DynamicResult;
+
+import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Collectors;
+
 public class Client {
     private int id;
     private String login;
-    private String password;
+    private int password;
     private RoleEnum role;
 
-    public Client(int id, String login, String password, RoleEnum role) {
+    public Client(int id, String login, int password, RoleEnum role) {
         this.id = id;
         this.login = login;
         this.password = password;
@@ -29,11 +37,11 @@ public class Client {
         this.login = login;
     }
 
-    public String getPassword() {
+    public int getPassword() {
         return this.password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(int password) {
         this.password = password;
     }
 
@@ -44,4 +52,6 @@ public class Client {
     public void setRole(RoleEnum role) {
         this.role = role;
     }
+
+
 }

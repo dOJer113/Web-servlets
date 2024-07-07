@@ -25,23 +25,34 @@ public class OracleUsersDAO implements UsersDAO {
                 dynamicResult = OracleUsersDAO.containDynamicResult(resultSet);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Error selecting user" + e.getMessage());
         }
         return dynamicResult;
     }
 
     @Override
-    public void insertNewUser(String login, int password, String role) throws SQLException {
+    public void insertNewUser(int id, String login, int password, String role) throws SQLException {
         String sql = "INSERT INTO users (id,login, password, role) VALUES ( ?, ?, ?,?)";
-        int countUsers = this.getUsers().getCountRows() + 1;
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, countUsers);
+            statement.setInt(1, id);
             statement.setString(2, login);
             statement.setInt(3, password);
             statement.setString(4, role);
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Error inserting user" + e.getMessage());
+        }
+    }
+
+    @Override
+    public void deleteUser(String login) throws SQLException {
+        String sql = "delete from users where login = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, login);
+            statement.executeUpdate();
+            this.commitChanges();
+        } catch (SQLException e) {
+            System.err.println("Error deleting user" + e.getMessage());
         }
     }
 
@@ -55,5 +66,14 @@ public class OracleUsersDAO implements UsersDAO {
             }
         }
         return dynamicResult;
+    }
+
+    public void commitChanges() {
+        try {
+            connection.commit();
+        } catch (SQLException e) {
+            System.err.println("Error commit changes " + e.getMessage());
+        }
+
     }
 }

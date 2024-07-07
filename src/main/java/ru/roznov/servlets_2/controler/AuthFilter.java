@@ -67,7 +67,6 @@ public class AuthFilter implements Filter {
 
 
         if (role.equals(RoleEnum.ADMIN)) {
-            //req.getRequestDispatcher("/addUser").forward(req, res);
             req.getRequestDispatcher("/WEB-INF/view/adduser.jsp").forward(req, res);
 
         } else {

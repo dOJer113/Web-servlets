@@ -1,6 +1,6 @@
 package ru.roznov.servlets_2.servlets;
 
-import ru.roznov.servlets_2.model.UserAdder;
+import ru.roznov.servlets_2.model.UserManager;
 import ru.roznov.servlets_2.model.UsersSearcher;
 
 import javax.servlet.ServletException;
@@ -16,20 +16,19 @@ public class AddUserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        int id = Integer.parseInt(request.getParameter("id"));
         String login = request.getParameter("login");
         int password = Integer.parseInt(request.getParameter("password"));
         String role = request.getParameter("role");
         try {
-            if (!UsersSearcher.isExistsUser(login)) {
-                UserAdder.addUser(login, password, role);
+            if (!UsersSearcher.isExistsUser(login) && !UsersSearcher.isExistsUser(id)) {
+                UserManager.addUser(id, login, password, role);
             } else {
                 System.err.println("User already exists");
             }
         } catch (SQLException e) {
             System.err.println("Error adding user " + e.getMessage());
         }
-        //response.sendRedirect(request.getContextPath() + "/WEB-INF/view/viewUsers.jsp");
-        //todo проблема в viewUsers
-        request.getRequestDispatcher("/hello").forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/clients");
     }
 }
