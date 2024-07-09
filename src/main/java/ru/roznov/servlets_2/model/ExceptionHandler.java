@@ -1,4 +1,4 @@
-package ru.roznov.servlets_2.model.dao;
+package ru.roznov.servlets_2.model;
 
 public class ExceptionHandler {
     public static void handleException(String exceptionString, Exception e) {

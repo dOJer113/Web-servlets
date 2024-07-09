@@ -1,4 +1,4 @@
-package ru.roznov.servlets_2.servlets;
+package ru.roznov.servlets_2.servlets.admin;
 
 
 import ru.roznov.servlets_2.model.UsersSearcher;

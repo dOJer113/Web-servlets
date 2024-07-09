@@ -1,4 +1,4 @@
-package ru.roznov.servlets_2.servlets;
+package ru.roznov.servlets_2.servlets.admin;
 
 import ru.roznov.servlets_2.model.UserManager;
 import ru.roznov.servlets_2.model.UsersSearcher;
@@ -11,23 +11,24 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@WebServlet("/addUser")
-public class AddUserServlet extends HttpServlet {
+@WebServlet("/deleteUser")
+public class DeleteUserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        int id = Integer.parseInt(request.getParameter("id"));
         String login = request.getParameter("login");
-        int password = Integer.parseInt(request.getParameter("password"));
-        String role = request.getParameter("role");
         try {
-            if (!UsersSearcher.isExistsUser(login) && !UsersSearcher.isExistsUser(id)) {
-                UserManager.addUser(id, login, password, role);
+            if (UsersSearcher.isExistsUser(login)) {
+                if (!UsersSearcher.getRoleByLogin(login).equals("ADMIN")) {
+                    UserManager.deleteUser(login);
+                } else {
+                    System.err.println("Admin user can`t be deleted");
+                }
             } else {
-                System.err.println("User already exists");
+                System.err.println("No such user in db");
             }
         } catch (SQLException e) {
-            System.err.println("Error adding user " + e.getMessage());
+            System.err.println("Error deleting user " + e.getMessage());
         }
         response.sendRedirect(request.getContextPath() + "/clients");
     }

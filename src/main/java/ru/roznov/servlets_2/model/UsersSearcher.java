@@ -3,7 +3,6 @@ package ru.roznov.servlets_2.model;
 import ru.roznov.servlets_2.model.dao.DAOinterfeices.DAOFactory;
 import ru.roznov.servlets_2.model.dao.DBType;
 import ru.roznov.servlets_2.model.dao.DynamicResult;
-import ru.roznov.servlets_2.model.dao.ExceptionHandler;
 import ru.roznov.servlets_2.objects.Client;
 import ru.roznov.servlets_2.objects.RoleEnum;
 

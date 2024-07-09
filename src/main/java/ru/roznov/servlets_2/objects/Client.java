@@ -1,13 +1,5 @@
 package ru.roznov.servlets_2.objects;
 
-
-import ru.roznov.servlets_2.model.UsersSearcher;
-import ru.roznov.servlets_2.model.dao.DynamicResult;
-
-import java.util.List;
-import java.util.stream.IntStream;
-import java.util.stream.Collectors;
-
 public class Client {
     private int id;
     private String login;

@@ -1,6 +1,7 @@
 package ru.roznov.servlets_2.controler;
 
 import jakarta.servlet.annotation.WebFilter;
+import ru.roznov.servlets_2.model.ClientBlocker;
 import ru.roznov.servlets_2.model.UsersSearcher;
 import ru.roznov.servlets_2.objects.RoleEnum;
 
@@ -16,7 +17,7 @@ import static java.util.Objects.nonNull;
 public class AuthFilter implements Filter {
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
     }
 
     @Override
@@ -32,22 +33,20 @@ public class AuthFilter implements Filter {
         final String login = req.getParameter("login");
         final String password = req.getParameter("password");
 
+
         final HttpSession session = req.getSession();
         UsersSearcher.getValuesFromOracleDB();
-        //Logged user.
-        if (nonNull(session) &&
-                nonNull(session.getAttribute("login")) &&
-                nonNull(session.getAttribute("password"))) {
+        if (ClientBlocker.isClientBlocked(login)) {
+            moveToMenu(req, res, RoleEnum.BLOCKED);
+        } else if (AuthFilter.isUserAuthed(request)) {
 
             final RoleEnum role = (RoleEnum) session.getAttribute("role");
 
             moveToMenu(req, res, role);
 
-
         } else if (nonNull(login) && UsersSearcher.isExistsUser(login)) {
 
             final RoleEnum role = RoleEnum.valueOf(UsersSearcher.getRoleByLogin(login).toString());
-
             req.getSession().setAttribute("password", password);
             req.getSession().setAttribute("login", login);
             req.getSession().setAttribute("role", role);
@@ -60,6 +59,14 @@ public class AuthFilter implements Filter {
         }
     }
 
+    private static boolean isUserAuthed(ServletRequest request) {
+        final HttpServletRequest req = (HttpServletRequest) request;
+        final HttpSession session = req.getSession();
+        return nonNull(session) &&
+                nonNull(session.getAttribute("login")) &&
+                nonNull(session.getAttribute("password"));
+    }
+
     private void moveToMenu(final HttpServletRequest req,
                             final HttpServletResponse res,
                             final RoleEnum role)
@@ -67,9 +74,11 @@ public class AuthFilter implements Filter {
 
 
         if (role.equals(RoleEnum.ADMIN)) {
-            // req.getRequestDispatcher("/WEB-INF/view/adduser.jsp").forward(req, res);
             req.getRequestDispatcher("/WEB-INF/view/adm.jsp").forward(req, res);
-
+        } else if (role.equals(RoleEnum.MODERATOR)) {
+            req.getRequestDispatcher("/WEB-INF/view/moder.jsp").forward(req, res);
+        } else if (role.equals(RoleEnum.BLOCKED)) {
+            req.getRequestDispatcher("/WEB-INF/view/block.jsp").forward(req, res);
         } else {
             req.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, res);
         }

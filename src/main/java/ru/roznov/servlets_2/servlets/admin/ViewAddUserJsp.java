@@ -1,4 +1,4 @@
-package ru.roznov.servlets_2.servlets;
+package ru.roznov.servlets_2.servlets.admin;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -6,10 +6,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-@WebServlet("/delete")
-public class ViewDeleteUserJsp extends HttpServlet {
+@WebServlet("/add")
+public class ViewAddUserJsp extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/WEB-INF/view/deleteUser.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/view/adduser.jsp").forward(req, resp);
     }
 }
