@@ -1,6 +1,7 @@
 package ru.roznov.servlets_2.model.dao.oracledb;
 
 
+import ru.roznov.servlets_2.model.UsersSearcher;
 import ru.roznov.servlets_2.model.dao.DAOinterfeices.UsersDAO;
 import ru.roznov.servlets_2.model.dao.DynamicResult;
 
@@ -32,6 +33,9 @@ public class OracleUsersDAO implements UsersDAO {
 
     @Override
     public void insertNewUser(int id, String login, int password, String role) throws SQLException {
+        if (UsersSearcher.isExistsUser(login)) {
+            throw new SQLException("This login already used");
+        }
         String sql = "INSERT INTO users (id,login, password, role) VALUES ( ?, ?, ?,?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
@@ -39,6 +43,7 @@ public class OracleUsersDAO implements UsersDAO {
             statement.setInt(3, password);
             statement.setString(4, role);
             statement.executeUpdate();
+            this.commitChanges();
         } catch (SQLException e) {
             System.err.println("Error inserting user" + e.getMessage());
         }
@@ -56,6 +61,21 @@ public class OracleUsersDAO implements UsersDAO {
         }
     }
 
+    @Override
+    public void updateUser(int id, String login, int password, String role) throws SQLException {
+        String sql = "UPDATE users SET login = ?,password = ?,role = ?WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, login);
+            statement.setInt(2, password);
+            statement.setString(3, role);
+            statement.setInt(4, id);
+            statement.executeUpdate();
+            this.commitChanges();
+        } catch (SQLException e) {
+            System.err.println("Error updating user" + e.getMessage());
+        }
+    }
+
 
     public static DynamicResult containDynamicResult(ResultSet resultSet) throws SQLException {
         DynamicResult dynamicResult = new DynamicResult();
@@ -68,7 +88,7 @@ public class OracleUsersDAO implements UsersDAO {
         return dynamicResult;
     }
 
-    public void commitChanges() {
+    private void commitChanges() {
         try {
             connection.commit();
         } catch (SQLException e) {

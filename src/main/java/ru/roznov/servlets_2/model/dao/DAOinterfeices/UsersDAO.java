@@ -11,4 +11,6 @@ public interface UsersDAO {
     void insertNewUser(int id, String login, int password, String role) throws SQLException;
 
     void deleteUser(String login) throws SQLException;
+
+    void updateUser(int id, String login, int password, String role) throws SQLException;
 }

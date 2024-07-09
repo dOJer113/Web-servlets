@@ -25,6 +25,24 @@ public class UsersSearcher {
         }
     }
 
+    public static Client getClientByLogin(String login) {
+        UsersSearcher.getValuesFromOracleDB();
+        if (result.containsField("LOGIN")) {
+            Iterator<BigDecimal> ids = result.getField("ID").iterator();
+            Iterator<String> logins = result.getField("LOGIN").iterator();
+            Iterator<BigDecimal> passwords = result.getField("PASSWORD").iterator();
+            Iterator<String> roles = result.getField("ROLE").iterator();
+            while (ids.hasNext()) {
+                Client client = new Client(ids.next().intValue(), logins.next(), passwords.next().intValue(), RoleEnum.valueOf(roles.next().toUpperCase()));
+                if (client.getLogin().equals(login)) {
+                    return client;
+                }
+            }
+
+        }
+        return new Client();
+    }
+
     public static boolean isExistsUser(String login) {
         UsersSearcher.getValuesFromOracleDB();
         if (result.containsField("LOGIN")) {

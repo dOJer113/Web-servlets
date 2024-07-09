@@ -21,6 +21,13 @@ public class Client {
         this.role = role;
     }
 
+    public Client() {
+        this.id = 0;
+        this.login = "";
+        this.role = RoleEnum.UNKNOWN;
+        this.password = 0;
+    }
+
     public int getId() {
         return this.id;
     }

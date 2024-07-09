@@ -1,4 +1,4 @@
-package ru.roznov.servlets_2.servlets;
+package ru.roznov.servlets_2.tests;
 
 
 import ru.roznov.servlets_2.model.UsersSearcher;
@@ -15,6 +15,6 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         UsersSearcher.getValuesFromOracleDB();
-        getServletContext().getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req,resp);
+
     }
 }
