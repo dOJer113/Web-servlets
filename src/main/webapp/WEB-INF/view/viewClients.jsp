@@ -13,6 +13,7 @@
         <th>Login</th>
         <th>Password</th>
         <th>Role</th>
+        <th>Activity</th>
     </tr>
     <jsp:useBean id="clients" scope="request" type="java.util.List"/>
     <c:forEach var="client" items="${clients}">
@@ -21,6 +22,7 @@
             <td>${client.login}</td>
             <td>${client.password}</td>
             <td>${client.role}</td>
+            <td>${client.activity}</td>
         </tr>
     </c:forEach>
 </table>

@@ -1,7 +1,8 @@
 package ru.roznov.servlets_2.servlets.admin;
 
-import ru.roznov.servlets_2.model.UserManager;
-import ru.roznov.servlets_2.model.UsersSearcher;
+import ru.roznov.servlets_2.model.UserAndActivityManager;
+import ru.roznov.servlets_2.model.user.UserManager;
+import ru.roznov.servlets_2.model.user.UsersSearcher;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,7 +23,8 @@ public class AddUserServlet extends HttpServlet {
         String role = request.getParameter("role");
         try {
             if (!UsersSearcher.isExistsUser(login) && !UsersSearcher.isExistsUser(id)) {
-                UserManager.addUser(id, login, password, role);
+                //UserManager.addUser(id, login, password, role);
+                UserAndActivityManager.addUserAndActivity(id, login, password, role);
             } else {
                 System.err.println("User already exists");
             }

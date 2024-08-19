@@ -1,7 +1,7 @@
 package ru.roznov.servlets_2.model.dao.oracledb;
 
 
-import ru.roznov.servlets_2.model.UsersSearcher;
+import ru.roznov.servlets_2.model.user.UsersSearcher;
 import ru.roznov.servlets_2.model.dao.DAOinterfeices.UsersDAO;
 import ru.roznov.servlets_2.model.dao.DynamicResult;
 
@@ -23,7 +23,7 @@ public class OracleUsersDAO implements UsersDAO {
         String sql = "select * from users";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             try (ResultSet resultSet = statement.executeQuery(sql)) {
-                dynamicResult = OracleUsersDAO.containDynamicResult(resultSet);
+                dynamicResult = DynamicResult.containDynamicResult(resultSet);
             }
         } catch (SQLException e) {
             System.err.println("Error selecting user" + e.getMessage());
@@ -77,23 +77,12 @@ public class OracleUsersDAO implements UsersDAO {
     }
 
 
-    public static DynamicResult containDynamicResult(ResultSet resultSet) throws SQLException {
-        DynamicResult dynamicResult = new DynamicResult();
-        int countColumns = resultSet.getMetaData().getColumnCount();
-        while (resultSet.next()) {
-            for (int i = 1; i <= countColumns; i++) {
-                dynamicResult.setField(resultSet.getMetaData().getColumnName(i), resultSet.getObject(i));
-            }
-        }
-        return dynamicResult;
-    }
-
     private void commitChanges() {
-        try {
+       /* try {
             connection.commit();
         } catch (SQLException e) {
             System.err.println("Error commit changes " + e.getMessage());
-        }
+        }*/
 
     }
 }

@@ -1,8 +1,10 @@
 package ru.roznov.servlets_2.controler;
 
 import jakarta.servlet.annotation.WebFilter;
-import ru.roznov.servlets_2.model.ClientBlocker;
-import ru.roznov.servlets_2.model.UsersSearcher;
+import ru.roznov.servlets_2.model.block.ClientBlocker;
+import ru.roznov.servlets_2.model.client.ClientActivityManager;
+import ru.roznov.servlets_2.model.exceptions.ExceptionHandler;
+import ru.roznov.servlets_2.model.user.UsersSearcher;
 import ru.roznov.servlets_2.objects.RoleEnum;
 
 import javax.servlet.*;
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import static java.util.Objects.nonNull;
 
@@ -32,8 +35,6 @@ public class AuthFilter implements Filter {
 
         final String login = req.getParameter("login");
         final String password = req.getParameter("password");
-
-
         final HttpSession session = req.getSession();
         UsersSearcher.getValuesFromOracleDB();
         if (ClientBlocker.isClientBlocked(login)) {
@@ -50,11 +51,14 @@ public class AuthFilter implements Filter {
             req.getSession().setAttribute("password", password);
             req.getSession().setAttribute("login", login);
             req.getSession().setAttribute("role", role);
-
+            try {
+                ClientActivityManager.makeClientActive(UsersSearcher.getIdByLogin(login));
+            } catch (SQLException e) {
+                ExceptionHandler.handleException("Error making client active", e);
+            }
             moveToMenu(req, res, role);
 
         } else {
-
             moveToMenu(req, res, RoleEnum.UNKNOWN);
         }
     }
@@ -72,13 +76,12 @@ public class AuthFilter implements Filter {
                             final RoleEnum role)
             throws ServletException, IOException {
 
-
         if (role.equals(RoleEnum.ADMIN)) {
             req.getRequestDispatcher("/WEB-INF/view/adm.jsp").forward(req, res);
         } else if (role.equals(RoleEnum.MODERATOR)) {
             req.getRequestDispatcher("/WEB-INF/view/moder.jsp").forward(req, res);
         } else if (role.equals(RoleEnum.BLOCKED)) {
-            req.getRequestDispatcher("/WEB-INF/view/block.jsp").forward(req, res);
+            req.getRequestDispatcher("/WEB-INF/view/searchUser.jsp").forward(req, res);
         } else {
             req.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, res);
         }

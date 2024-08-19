@@ -1,7 +1,7 @@
 package ru.roznov.servlets_2.servlets.admin;
 
-import ru.roznov.servlets_2.model.UserManager;
-import ru.roznov.servlets_2.model.ExceptionHandler;
+import ru.roznov.servlets_2.model.user.UserManager;
+import ru.roznov.servlets_2.model.exceptions.ExceptionHandler;
 import ru.roznov.servlets_2.objects.RoleEnum;
 
 import javax.servlet.annotation.WebServlet;

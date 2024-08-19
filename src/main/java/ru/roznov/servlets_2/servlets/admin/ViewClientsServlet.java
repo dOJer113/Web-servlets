@@ -1,8 +1,10 @@
 package ru.roznov.servlets_2.servlets.admin;
 
 
-import ru.roznov.servlets_2.model.UsersSearcher;
-import ru.roznov.servlets_2.objects.Client;
+import ru.roznov.servlets_2.model.client.ClientActivityManager;
+import ru.roznov.servlets_2.model.client.ClientActivitySearcher;
+import ru.roznov.servlets_2.model.user.UsersSearcher;
+import ru.roznov.servlets_2.objects.UserWithActivity;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,8 +23,9 @@ public class ViewClientsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Client> clients = UsersSearcher.getClientsListByDynamicResult();
-        req.setAttribute("clients", clients);
+        //List<ClientWithActivity> clients = UsersSearcher.getClientsListByDynamicResult();
+        List<UserWithActivity> users = ClientActivitySearcher.getUserWithActivity();
+        req.setAttribute("clients", users);
         req.getRequestDispatcher("/WEB-INF/view/viewClients.jsp").forward(req, resp);
     }
 }

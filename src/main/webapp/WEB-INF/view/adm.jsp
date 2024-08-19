@@ -7,7 +7,6 @@
 <body>
 <h2>Choose an action</h2>
 
-<!-- Button 1 -->
 <form action="${pageContext.request.contextPath}/add" method="get">
     <input type="submit" value="Add User">
 </form>

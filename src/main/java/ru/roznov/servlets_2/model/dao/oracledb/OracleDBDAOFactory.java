@@ -1,6 +1,7 @@
 package ru.roznov.servlets_2.model.dao.oracledb;
 
 
+import ru.roznov.servlets_2.model.dao.DAOinterfeices.ClientActivityDAO;
 import ru.roznov.servlets_2.model.dao.DAOinterfeices.DAOFactory;
 import ru.roznov.servlets_2.model.dao.DAOinterfeices.UsersDAO;
 
@@ -50,4 +51,10 @@ public class OracleDBDAOFactory extends DAOFactory {
     public UsersDAO getUsersDAO() {
         return new OracleUsersDAO(connection);
     }
+
+    @Override
+    public ClientActivityDAO getClientActivityDAO() {
+        return new OracleClientActivityDAO(connection);
+    }
+
 }

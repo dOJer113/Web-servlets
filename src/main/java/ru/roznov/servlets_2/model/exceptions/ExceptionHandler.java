@@ -1,4 +1,4 @@
-package ru.roznov.servlets_2.model;
+package ru.roznov.servlets_2.model.exceptions;
 
 public class ExceptionHandler {
     public static void handleException(String exceptionString, Exception e) {

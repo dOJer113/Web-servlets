@@ -1,7 +1,8 @@
 package ru.roznov.servlets_2.servlets.admin;
 
-import ru.roznov.servlets_2.model.UserManager;
-import ru.roznov.servlets_2.model.UsersSearcher;
+import ru.roznov.servlets_2.model.UserAndActivityManager;
+import ru.roznov.servlets_2.model.user.UserManager;
+import ru.roznov.servlets_2.model.user.UsersSearcher;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,7 +21,8 @@ public class DeleteUserServlet extends HttpServlet {
         try {
             if (UsersSearcher.isExistsUser(login)) {
                 if (!UsersSearcher.getRoleByLogin(login).equals("ADMIN")) {
-                    UserManager.deleteUser(login);
+                    //UserManager.deleteUser(login);
+                    UserAndActivityManager.deleteUserAndActivity(login);
                 } else {
                     System.err.println("Admin user can`t be deleted");
                 }

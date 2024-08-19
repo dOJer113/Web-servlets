@@ -1,4 +1,4 @@
-package ru.roznov.servlets_2.model;
+package ru.roznov.servlets_2.model.user;
 
 import ru.roznov.servlets_2.model.dao.DAOinterfeices.DAOFactory;
 import ru.roznov.servlets_2.model.dao.DBType;

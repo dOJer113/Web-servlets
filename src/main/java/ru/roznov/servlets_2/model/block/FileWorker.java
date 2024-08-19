@@ -20,7 +20,7 @@ public class FileWorker {
         List<Client> clients = new ArrayList<>();
         try {
             Reader reader = Files.newBufferedReader(Paths.get("block.json"));
-            clients = Arrays.asList(gson.fromJson(reader, Client[].class));
+            clients = new ArrayList(Arrays.asList(gson.fromJson(reader, Client[].class)));
             reader.close();
         } catch (IOException e) {
             System.err.println("Error reading " + e.getMessage());

@@ -1,5 +1,7 @@
 package ru.roznov.servlets_2.model.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 
@@ -87,6 +89,16 @@ public class DynamicResult<T> {
             separateRowBuilder.append("-");
         }
         return separateRowBuilder.append("|").toString();
+    }
+    public static DynamicResult containDynamicResult(ResultSet resultSet) throws SQLException {
+        DynamicResult dynamicResult = new DynamicResult();
+        int countColumns = resultSet.getMetaData().getColumnCount();
+        while (resultSet.next()) {
+            for (int i = 1; i <= countColumns; i++) {
+                dynamicResult.setField(resultSet.getMetaData().getColumnName(i), resultSet.getObject(i));
+            }
+        }
+        return dynamicResult;
     }
 
 }

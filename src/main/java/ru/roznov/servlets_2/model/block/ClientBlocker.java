@@ -1,8 +1,10 @@
-package ru.roznov.servlets_2.model;
+package ru.roznov.servlets_2.model.block;
 
 import ru.roznov.servlets_2.model.block.FileWorker;
 import ru.roznov.servlets_2.objects.Client;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class ClientBlocker {

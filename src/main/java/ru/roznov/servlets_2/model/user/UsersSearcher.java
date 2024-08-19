@@ -1,8 +1,9 @@
-package ru.roznov.servlets_2.model;
+package ru.roznov.servlets_2.model.user;
 
 import ru.roznov.servlets_2.model.dao.DAOinterfeices.DAOFactory;
 import ru.roznov.servlets_2.model.dao.DBType;
 import ru.roznov.servlets_2.model.dao.DynamicResult;
+import ru.roznov.servlets_2.model.exceptions.ExceptionHandler;
 import ru.roznov.servlets_2.objects.Client;
 import ru.roznov.servlets_2.objects.RoleEnum;
 
@@ -18,7 +19,7 @@ public class UsersSearcher {
 
     public static void getValuesFromOracleDB() {
         try {
-            result = DAOFactory.getInstance(DBType.ORACLE).getUsersDAO().getUsers();
+            UsersSearcher.result = DAOFactory.getInstance(DBType.ORACLE).getUsersDAO().getUsers();
         } catch (SQLException e) {
             ExceptionHandler.handleException("Error checking existing user", e);
         }
@@ -40,6 +41,22 @@ public class UsersSearcher {
 
         }
         return new Client();
+    }
+
+    public static int getIdByLogin(String login) {
+        UsersSearcher.getValuesFromOracleDB();
+        if (result.containsField("LOGIN")) {
+            Iterator<BigDecimal> ids = result.getField("ID").iterator();
+            Iterator<String> logins = result.getField("LOGIN").iterator();
+            while (logins.hasNext()) {
+                int id = ids.next().intValue();
+                if (logins.next().equals(login)) {
+                    return id;
+                }
+            }
+
+        }
+        return 0;
     }
 
     public static boolean isExistsUser(String login) {

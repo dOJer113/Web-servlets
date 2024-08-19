@@ -1,5 +1,7 @@
 package ru.roznov.servlets_2.objects;
 
+import java.util.Objects;
+
 public class Client {
     private int id;
     private String login;
@@ -52,5 +54,17 @@ public class Client {
         this.role = role;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Client)) return false;
+        Client client = (Client) o;
+        boolean result = ((Client) o).getId() == client.getId();
+        return result;
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getId(), this.getLogin());
+    }
 }
