@@ -22,19 +22,20 @@ public class LogoutServlet extends HttpServlet {
             throws ServletException, IOException {
 
         final HttpSession session = req.getSession();
-        final String login = session.getAttribute("login").toString();
-
+        //TODO ОШИБКА ПРИ ВХОДЕ ЗАБЛОКИРОВАННОГО С АКТИВНОСТЬЮ
         try {
-            ClientActivityManager.makeClientUnActive(UsersSearcher.getIdByLogin(login));
-        } catch (SQLException e) {
-            ExceptionHandler.handleException("Error making client not active", e);
+            if (!req.getSession().getAttribute("role").toString().equals("BLOCKED")) {
+                final String login = session.getAttribute("login").toString();
+                ClientActivityManager.makeClientUnActive(UsersSearcher.getIdByLogin(login));
+            }
+        } catch (SQLException | NullPointerException e) {
+            ExceptionHandler.handleException("Error making client not active ", e);
         }
         session.removeAttribute("password");
         session.removeAttribute("login");
         session.removeAttribute("role");
 
-        getServletContext().getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, resp);
-
+        resp.sendRedirect(resp.encodeRedirectURL(req.getContextPath() + "/"));
     }
 
 }

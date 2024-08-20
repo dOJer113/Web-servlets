@@ -39,6 +39,7 @@ public class AuthFilter implements Filter {
         UsersSearcher.getValuesFromOracleDB();
         if (ClientBlocker.isClientBlocked(login)) {
             moveToMenu(req, res, RoleEnum.BLOCKED);
+            req.getSession().setAttribute("role", RoleEnum.valueOf("BLOCKED"));
         } else if (AuthFilter.isUserAuthed(request)) {
 
             final RoleEnum role = (RoleEnum) session.getAttribute("role");
@@ -81,7 +82,7 @@ public class AuthFilter implements Filter {
         } else if (role.equals(RoleEnum.MODERATOR)) {
             req.getRequestDispatcher("/WEB-INF/view/moder.jsp").forward(req, res);
         } else if (role.equals(RoleEnum.BLOCKED)) {
-            req.getRequestDispatcher("/WEB-INF/view/searchUser.jsp").forward(req, res);
+            req.getRequestDispatcher("/WEB-INF/view/pageBlockedClient.jsp").forward(req, res);
         } else {
             req.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, res);
         }

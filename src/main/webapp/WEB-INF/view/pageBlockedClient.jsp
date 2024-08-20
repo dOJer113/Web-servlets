@@ -1,16 +1,19 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: aleks
-  Date: 19.08.2024
-  Time: 16:09
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Title</title>
+    <title>You was blocked!</title>
 </head>
 <body>
+<h2>Blocked!</h2>
+
+<form action="blocked" method="get">
+    You was blocked! Write to moderator.
+</form>
+
+<form action="${pageContext.request.contextPath}/delogin" method="get">
+    <input type="submit" value="Logout">
+</form>
 
 </body>
 </html>
