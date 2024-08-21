@@ -1,5 +1,6 @@
 package ru.roznov.servlets_2.model.block;
 
+import ru.roznov.servlets_2.controler.command.CommandParameters;
 import ru.roznov.servlets_2.objects.Client;
 
 import java.util.List;
@@ -10,7 +11,8 @@ public class ClientBlocker {
         return blockedClientsLogins.contains(login);
     }
 
-    public static void blockClient(Client client) {
+    public static void blockClient(CommandParameters commandParameters) {
+        Client client = commandParameters.getParameter("client", Client.class);
         List<Client> clients = FileWorker.readBlockedUsersFromFile();
         if (!clients.contains(client)) {
             clients.add(client);
@@ -18,7 +20,8 @@ public class ClientBlocker {
         FileWorker.writeBlockedUsersToFile(clients);
     }
 
-    public static void unblockClient(Client client) {
+    public static void unblockClient(CommandParameters commandParameters) {
+        Client client = commandParameters.getParameter("client", Client.class);
         List<Client> clients = FileWorker.readBlockedUsersFromFile();
         clients.remove(client);
         FileWorker.writeBlockedUsersToFile(clients);

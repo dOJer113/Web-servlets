@@ -1,5 +1,8 @@
 package ru.roznov.servlets_2.servlets.admin;
 
+import ru.roznov.servlets_2.controler.command.CommandController;
+import ru.roznov.servlets_2.controler.command.CommandName;
+import ru.roznov.servlets_2.controler.command.CommandParameters;
 import ru.roznov.servlets_2.model.UserAndActivityManager;
 import ru.roznov.servlets_2.model.user.UserManager;
 import ru.roznov.servlets_2.model.user.UsersSearcher;
@@ -19,12 +22,14 @@ public class AddUserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         int id = Integer.parseInt(request.getParameter("id"));
         String login = request.getParameter("login");
-        int password = Integer.parseInt(request.getParameter("password"));
-        String role = request.getParameter("role");
+        CommandParameters commandParameters = new CommandParameters();
+        commandParameters.addParameter("id", id);
+        commandParameters.addParameter("login", login);
+        commandParameters.addParameter("password", Integer.parseInt(request.getParameter("password")));
+        commandParameters.addParameter("role", request.getParameter("role"));
         try {
             if (!UsersSearcher.isExistsUser(login) && !UsersSearcher.isExistsUser(id)) {
-                //UserManager.addUser(id, login, password, role);
-                UserAndActivityManager.addUserAndActivity(id, login, password, role);
+                CommandController.executeCommand(CommandName.ADD_USER_AND_ACTIVITY,commandParameters);
             } else {
                 System.err.println("User already exists");
             }

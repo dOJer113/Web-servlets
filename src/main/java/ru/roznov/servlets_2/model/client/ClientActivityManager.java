@@ -1,34 +1,49 @@
 package ru.roznov.servlets_2.model.client;
 
+import ru.roznov.servlets_2.controler.command.CommandParameters;
 import ru.roznov.servlets_2.model.dao.DAOinterfeices.DAOFactory;
 import ru.roznov.servlets_2.model.dao.DBType;
-import ru.roznov.servlets_2.objects.RoleEnum;
+import ru.roznov.servlets_2.model.exceptions.ExceptionHandler;
 
 import java.sql.SQLException;
 
 public class ClientActivityManager {
 
-    public static boolean isClientActive(int clientId) {
-        return ClientActivitySearcher.isActiveClient(clientId);
-    }
-
-    public static void makeClientUnActive(int id) throws SQLException {
+    public static void makeClientUnActive(CommandParameters parameters) throws SQLException {
+        int id = parameters.getParameter("id", Integer.class);
         DAOFactory.getInstance(DBType.ORACLE).getClientActivityDAO().updateClient(id, 0);
-
     }
 
-    public static void makeClientActive(int id) throws SQLException {
+    public static void makeClientActive(CommandParameters parameters) throws SQLException {
+        int id = parameters.getParameter("id", Integer.class);
         DAOFactory.getInstance(DBType.ORACLE).getClientActivityDAO().updateClient(id, 1);
     }
 
-    public static void addUser(int id) throws SQLException {
+    public static void addClient(CommandParameters parameters) throws SQLException {
+        int id = parameters.getParameter("id", Integer.class);
         DAOFactory.getInstance(DBType.ORACLE).getClientActivityDAO().insertNewClient(id);
     }
 
 
-    public static void deleteUser(int id) throws SQLException {
+    public static void deleteClient(CommandParameters parameters) throws SQLException {
+        int id = parameters.getParameter("id", Integer.class);
         DAOFactory.getInstance(DBType.ORACLE).getClientActivityDAO().deleteClient(id);
     }
 
+    public static void getClientsFromOracleDB(CommandParameters parameters) {
+        try {
+            ClientActivitySearcher.result = DAOFactory.getInstance(DBType.ORACLE).getClientActivityDAO().getClients();
+        } catch (SQLException e) {
+            ExceptionHandler.handleException("Error getting clients activity", e);
+        }
+    }
+
+    public static void getValuesByTwoTables(CommandParameters parameters) {
+        try {
+            ClientActivitySearcher.result = DAOFactory.getInstance(DBType.ORACLE).getClientActivityDAO().getUsersWithActivity();
+        } catch (SQLException e) {
+            ExceptionHandler.handleException("Error getting clients with activity", e);
+        }
+    }
 
 }

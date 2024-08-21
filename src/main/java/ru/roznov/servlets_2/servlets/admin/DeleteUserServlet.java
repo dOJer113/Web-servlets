@@ -1,5 +1,8 @@
 package ru.roznov.servlets_2.servlets.admin;
 
+import ru.roznov.servlets_2.controler.command.CommandController;
+import ru.roznov.servlets_2.controler.command.CommandName;
+import ru.roznov.servlets_2.controler.command.CommandParameters;
 import ru.roznov.servlets_2.model.UserAndActivityManager;
 import ru.roznov.servlets_2.model.user.UserManager;
 import ru.roznov.servlets_2.model.user.UsersSearcher;
@@ -17,12 +20,13 @@ public class DeleteUserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        CommandParameters commandParameters = new CommandParameters();
         String login = request.getParameter("login");
+        commandParameters.addParameter("login", login);
         try {
             if (UsersSearcher.isExistsUser(login)) {
                 if (!UsersSearcher.getRoleByLogin(login).equals("ADMIN")) {
-                    //UserManager.deleteUser(login);
-                    UserAndActivityManager.deleteUserAndActivity(login);
+                    CommandController.executeCommand(CommandName.DELETE_USER_AND_ACTIVITY,commandParameters);
                 } else {
                     System.err.println("Admin user can`t be deleted");
                 }

@@ -1,0 +1,19 @@
+package ru.roznov.servlets_2.controler.command;
+
+public enum CommandName {
+    DELETE_USER_AND_ACTIVITY,
+    ADD_USER_AND_ACTIVITY,
+    MAKE_CLIENT_UNACTIVE,
+    MAKE_CLIENT_ACTIVE,
+    ADD_CLIENT,
+    DELETE_CLIENT,
+    GET_CLIENTS_FROM_ORACLE_DB,
+    GET_VALUES_BY_TWO_TABLES,
+    ADD_USER,
+    UPDATE_USER,
+    DELETE_USER,
+    GET_VALUES_FROM_ORACLE_DB,
+    BLOCK_CLIENT,
+    UNBLOCK_CLIENT
+}
+

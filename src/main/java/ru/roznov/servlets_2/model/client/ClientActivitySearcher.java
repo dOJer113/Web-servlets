@@ -1,7 +1,8 @@
 package ru.roznov.servlets_2.model.client;
 
-import ru.roznov.servlets_2.model.dao.DAOinterfeices.DAOFactory;
-import ru.roznov.servlets_2.model.dao.DBType;
+import ru.roznov.servlets_2.controler.command.CommandController;
+import ru.roznov.servlets_2.controler.command.CommandName;
+import ru.roznov.servlets_2.controler.command.CommandParameters;
 import ru.roznov.servlets_2.model.dao.DynamicResult;
 import ru.roznov.servlets_2.model.exceptions.ExceptionHandler;
 import ru.roznov.servlets_2.objects.ClientActivity;
@@ -15,23 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ClientActivitySearcher {
-    private static DynamicResult result;
-
-    public static void getValuesFromOracleDB() {
-        try {
-            ClientActivitySearcher.result = DAOFactory.getInstance(DBType.ORACLE).getClientActivityDAO().getClients();
-        } catch (SQLException e) {
-            ExceptionHandler.handleException("Error getting clients activity", e);
-        }
-    }
-
-    public static void getValuesByTwoTables() {
-        try {
-            ClientActivitySearcher.result = DAOFactory.getInstance(DBType.ORACLE).getClientActivityDAO().getUsersWithActivity();
-        } catch (SQLException e) {
-            ExceptionHandler.handleException("Error getting clients with activity", e);
-        }
-    }
+    public static DynamicResult result;
 
     public static boolean isActiveClient(int id) {
         if (ClientActivitySearcher.isExistsClient(id)) {
@@ -48,7 +33,11 @@ public class ClientActivitySearcher {
     }
 
     public static boolean isExistsClient(int id) {
-        ClientActivitySearcher.getValuesFromOracleDB();
+        try {
+            CommandController.executeCommand(CommandName.GET_CLIENTS_FROM_ORACLE_DB, new CommandParameters());
+        } catch (SQLException e) {
+            ExceptionHandler.handleException("Error checking existing client ", e);
+        }
         if (result.containsField("ID")) {
             List<Integer> ids = result.getField("ID");
             return ids.contains(id);
@@ -57,7 +46,11 @@ public class ClientActivitySearcher {
     }
 
     public static List<UserWithActivity> getUserWithActivity() {
-        ClientActivitySearcher.getValuesByTwoTables();
+        try {
+            CommandController.executeCommand(CommandName.GET_VALUES_BY_TWO_TABLES, new CommandParameters());
+        } catch (SQLException e) {
+            ExceptionHandler.handleException("Error checking existing client ", e);
+        }
         List<UserWithActivity> userWithActivities = new ArrayList<>();
         Iterator<BigDecimal> ids = result.getField("ID").iterator();
         Iterator<String> logins = result.getField("LOGIN").iterator();

@@ -1,5 +1,8 @@
 package ru.roznov.servlets_2.servlets.moderator;
 
+import ru.roznov.servlets_2.controler.command.CommandController;
+import ru.roznov.servlets_2.controler.command.CommandName;
+import ru.roznov.servlets_2.controler.command.CommandParameters;
 import ru.roznov.servlets_2.model.block.ClientBlocker;
 import ru.roznov.servlets_2.model.user.UsersSearcher;
 
@@ -19,7 +22,9 @@ public class BlockClientServlet extends HttpServlet {
         try {
             if (UsersSearcher.isExistsUser(login)) {
                 if (!ClientBlocker.isClientBlocked(login)) {
-                    ClientBlocker.blockClient(UsersSearcher.getClientByLogin(login));
+                    CommandParameters commandParameters = new CommandParameters();
+                    commandParameters.addParameter("client", UsersSearcher.getClientByLogin(login));
+                    CommandController.executeCommand(CommandName.BLOCK_CLIENT,commandParameters);
                 } else {
                     System.err.println("Client already blocked");
                 }

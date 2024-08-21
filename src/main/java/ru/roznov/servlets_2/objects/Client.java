@@ -59,7 +59,7 @@ public class Client {
         if (this == o) return true;
         if (!(o instanceof Client)) return false;
         Client client = (Client) o;
-        boolean result = ((Client) o).getId() == client.getId();
+        boolean result = Objects.equals(client.getLogin(), this.getLogin()) && client.getId() == this.getId();
         return result;
     }
 

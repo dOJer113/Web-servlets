@@ -1,13 +1,16 @@
 package ru.roznov.servlets_2.model.user;
 
-import ru.roznov.servlets_2.model.dao.DAOinterfeices.DAOFactory;
-import ru.roznov.servlets_2.model.dao.DBType;
+import ru.roznov.servlets_2.controler.command.CommandController;
+import ru.roznov.servlets_2.controler.command.CommandName;
+import ru.roznov.servlets_2.controler.command.CommandParameters;
+
 import ru.roznov.servlets_2.model.dao.DynamicResult;
 import ru.roznov.servlets_2.model.exceptions.ExceptionHandler;
 import ru.roznov.servlets_2.objects.Client;
 import ru.roznov.servlets_2.objects.RoleEnum;
 
 import java.math.BigDecimal;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,18 +18,15 @@ import java.util.List;
 
 
 public class UsersSearcher {
-    private static DynamicResult result;
+    public static DynamicResult result;
 
-    public static void getValuesFromOracleDB() {
-        try {
-            UsersSearcher.result = DAOFactory.getInstance(DBType.ORACLE).getUsersDAO().getUsers();
-        } catch (SQLException e) {
-            ExceptionHandler.handleException("Error checking existing user", e);
-        }
-    }
 
     public static Client getClientByLogin(String login) {
-        UsersSearcher.getValuesFromOracleDB();
+        try {
+            CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
+        } catch (SQLException e) {
+            ExceptionHandler.handleException("Error getting values from ORACLE DB ", e);
+        }
         if (result.containsField("LOGIN")) {
             Iterator<BigDecimal> ids = result.getField("ID").iterator();
             Iterator<String> logins = result.getField("LOGIN").iterator();
@@ -44,7 +44,11 @@ public class UsersSearcher {
     }
 
     public static int getIdByLogin(String login) {
-        UsersSearcher.getValuesFromOracleDB();
+        try {
+            CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
+        } catch (SQLException e) {
+            ExceptionHandler.handleException("Error getting values from ORACLE DB ", e);
+        }
         if (result.containsField("LOGIN")) {
             Iterator<BigDecimal> ids = result.getField("ID").iterator();
             Iterator<String> logins = result.getField("LOGIN").iterator();
@@ -60,7 +64,11 @@ public class UsersSearcher {
     }
 
     public static boolean isExistsUser(String login) {
-        UsersSearcher.getValuesFromOracleDB();
+        try {
+            CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
+        } catch (SQLException e) {
+            ExceptionHandler.handleException("Error getting values from ORACLE DB ", e);
+        }
         if (result.containsField("LOGIN")) {
             List logins = result.getField("LOGIN");
             return logins.contains(login);
@@ -69,7 +77,11 @@ public class UsersSearcher {
     }
 
     public static boolean isExistsUser(int id) {
-        UsersSearcher.getValuesFromOracleDB();
+        try {
+            CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
+        } catch (SQLException e) {
+            ExceptionHandler.handleException("Error getting values from ORACLE DB ", e);
+        }
         if (result.containsField("ID")) {
             List ids = result.getField("ID");
             return ids.contains(id);
@@ -92,7 +104,11 @@ public class UsersSearcher {
     }
 
     public static List<Client> getClientsListByDynamicResult() {
-        UsersSearcher.getValuesFromOracleDB();
+        try {
+            CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
+        } catch (SQLException e) {
+            ExceptionHandler.handleException("Error getting values from ORACLE DB ", e);
+        }
         List<Client> clients = new ArrayList<>();
         Iterator<BigDecimal> ids = result.getField("ID").iterator();
         Iterator<String> logins = result.getField("LOGIN").iterator();

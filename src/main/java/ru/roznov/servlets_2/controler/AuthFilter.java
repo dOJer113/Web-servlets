@@ -1,9 +1,13 @@
 package ru.roznov.servlets_2.controler;
 
 import jakarta.servlet.annotation.WebFilter;
+import ru.roznov.servlets_2.controler.command.CommandController;
+import ru.roznov.servlets_2.controler.command.CommandName;
+import ru.roznov.servlets_2.controler.command.CommandParameters;
 import ru.roznov.servlets_2.model.block.ClientBlocker;
 import ru.roznov.servlets_2.model.client.ClientActivityManager;
 import ru.roznov.servlets_2.model.exceptions.ExceptionHandler;
+import ru.roznov.servlets_2.model.user.UserManager;
 import ru.roznov.servlets_2.model.user.UsersSearcher;
 import ru.roznov.servlets_2.objects.RoleEnum;
 
@@ -36,7 +40,6 @@ public class AuthFilter implements Filter {
         final String login = req.getParameter("login");
         final String password = req.getParameter("password");
         final HttpSession session = req.getSession();
-        UsersSearcher.getValuesFromOracleDB();
         if (ClientBlocker.isClientBlocked(login)) {
             moveToMenu(req, res, RoleEnum.BLOCKED);
             req.getSession().setAttribute("role", RoleEnum.valueOf("BLOCKED"));
@@ -53,7 +56,9 @@ public class AuthFilter implements Filter {
             req.getSession().setAttribute("login", login);
             req.getSession().setAttribute("role", role);
             try {
-                ClientActivityManager.makeClientActive(UsersSearcher.getIdByLogin(login));
+                CommandParameters commandParameters = new CommandParameters();
+                commandParameters.addParameter("id", UsersSearcher.getIdByLogin(login));
+                CommandController.executeCommand(CommandName.MAKE_CLIENT_ACTIVE, commandParameters);
             } catch (SQLException e) {
                 ExceptionHandler.handleException("Error making client active", e);
             }
