@@ -3,6 +3,7 @@ package ru.roznov.servlets_2.model.dao.oracledb;
 import ru.roznov.servlets_2.model.client.ClientActivitySearcher;
 import ru.roznov.servlets_2.model.dao.DAOinterfeices.ClientActivityDAO;
 import ru.roznov.servlets_2.model.dao.DynamicResult;
+import ru.roznov.servlets_2.model.exceptions.ExceptionHandler;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,7 +26,7 @@ public class OracleClientActivityDAO implements ClientActivityDAO {
                 dynamicResult = DynamicResult.containDynamicResult(resultSet);
             }
         } catch (SQLException e) {
-            System.err.println("Error selecting client activity" + e.getMessage());
+            ExceptionHandler.handleException("Error selecting client activity ", e);
         }
         return dynamicResult;
     }
@@ -40,39 +41,46 @@ public class OracleClientActivityDAO implements ClientActivityDAO {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             statement.executeUpdate();
-            this.commitChanges();
         } catch (SQLException e) {
-            System.err.println("Error inserting users activity" + e.getMessage());
+            ExceptionHandler.handleException("Error inserting users activity ", e);
         }
     }
 
     @Override
-    public void deleteClient(int id) throws SQLException {
+    public void deleteClient(int id) {
         String sql = "delete from users_activity where id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             statement.executeUpdate();
-            this.commitChanges();
         } catch (SQLException e) {
-            System.err.println("Error deleting users activity" + e.getMessage());
+            ExceptionHandler.handleException("Error deleting users activity ", e);
         }
     }
 
     @Override
-    public void updateClient(int id, int activity) throws SQLException {
+    public void updateClient(int id, int activity) {
         String sql = "UPDATE users_activity SET activity = ? WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, activity);
             statement.setInt(2, id);
             statement.executeUpdate();
-            this.commitChanges();
         } catch (SQLException e) {
-            System.err.println("Error updating users activity" + e.getMessage());
+            ExceptionHandler.handleException("Error updating users activity ", e);
         }
     }
 
     @Override
-    public DynamicResult getUsersWithActivity() throws SQLException {
+    public void makeAllUnActive() {
+        String sql = "UPDATE users_activity SET activity = 0";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            ExceptionHandler.handleException("Error making all client un active ", e);
+        }
+    }
+
+    @Override
+    public DynamicResult getUsersWithActivity() {
         DynamicResult dynamicResult = new DynamicResult();
 
         String sql = "select u.id, u.login, u.password, u.role, users_activity.activity from users u inner join users_activity on u.id = users_activity.id where users_activity.activity = 1 ORDER BY u.id asc";
@@ -81,16 +89,9 @@ public class OracleClientActivityDAO implements ClientActivityDAO {
                 dynamicResult = DynamicResult.containDynamicResult(resultSet);
             }
         } catch (SQLException e) {
-            System.err.println("Error selecting users with activity" + e.getMessage());
+            ExceptionHandler.handleException("Error selecting users with activity ", e);
         }
         return dynamicResult;
     }
 
-    private void commitChanges() {
-       /* try {
-            connection.commit();
-        } catch (SQLException e) {
-            System.err.println("Error commit changes " + e.getMessage());
-        }*/
-    }
 }

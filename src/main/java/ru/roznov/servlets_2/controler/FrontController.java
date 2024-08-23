@@ -15,6 +15,7 @@ import java.io.IOException;
 
 @WebServlet("/")
 public class FrontController extends HttpServlet {
+    public static final int LOG_OUT_TIMER = 2999;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -36,9 +37,12 @@ public class FrontController extends HttpServlet {
             req.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, res);
         }
     }
+
     public static void authorizeClient(CommandParameters commandParameters) {
         String login = commandParameters.getParameter("login", String.class);
         HttpServletRequest req = commandParameters.getParameter("request", HttpServletRequest.class);
+        AppListener appListener = (AppListener) req.getServletContext().getAttribute("appListener");
+        appListener.scheduleTask(new LogOutTimerTask(login), FrontController.LOG_OUT_TIMER);
         final RoleEnum role = RoleEnum.valueOf(UsersSearcher.getRoleByLogin(login).toString());
         req.getSession().setAttribute("password", commandParameters.getParameter("password", String.class));
         commandParameters.addParameter("role", role);

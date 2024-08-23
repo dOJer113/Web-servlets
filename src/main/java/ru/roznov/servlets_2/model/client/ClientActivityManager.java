@@ -42,7 +42,15 @@ public class ClientActivityManager {
         try {
             ClientActivitySearcher.result = DAOFactory.getInstance(DBType.ORACLE).getClientActivityDAO().getUsersWithActivity();
         } catch (SQLException e) {
-            ExceptionHandler.handleException("Error getting clients with activity", e);
+            ExceptionHandler.handleException("Error getting users with activity", e);
+        }
+    }
+
+    public static void makeAllClientsUnActive(CommandParameters parameters) {
+        try {
+            DAOFactory.getInstance(DBType.ORACLE).getClientActivityDAO().makeAllUnActive();
+        } catch (SQLException e) {
+            ExceptionHandler.handleException("Error making all clients un active ", e);
         }
     }
 

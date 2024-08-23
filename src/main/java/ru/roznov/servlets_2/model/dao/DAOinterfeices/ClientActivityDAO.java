@@ -13,5 +13,8 @@ public interface ClientActivityDAO {
 
     void updateClient(int id, int activity) throws SQLException;
 
+    void makeAllUnActive() throws SQLException;
+
     DynamicResult getUsersWithActivity() throws SQLException;
+
 }

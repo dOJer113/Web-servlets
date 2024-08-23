@@ -16,6 +16,7 @@ public enum CommandName {
     BLOCK_CLIENT,
     UNBLOCK_CLIENT,
     MOVE_TO_MENU,
-    AUTHORIZE_CLIENT
+    AUTHORIZE_CLIENT,
+    MAKE_ALL_UN_ACTIVE
 }
 

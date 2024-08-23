@@ -40,6 +40,7 @@ public class CommandController {
         commandMap.put(CommandName.UNBLOCK_CLIENT, ClientBlocker::unblockClient);
         commandMap.put(CommandName.MOVE_TO_MENU, FrontController::moveToMenu);
         commandMap.put(CommandName.AUTHORIZE_CLIENT, FrontController::authorizeClient);
+        commandMap.put(CommandName.MAKE_ALL_UN_ACTIVE, ClientActivityManager::makeAllClientsUnActive);
     }
 
     public static void executeCommand(CommandName name, CommandParameters commandParameters) {
