@@ -23,18 +23,14 @@ public class DeleteUserServlet extends HttpServlet {
         CommandParameters commandParameters = new CommandParameters();
         String login = request.getParameter("login");
         commandParameters.addParameter("login", login);
-        try {
-            if (UsersSearcher.isExistsUser(login)) {
-                if (!UsersSearcher.getRoleByLogin(login).equals("ADMIN")) {
-                    CommandController.executeCommand(CommandName.DELETE_USER_AND_ACTIVITY,commandParameters);
-                } else {
-                    System.err.println("Admin user can`t be deleted");
-                }
+        if (UsersSearcher.isExistsUser(login)) {
+            if (!UsersSearcher.getRoleByLogin(login).equals("ADMIN")) {
+                CommandController.executeCommand(CommandName.DELETE_USER_AND_ACTIVITY,commandParameters);
             } else {
-                System.err.println("No such user in db");
+                System.err.println("Admin user can`t be deleted");
             }
-        } catch (SQLException e) {
-            System.err.println("Error deleting user " + e.getMessage());
+        } else {
+            System.err.println("No such user in db");
         }
         response.sendRedirect(request.getContextPath() + "/clients");
     }

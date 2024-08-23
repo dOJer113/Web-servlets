@@ -32,7 +32,7 @@ public class LogoutServlet extends HttpServlet {
                 commandParameters.addParameter("id",UsersSearcher.getIdByLogin(login));
                 CommandController.executeCommand(CommandName.MAKE_CLIENT_UNACTIVE,commandParameters);
             }
-        } catch (SQLException | NullPointerException e) {
+        } catch (NullPointerException e) {
             ExceptionHandler.handleException("Error making client not active ", e);
         }
         session.removeAttribute("password");

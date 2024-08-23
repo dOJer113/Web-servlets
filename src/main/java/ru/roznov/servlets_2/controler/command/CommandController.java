@@ -1,10 +1,15 @@
 package ru.roznov.servlets_2.controler.command;
 
+import ru.roznov.servlets_2.controler.AuthFilter;
+import ru.roznov.servlets_2.controler.FrontController;
 import ru.roznov.servlets_2.model.UserAndActivityManager;
 import ru.roznov.servlets_2.model.block.ClientBlocker;
 import ru.roznov.servlets_2.model.client.ClientActivityManager;
+import ru.roznov.servlets_2.model.exceptions.ExceptionHandler;
 import ru.roznov.servlets_2.model.user.UserManager;
 
+import javax.servlet.ServletException;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,12 +38,18 @@ public class CommandController {
         commandMap.put(CommandName.GET_VALUES_FROM_ORACLE_DB, UserManager::getValuesFromOracleDB);
         commandMap.put(CommandName.BLOCK_CLIENT, ClientBlocker::blockClient);
         commandMap.put(CommandName.UNBLOCK_CLIENT, ClientBlocker::unblockClient);
+        commandMap.put(CommandName.MOVE_TO_MENU, FrontController::moveToMenu);
+        commandMap.put(CommandName.AUTHORIZE_CLIENT, FrontController::authorizeClient);
     }
 
-    public static void executeCommand(CommandName name, CommandParameters commandParameters) throws SQLException {
+    public static void executeCommand(CommandName name, CommandParameters commandParameters) {
         Command command = commandMap.get(name);
         if (command != null) {
-            command.execute(commandParameters);
+            try {
+                command.execute(commandParameters);
+            } catch (ServletException | IOException | SQLException e) {
+                ExceptionHandler.handleException("Error executing command ", e);
+            }
         } else {
             System.err.println("Command not found: " + name);
         }

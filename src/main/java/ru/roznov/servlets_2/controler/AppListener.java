@@ -15,11 +15,7 @@ public class AppListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         CommandController.init();
-        try {
-            CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
-        } catch (SQLException e) {
-            ExceptionHandler.handleException("Error getting values from ORACLE DB ", e);
-        }
+        CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
     }
 
 }

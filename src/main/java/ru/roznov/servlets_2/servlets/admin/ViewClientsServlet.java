@@ -24,11 +24,7 @@ import java.util.List;
 public class ViewClientsServlet extends HttpServlet {
     @Override
     public void init() {
-        try {
-            CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
-        } catch (SQLException e) {
-            ExceptionHandler.handleException("Error getting values from ORACLE DB ", e);
-        }
+        CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
     }
 
     @Override

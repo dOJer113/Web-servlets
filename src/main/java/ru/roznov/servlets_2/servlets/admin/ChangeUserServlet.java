@@ -26,7 +26,7 @@ public class ChangeUserServlet extends HttpServlet {
             commandParameters.addParameter("role", req.getParameter("role"));
             CommandController.executeCommand(CommandName.UPDATE_USER,commandParameters);
             resp.sendRedirect(req.getContextPath() + "/clients");
-        } catch (SQLException | IOException e) {
+        } catch (IOException e) {
             ExceptionHandler.handleException("Error updating user", e);
         }
 

@@ -22,11 +22,7 @@ public class UsersSearcher {
 
 
     public static Client getClientByLogin(String login) {
-        try {
-            CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
-        } catch (SQLException e) {
-            ExceptionHandler.handleException("Error getting values from ORACLE DB ", e);
-        }
+        CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
         if (result.containsField("LOGIN")) {
             Iterator<BigDecimal> ids = result.getField("ID").iterator();
             Iterator<String> logins = result.getField("LOGIN").iterator();
@@ -44,11 +40,7 @@ public class UsersSearcher {
     }
 
     public static int getIdByLogin(String login) {
-        try {
-            CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
-        } catch (SQLException e) {
-            ExceptionHandler.handleException("Error getting values from ORACLE DB ", e);
-        }
+        CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
         if (result.containsField("LOGIN")) {
             Iterator<BigDecimal> ids = result.getField("ID").iterator();
             Iterator<String> logins = result.getField("LOGIN").iterator();
@@ -64,11 +56,7 @@ public class UsersSearcher {
     }
 
     public static boolean isExistsUser(String login) {
-        try {
-            CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
-        } catch (SQLException e) {
-            ExceptionHandler.handleException("Error getting values from ORACLE DB ", e);
-        }
+        CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
         if (result.containsField("LOGIN")) {
             List logins = result.getField("LOGIN");
             return logins.contains(login);
@@ -77,11 +65,7 @@ public class UsersSearcher {
     }
 
     public static boolean isExistsUser(int id) {
-        try {
-            CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
-        } catch (SQLException e) {
-            ExceptionHandler.handleException("Error getting values from ORACLE DB ", e);
-        }
+        CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
         if (result.containsField("ID")) {
             List ids = result.getField("ID");
             return ids.contains(id);
@@ -104,11 +88,7 @@ public class UsersSearcher {
     }
 
     public static List<Client> getClientsListByDynamicResult() {
-        try {
-            CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
-        } catch (SQLException e) {
-            ExceptionHandler.handleException("Error getting values from ORACLE DB ", e);
-        }
+        CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
         List<Client> clients = new ArrayList<>();
         Iterator<BigDecimal> ids = result.getField("ID").iterator();
         Iterator<String> logins = result.getField("LOGIN").iterator();

@@ -27,14 +27,10 @@ public class AddUserServlet extends HttpServlet {
         commandParameters.addParameter("login", login);
         commandParameters.addParameter("password", Integer.parseInt(request.getParameter("password")));
         commandParameters.addParameter("role", request.getParameter("role"));
-        try {
-            if (!UsersSearcher.isExistsUser(login) && !UsersSearcher.isExistsUser(id)) {
-                CommandController.executeCommand(CommandName.ADD_USER_AND_ACTIVITY,commandParameters);
-            } else {
-                System.err.println("User already exists");
-            }
-        } catch (SQLException e) {
-            System.err.println("Error adding user " + e.getMessage());
+        if (!UsersSearcher.isExistsUser(login) && !UsersSearcher.isExistsUser(id)) {
+            CommandController.executeCommand(CommandName.ADD_USER_AND_ACTIVITY, commandParameters);
+        } else {
+            System.err.println("User already exists");
         }
         response.sendRedirect(request.getContextPath() + "/clients");
     }

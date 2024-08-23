@@ -33,11 +33,7 @@ public class ClientActivitySearcher {
     }
 
     public static boolean isExistsClient(int id) {
-        try {
-            CommandController.executeCommand(CommandName.GET_CLIENTS_FROM_ORACLE_DB, new CommandParameters());
-        } catch (SQLException e) {
-            ExceptionHandler.handleException("Error checking existing client ", e);
-        }
+        CommandController.executeCommand(CommandName.GET_CLIENTS_FROM_ORACLE_DB, new CommandParameters());
         if (result.containsField("ID")) {
             List<Integer> ids = result.getField("ID");
             return ids.contains(id);
@@ -46,11 +42,7 @@ public class ClientActivitySearcher {
     }
 
     public static List<UserWithActivity> getUserWithActivity() {
-        try {
-            CommandController.executeCommand(CommandName.GET_VALUES_BY_TWO_TABLES, new CommandParameters());
-        } catch (SQLException e) {
-            ExceptionHandler.handleException("Error checking existing client ", e);
-        }
+        CommandController.executeCommand(CommandName.GET_VALUES_BY_TWO_TABLES, new CommandParameters());
         List<UserWithActivity> userWithActivities = new ArrayList<>();
         Iterator<BigDecimal> ids = result.getField("ID").iterator();
         Iterator<String> logins = result.getField("LOGIN").iterator();
