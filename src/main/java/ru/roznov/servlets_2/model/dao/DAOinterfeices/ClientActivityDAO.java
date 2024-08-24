@@ -9,12 +9,12 @@ public interface ClientActivityDAO {
 
     void insertNewClient(int id) throws SQLException;
 
-    void deleteClient(int id) throws SQLException;
+    void deleteClient(int id);
 
-    void updateClient(int id, int activity) throws SQLException;
+    void updateClient(int id, int activity);
 
-    void makeAllUnActive() throws SQLException;
+    void makeAllUnActive();
 
-    DynamicResult getUsersWithActivity() throws SQLException;
+    DynamicResult getUsersWithActivity();
 
 }

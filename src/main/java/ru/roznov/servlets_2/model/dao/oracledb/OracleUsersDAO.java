@@ -18,7 +18,7 @@ public class OracleUsersDAO implements UsersDAO {
 
 
     @Override
-    public DynamicResult getUsers() throws SQLException {
+    public DynamicResult getUsers() {
         DynamicResult dynamicResult = new DynamicResult();
         String sql = "select * from users";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -26,7 +26,7 @@ public class OracleUsersDAO implements UsersDAO {
                 dynamicResult = DynamicResult.containDynamicResult(resultSet);
             }
         } catch (SQLException e) {
-            System.err.println("Error selecting user" + e.getMessage());
+            System.err.println("Error selecting user " + e.getMessage());
         }
         return dynamicResult;
     }
@@ -43,26 +43,24 @@ public class OracleUsersDAO implements UsersDAO {
             statement.setInt(3, password);
             statement.setString(4, role);
             statement.executeUpdate();
-            this.commitChanges();
         } catch (SQLException e) {
-            System.err.println("Error inserting user" + e.getMessage());
+            System.err.println("Error inserting user " + e.getMessage());
         }
     }
 
     @Override
-    public void deleteUser(String login) throws SQLException {
+    public void deleteUser(String login) {
         String sql = "delete from users where login = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, login);
             statement.executeUpdate();
-            this.commitChanges();
         } catch (SQLException e) {
             System.err.println("Error deleting user" + e.getMessage());
         }
     }
 
     @Override
-    public void updateUser(int id, String login, int password, String role) throws SQLException {
+    public void updateUser(int id, String login, int password, String role) {
         String sql = "UPDATE users SET login = ?,password = ?,role = ?WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, login);
@@ -70,19 +68,10 @@ public class OracleUsersDAO implements UsersDAO {
             statement.setString(3, role);
             statement.setInt(4, id);
             statement.executeUpdate();
-            this.commitChanges();
         } catch (SQLException e) {
             System.err.println("Error updating user" + e.getMessage());
         }
     }
 
 
-    private void commitChanges() {
-       /* try {
-            connection.commit();
-        } catch (SQLException e) {
-            System.err.println("Error commit changes " + e.getMessage());
-        }*/
-
-    }
 }

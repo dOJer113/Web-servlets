@@ -12,6 +12,8 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import java.io.IOException;
+
 import static java.util.Objects.nonNull;
 
 @WebFilter("/*")
@@ -24,24 +26,24 @@ public class AuthFilter implements Filter {
     @Override
     public void doFilter(final ServletRequest request,
                          final ServletResponse response,
-                         final FilterChain filterChain) {
+                         final FilterChain filterChain) throws ServletException, IOException {
 
         final HttpServletRequest req = (HttpServletRequest) request;
         CommandParameters moveParameters = new CommandParameters();
         moveParameters.addParameter("response", response);
         moveParameters.addParameter("request", req);
-        final String login = req.getParameter("login");
+        String login = req.getParameter("login");
         final String password = req.getParameter("password");
-        final HttpSession session = req.getSession();
-
         if (ClientBlocker.isClientBlocked(login)) {
             moveParameters.addParameter("role", RoleEnum.BLOCKED);
             CommandController.executeCommand(CommandName.MOVE_TO_MENU, moveParameters);
             req.getSession().setAttribute("role", RoleEnum.valueOf("BLOCKED"));
         } else if (AuthFilter.isUserAuthed(request)) {
-            final RoleEnum role = (RoleEnum) session.getAttribute("role");
-            moveParameters.addParameter("role", role);
-            CommandController.executeCommand(CommandName.MOVE_TO_MENU, moveParameters);
+            CommandParameters parameters = new CommandParameters();
+            parameters.addParameter("request", req);
+            parameters.addParameter("role", RoleEnum.valueOf(req.getSession().getAttribute("role").toString()));
+            parameters.addParameter("response", response);
+            CommandController.executeCommand(CommandName.RE_AUTHORIZE_CLIENT, parameters);
         } else if (nonNull(login) && UsersSearcher.isExistsUser(login)) {
             CommandParameters authorizationParameters = new CommandParameters();
             authorizationParameters.addParameter("response", response);
@@ -53,6 +55,7 @@ public class AuthFilter implements Filter {
             moveParameters.addParameter("role", RoleEnum.UNKNOWN);
             CommandController.executeCommand(CommandName.MOVE_TO_MENU, moveParameters);
         }
+        filterChain.doFilter(request, response);
     }
 
     private static boolean isUserAuthed(ServletRequest request) {

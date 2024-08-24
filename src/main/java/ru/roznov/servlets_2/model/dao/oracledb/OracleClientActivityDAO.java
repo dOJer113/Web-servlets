@@ -18,7 +18,7 @@ public class OracleClientActivityDAO implements ClientActivityDAO {
     }
 
     @Override
-    public DynamicResult getClients() throws SQLException {
+    public DynamicResult getClients() {
         DynamicResult dynamicResult = new DynamicResult();
         String sql = "select * from users_activity";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {

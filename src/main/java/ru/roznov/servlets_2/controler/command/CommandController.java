@@ -41,6 +41,8 @@ public class CommandController {
         commandMap.put(CommandName.MOVE_TO_MENU, FrontController::moveToMenu);
         commandMap.put(CommandName.AUTHORIZE_CLIENT, FrontController::authorizeClient);
         commandMap.put(CommandName.MAKE_ALL_UN_ACTIVE, ClientActivityManager::makeAllClientsUnActive);
+        commandMap.put(CommandName.RE_AUTHORIZE_CLIENT, FrontController::reAuthorizeClient);
+        commandMap.put(CommandName.START_LISTENER_TIMER, FrontController::startListenerTimer);
     }
 
     public static void executeCommand(CommandName name, CommandParameters commandParameters) {
@@ -57,7 +59,7 @@ public class CommandController {
         commandLog.add(name);
     }
 
-    public List<CommandName> getCommandLog() {
-        return commandLog;
+    public static List<CommandName> getCommandLog() {
+        return CommandController.commandLog;
     }
 }

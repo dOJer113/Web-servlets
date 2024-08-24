@@ -6,7 +6,7 @@
 </head>
 <body>
 <h2>Changing user</h2>
-<form action="changing" method="post">
+<form action="/update" method="post">
     <label for="id">Client id:</label>
     <input type="text" id="id" name="id" value="${client.id}" required><br><br>
     <label for="login">LOGIN:</label>

@@ -3,8 +3,6 @@ package ru.roznov.servlets_2.servlets.admin;
 import ru.roznov.servlets_2.controler.command.CommandController;
 import ru.roznov.servlets_2.controler.command.CommandName;
 import ru.roznov.servlets_2.controler.command.CommandParameters;
-import ru.roznov.servlets_2.model.UserAndActivityManager;
-import ru.roznov.servlets_2.model.user.UserManager;
 import ru.roznov.servlets_2.model.user.UsersSearcher;
 
 import javax.servlet.ServletException;
@@ -13,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 
 @WebServlet("/addUser")
 public class AddUserServlet extends HttpServlet {
@@ -32,6 +29,11 @@ public class AddUserServlet extends HttpServlet {
         } else {
             System.err.println("User already exists");
         }
-        response.sendRedirect(request.getContextPath() + "/clients");
+        request.getRequestDispatcher("/WEB-INF/view/adm.jsp").forward(request, response);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("/WEB-INF/view/adduser.jsp").forward(req, resp);
     }
 }

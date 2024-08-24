@@ -25,6 +25,6 @@
     </servlet-mapping>
 
     <session-config>
-        <session-timeout>3000</session-timeout>
+        <session-timeout>50</session-timeout>
     </session-config>
 </web-app>

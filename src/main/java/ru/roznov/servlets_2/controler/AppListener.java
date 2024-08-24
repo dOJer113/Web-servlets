@@ -7,6 +7,8 @@ import ru.roznov.servlets_2.controler.command.CommandParameters;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -34,6 +36,13 @@ public class AppListener implements ServletContextListener {
             timer.cancel();
         }
         CommandController.executeCommand(CommandName.MAKE_ALL_UN_ACTIVE, new CommandParameters());
+        Iterator<CommandName> iterator = CommandController.getCommandLog().iterator();
+        int i = 1;
+        System.out.println("Used command log:");
+        while (iterator.hasNext()) {
+            System.out.println(i + ") " + iterator.next());
+            i++;
+        }
         System.out.println("Application stopped.");
     }
 

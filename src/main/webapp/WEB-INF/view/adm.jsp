@@ -7,12 +7,12 @@
 <body>
 <h2>Choose an action</h2>
 
-<form action="${pageContext.request.contextPath}/add" method="get">
+<form action="${pageContext.request.contextPath}/addUser" method="get">
     <input type="submit" value="Add User">
 </form>
 <br>
 
-<form action="${pageContext.request.contextPath}/delete" method="get">
+<form action="${pageContext.request.contextPath}/deleteUser" method="get">
     <input type="submit" value="Delete User">
 </form>
 <br>

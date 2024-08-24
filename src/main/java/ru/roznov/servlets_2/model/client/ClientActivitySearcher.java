@@ -4,13 +4,11 @@ import ru.roznov.servlets_2.controler.command.CommandController;
 import ru.roznov.servlets_2.controler.command.CommandName;
 import ru.roznov.servlets_2.controler.command.CommandParameters;
 import ru.roznov.servlets_2.model.dao.DynamicResult;
-import ru.roznov.servlets_2.model.exceptions.ExceptionHandler;
 import ru.roznov.servlets_2.objects.ClientActivity;
 import ru.roznov.servlets_2.objects.RoleEnum;
 import ru.roznov.servlets_2.objects.UserWithActivity;
 
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -42,6 +40,7 @@ public class ClientActivitySearcher {
     }
 
     public static List<UserWithActivity> getUserWithActivity() {
+
         CommandController.executeCommand(CommandName.GET_VALUES_BY_TWO_TABLES, new CommandParameters());
         List<UserWithActivity> userWithActivities = new ArrayList<>();
         Iterator<BigDecimal> ids = result.getField("ID").iterator();
