@@ -3,7 +3,7 @@ package ru.roznov.servlets_2.servlets.admin;
 import ru.roznov.servlets_2.controler.command.CommandController;
 import ru.roznov.servlets_2.controler.command.CommandName;
 import ru.roznov.servlets_2.controler.command.CommandParameters;
-import ru.roznov.servlets_2.model.exceptions.ExceptionHandler;
+import ru.roznov.servlets_2.model.ExceptionHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

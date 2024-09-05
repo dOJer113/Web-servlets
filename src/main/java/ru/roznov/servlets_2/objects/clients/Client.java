@@ -1,4 +1,4 @@
-package ru.roznov.servlets_2.objects;
+package ru.roznov.servlets_2.objects.clients;
 
 import java.util.Objects;
 

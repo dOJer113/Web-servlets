@@ -1,4 +1,4 @@
-package ru.roznov.servlets_2.controler;
+package ru.roznov.servlets_2.controler.global;
 
 import ru.roznov.servlets_2.controler.command.CommandController;
 import ru.roznov.servlets_2.controler.command.CommandName;
@@ -8,7 +8,6 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -21,7 +20,13 @@ public class AppListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         timer = new Timer();
         CommandController.init();
-        CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
+        CommandParameters commandParameters = new CommandParameters();
+        CommandController.executeCommand(CommandName.GET_USERS_FROM_ORACLE_DB, commandParameters);
+        CommandController.executeCommand(CommandName.GET_PRODUCTS, commandParameters);
+        CommandController.executeCommand(CommandName.GET_STORAGES_STOREKEEPERS, commandParameters);
+        CommandController.executeCommand(CommandName.GET_STORAGES, commandParameters);
+        CommandController.executeCommand(CommandName.GET_CARS, commandParameters);
+        CommandController.executeCommand(CommandName.GET_CARS_DRIVERS, commandParameters);
         sce.getServletContext().setAttribute("appListener", this);
         System.out.println("Application started.");
     }

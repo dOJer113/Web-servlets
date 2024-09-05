@@ -4,7 +4,7 @@ import ru.roznov.servlets_2.controler.command.CommandController;
 import ru.roznov.servlets_2.controler.command.CommandName;
 import ru.roznov.servlets_2.controler.command.CommandParameters;
 import ru.roznov.servlets_2.model.user.UsersSearcher;
-import ru.roznov.servlets_2.objects.RoleEnum;
+import ru.roznov.servlets_2.objects.clients.RoleEnum;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

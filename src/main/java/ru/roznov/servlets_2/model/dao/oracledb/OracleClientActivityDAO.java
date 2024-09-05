@@ -3,7 +3,7 @@ package ru.roznov.servlets_2.model.dao.oracledb;
 import ru.roznov.servlets_2.model.client.ClientActivitySearcher;
 import ru.roznov.servlets_2.model.dao.DAOinterfeices.ClientActivityDAO;
 import ru.roznov.servlets_2.model.dao.DynamicResult;
-import ru.roznov.servlets_2.model.exceptions.ExceptionHandler;
+import ru.roznov.servlets_2.model.ExceptionHandler;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

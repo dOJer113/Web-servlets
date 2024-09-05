@@ -1,4 +1,4 @@
-package ru.roznov.servlets_2.controler;
+package ru.roznov.servlets_2.controler.global;
 
 import ru.roznov.servlets_2.controler.command.CommandController;
 import ru.roznov.servlets_2.controler.command.CommandName;

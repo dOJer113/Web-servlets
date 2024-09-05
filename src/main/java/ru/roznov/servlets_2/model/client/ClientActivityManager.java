@@ -3,7 +3,7 @@ package ru.roznov.servlets_2.model.client;
 import ru.roznov.servlets_2.controler.command.CommandParameters;
 import ru.roznov.servlets_2.model.dao.DAOinterfeices.DAOFactory;
 import ru.roznov.servlets_2.model.dao.DBType;
-import ru.roznov.servlets_2.model.exceptions.ExceptionHandler;
+import ru.roznov.servlets_2.model.ExceptionHandler;
 
 import java.sql.SQLException;
 
@@ -39,19 +39,11 @@ public class ClientActivityManager {
     }
 
     public static void getValuesByTwoTables(CommandParameters parameters) {
-        try {
-            ClientActivitySearcher.result = DAOFactory.getInstance(DBType.ORACLE).getClientActivityDAO().getUsersWithActivity();
-        } catch (SQLException e) {
-            ExceptionHandler.handleException("Error getting users with activity", e);
-        }
+        ClientActivitySearcher.result = DAOFactory.getInstance(DBType.ORACLE).getClientActivityDAO().getUsersWithActivity();
     }
 
     public static void makeAllClientsUnActive(CommandParameters parameters) {
-        try {
-            DAOFactory.getInstance(DBType.ORACLE).getClientActivityDAO().makeAllUnActive();
-        } catch (SQLException e) {
-            ExceptionHandler.handleException("Error making all clients un active ", e);
-        }
+        DAOFactory.getInstance(DBType.ORACLE).getClientActivityDAO().makeAllUnActive();
     }
 
 }

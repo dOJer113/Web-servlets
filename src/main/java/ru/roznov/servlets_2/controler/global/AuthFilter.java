@@ -1,12 +1,11 @@
-package ru.roznov.servlets_2.controler;
+package ru.roznov.servlets_2.controler.global;
 
 import jakarta.servlet.annotation.WebFilter;
 import ru.roznov.servlets_2.controler.command.CommandController;
 import ru.roznov.servlets_2.controler.command.CommandName;
 import ru.roznov.servlets_2.controler.command.CommandParameters;
-import ru.roznov.servlets_2.model.block.ClientBlocker;
 import ru.roznov.servlets_2.model.user.UsersSearcher;
-import ru.roznov.servlets_2.objects.RoleEnum;
+import ru.roznov.servlets_2.objects.clients.RoleEnum;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +33,9 @@ public class AuthFilter implements Filter {
         moveParameters.addParameter("request", req);
         String login = req.getParameter("login");
         final String password = req.getParameter("password");
-        if (ClientBlocker.isClientBlocked(login)) {
+        moveParameters.addParameter("login", login);
+        CommandController.executeCommand(CommandName.IS_CLIENT_BLOCKED, moveParameters);
+        if (moveParameters.getParameter("block", Boolean.class)) {
             moveParameters.addParameter("role", RoleEnum.BLOCKED);
             CommandController.executeCommand(CommandName.MOVE_TO_MENU, moveParameters);
             req.getSession().setAttribute("role", RoleEnum.valueOf("BLOCKED"));

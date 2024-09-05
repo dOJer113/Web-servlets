@@ -3,7 +3,6 @@ package ru.roznov.servlets_2.model.user;
 import ru.roznov.servlets_2.controler.command.CommandParameters;
 import ru.roznov.servlets_2.model.dao.DAOinterfeices.DAOFactory;
 import ru.roznov.servlets_2.model.dao.DBType;
-import ru.roznov.servlets_2.model.exceptions.ExceptionHandler;
 
 import java.sql.SQLException;
 
@@ -30,10 +29,6 @@ public class UserManager {
     }
 
     public static void getValuesFromOracleDB(CommandParameters commandParameters) {
-        try {
-            UsersSearcher.result = DAOFactory.getInstance(DBType.ORACLE).getUsersDAO().getUsers();
-        } catch (SQLException e) {
-            ExceptionHandler.handleException("Error checking existing user", e);
-        }
+        UsersSearcher.result = DAOFactory.getInstance(DBType.ORACLE).getUsersDAO().getUsers();
     }
 }

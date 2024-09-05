@@ -2,7 +2,7 @@ package ru.roznov.servlets_2.model.block;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import ru.roznov.servlets_2.objects.Client;
+import ru.roznov.servlets_2.objects.clients.Client;
 
 import java.io.IOException;
 import java.io.Reader;

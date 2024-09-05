@@ -1,4 +1,4 @@
-package ru.roznov.servlets_2.objects;
+package ru.roznov.servlets_2.objects.clients;
 
 public class ClientActivity {
     private int id;

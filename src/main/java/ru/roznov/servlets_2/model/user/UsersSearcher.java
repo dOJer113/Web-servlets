@@ -5,13 +5,11 @@ import ru.roznov.servlets_2.controler.command.CommandName;
 import ru.roznov.servlets_2.controler.command.CommandParameters;
 
 import ru.roznov.servlets_2.model.dao.DynamicResult;
-import ru.roznov.servlets_2.model.exceptions.ExceptionHandler;
-import ru.roznov.servlets_2.objects.Client;
-import ru.roznov.servlets_2.objects.RoleEnum;
+import ru.roznov.servlets_2.objects.clients.Client;
+import ru.roznov.servlets_2.objects.clients.RoleEnum;
 
 import java.math.BigDecimal;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -22,7 +20,6 @@ public class UsersSearcher {
 
 
     public static Client getClientByLogin(String login) {
-        CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
         if (result.containsField("LOGIN")) {
             Iterator<BigDecimal> ids = result.getField("ID").iterator();
             Iterator<String> logins = result.getField("LOGIN").iterator();
@@ -40,7 +37,6 @@ public class UsersSearcher {
     }
 
     public static int getIdByLogin(String login) {
-        CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
         if (result.containsField("LOGIN")) {
             Iterator<BigDecimal> ids = result.getField("ID").iterator();
             Iterator<String> logins = result.getField("LOGIN").iterator();
@@ -56,7 +52,7 @@ public class UsersSearcher {
     }
 
     public static boolean isExistsUser(String login) {
-        CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
+        //CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
         if (result.containsField("LOGIN")) {
             List logins = result.getField("LOGIN");
             return logins.contains(login);
@@ -65,7 +61,7 @@ public class UsersSearcher {
     }
 
     public static boolean isExistsUser(int id) {
-        CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
+        //CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
         if (result.containsField("ID")) {
             List ids = result.getField("ID");
             return ids.contains(id);
@@ -88,7 +84,7 @@ public class UsersSearcher {
     }
 
     public static List<Client> getClientsListByDynamicResult() {
-        CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
+        //CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
         List<Client> clients = new ArrayList<>();
         Iterator<BigDecimal> ids = result.getField("ID").iterator();
         Iterator<String> logins = result.getField("LOGIN").iterator();

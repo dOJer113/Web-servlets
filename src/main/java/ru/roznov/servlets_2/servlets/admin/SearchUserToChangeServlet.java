@@ -1,7 +1,7 @@
 package ru.roznov.servlets_2.servlets.admin;
 
 import ru.roznov.servlets_2.model.user.UsersSearcher;
-import ru.roznov.servlets_2.objects.Client;
+import ru.roznov.servlets_2.objects.clients.Client;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

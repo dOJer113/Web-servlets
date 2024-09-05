@@ -1,14 +1,14 @@
 package ru.roznov.servlets_2.model.block;
 
 import ru.roznov.servlets_2.controler.command.CommandParameters;
-import ru.roznov.servlets_2.objects.Client;
+import ru.roznov.servlets_2.objects.clients.Client;
 
 import java.util.List;
 
 public class ClientBlocker {
-    public static boolean isClientBlocked(String login) {
+    public static void isClientBlocked(CommandParameters parameters) {
         List<String> blockedClientsLogins = FileWorker.getBlockedClientsLogins();
-        return blockedClientsLogins.contains(login);
+        parameters.addParameter("block", blockedClientsLogins.contains(parameters.getParameter("login", String.class)));
     }
 
     public static void blockClient(CommandParameters commandParameters) {

@@ -1,4 +1,4 @@
-package ru.roznov.servlets_2.objects;
+package ru.roznov.servlets_2.objects.clients;
 
 public class UserWithActivity {
     private int id;

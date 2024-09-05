@@ -1,11 +1,11 @@
-package ru.roznov.servlets_2.controler;
+package ru.roznov.servlets_2.controler.global;
 
 import ru.roznov.servlets_2.controler.command.CommandController;
 import ru.roznov.servlets_2.controler.command.CommandName;
 import ru.roznov.servlets_2.controler.command.CommandParameters;
 import ru.roznov.servlets_2.model.user.UsersSearcher;
-import ru.roznov.servlets_2.objects.Client;
-import ru.roznov.servlets_2.objects.RoleEnum;
+import ru.roznov.servlets_2.objects.clients.Client;
+import ru.roznov.servlets_2.objects.clients.RoleEnum;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,7 +20,7 @@ public class FrontController extends HttpServlet {
     public static final int LOG_OUT_TIMER = 2_999_999;
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 
     }
 
@@ -50,6 +50,7 @@ public class FrontController extends HttpServlet {
         session.setAttribute("password", commandParameters.getParameter("password", String.class));
         session.setAttribute("login", login);
         session.setAttribute("role", role);
+        session.setAttribute("id", client.getId());
         commandParameters.addParameter("role", role);
         CommandParameters activateParameters = new CommandParameters();
         activateParameters.addParameter("id", client.getId());

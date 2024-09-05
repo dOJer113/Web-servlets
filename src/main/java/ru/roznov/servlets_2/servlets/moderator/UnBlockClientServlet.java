@@ -19,8 +19,12 @@ public class UnBlockClientServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String login = req.getParameter("login");
         try {
-            if (UsersSearcher.isExistsUser(login) || ClientBlocker.isClientBlocked(login)) {
-                if (ClientBlocker.isClientBlocked(login)) {
+            CommandParameters blockParameters = new CommandParameters();
+            blockParameters.addParameter("login", login);
+            CommandController.executeCommand(CommandName.IS_CLIENT_BLOCKED, blockParameters);
+            boolean block = blockParameters.getParameter("block", Boolean.class);
+            if (UsersSearcher.isExistsUser(login) || block) {
+                if (block) {
                     CommandParameters commandParameters = new CommandParameters();
                     commandParameters.addParameter("client", UsersSearcher.getClientByLogin(login));
                     CommandController.executeCommand(CommandName.UNBLOCK_CLIENT, commandParameters);

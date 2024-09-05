@@ -9,6 +9,13 @@ public abstract class DAOFactory {
     }
 
     public abstract UsersDAO getUsersDAO();
+
     public abstract ClientActivityDAO getClientActivityDAO();
+
+    public abstract StorageDAO getStorageDAO();
+
+    public abstract CarDAO getCarDAO();
+
+    public abstract ProductDAO getProductDAO();
 
 }

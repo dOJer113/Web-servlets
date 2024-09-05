@@ -1,9 +1,7 @@
 package ru.roznov.servlets_2.model.dao.oracledb;
 
 
-import ru.roznov.servlets_2.model.dao.DAOinterfeices.ClientActivityDAO;
-import ru.roznov.servlets_2.model.dao.DAOinterfeices.DAOFactory;
-import ru.roznov.servlets_2.model.dao.DAOinterfeices.UsersDAO;
+import ru.roznov.servlets_2.model.dao.DAOinterfeices.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -55,6 +53,21 @@ public class OracleDBDAOFactory extends DAOFactory {
     @Override
     public ClientActivityDAO getClientActivityDAO() {
         return new OracleClientActivityDAO(connection);
+    }
+
+    @Override
+    public StorageDAO getStorageDAO() {
+        return new OracleStorageDAO(connection);
+    }
+
+    @Override
+    public CarDAO getCarDAO() {
+        return new OracleCarsDAO(connection);
+    }
+
+    @Override
+    public ProductDAO getProductDAO() {
+        return new OracleProductsDAO(connection);
     }
 
 }

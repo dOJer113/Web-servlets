@@ -4,9 +4,9 @@ import ru.roznov.servlets_2.controler.command.CommandController;
 import ru.roznov.servlets_2.controler.command.CommandName;
 import ru.roznov.servlets_2.controler.command.CommandParameters;
 import ru.roznov.servlets_2.model.dao.DynamicResult;
-import ru.roznov.servlets_2.objects.ClientActivity;
-import ru.roznov.servlets_2.objects.RoleEnum;
-import ru.roznov.servlets_2.objects.UserWithActivity;
+import ru.roznov.servlets_2.objects.clients.ClientActivity;
+import ru.roznov.servlets_2.objects.clients.RoleEnum;
+import ru.roznov.servlets_2.objects.clients.UserWithActivity;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
