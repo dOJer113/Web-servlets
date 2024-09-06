@@ -3,13 +3,11 @@ package ru.roznov.servlets_2.model.user;
 import ru.roznov.servlets_2.controler.command.CommandController;
 import ru.roznov.servlets_2.controler.command.CommandName;
 import ru.roznov.servlets_2.controler.command.CommandParameters;
-
 import ru.roznov.servlets_2.model.dao.DynamicResult;
 import ru.roznov.servlets_2.objects.clients.Client;
 import ru.roznov.servlets_2.objects.clients.RoleEnum;
 
 import java.math.BigDecimal;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -54,7 +52,7 @@ public class UsersSearcher {
     public static boolean isExistsUser(String login) {
         CommandController.executeCommand(CommandName.GET_USERS_FROM_ORACLE_DB, new CommandParameters());
         if (result.containsField("LOGIN")) {
-            List logins = result.getField("LOGIN");
+            List<String> logins = result.getField("LOGIN");
             return logins.contains(login);
         }
         return false;

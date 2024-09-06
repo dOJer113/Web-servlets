@@ -7,12 +7,12 @@
 <body>
 <h2>Choose an action</h2>
 
-<form action="${pageContext.request.contextPath}/searchToBlock" method="get">
+<form action="${pageContext.request.contextPath}/blockClient" method="get">
     <input type="submit" value="Block Client">
 </form>
 <br>
 
-<form action="${pageContext.request.contextPath}/searchToUnBlock" method="get">
+<form action="${pageContext.request.contextPath}/unBlockClient" method="get">
     <input type="submit" value="Unblock Client">
 </form>
 <br>

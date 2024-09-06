@@ -14,17 +14,20 @@ import java.io.IOException;
 
 @WebServlet("/blockClient")
 public class BlockClientServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("/WEB-INF/view/block.jsp").forward(req, resp);
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String login = req.getParameter("login");
         try {
             if (UsersSearcher.isExistsUser(login)) {
-
                 CommandParameters blockParameters = new CommandParameters();
                 blockParameters.addParameter("login", login);
                 CommandController.executeCommand(CommandName.IS_CLIENT_BLOCKED, blockParameters);
-                if (blockParameters.getParameter("block", Boolean.class)) {
+                if (!blockParameters.getParameter("block", Boolean.class)) {
                     CommandParameters commandParameters = new CommandParameters();
                     commandParameters.addParameter("client", UsersSearcher.getClientByLogin(login));
                     CommandController.executeCommand(CommandName.BLOCK_CLIENT, commandParameters);

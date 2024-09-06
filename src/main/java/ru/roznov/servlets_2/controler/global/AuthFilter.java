@@ -10,7 +10,6 @@ import ru.roznov.servlets_2.objects.clients.RoleEnum;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import java.io.IOException;
 
 import static java.util.Objects.nonNull;
@@ -26,9 +25,6 @@ public class AuthFilter implements Filter {
     public void doFilter(final ServletRequest request,
                          final ServletResponse response,
                          final FilterChain filterChain) throws ServletException, IOException {
-        //todo не совсем понятно что прроисходи при авторизации
-        //  сначала три раза проверка авторизации, а потом уже открывается login
-
         final HttpServletRequest req = (HttpServletRequest) request;
         CommandParameters moveParameters = new CommandParameters();
         moveParameters.addParameter("response", response);
