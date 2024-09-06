@@ -3,6 +3,7 @@ package ru.roznov.servlets_2.model.block;
 import ru.roznov.servlets_2.controler.command.CommandParameters;
 import ru.roznov.servlets_2.objects.clients.Client;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClientBlocker {
@@ -25,5 +26,9 @@ public class ClientBlocker {
         List<Client> clients = FileWorker.readBlockedUsersFromFile();
         clients.remove(client);
         FileWorker.writeBlockedUsersToFile(clients);
+    }
+
+    public static void unBlockAll(CommandParameters commandParameters) {
+        FileWorker.writeBlockedUsersToFile(new ArrayList<>());
     }
 }

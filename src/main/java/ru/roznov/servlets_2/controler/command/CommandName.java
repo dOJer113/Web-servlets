@@ -42,5 +42,6 @@ public enum CommandName {
     GET_STORAGES,
     GET_CARS_DRIVERS,
     GET_STORAGES_STOREKEEPERS,
+    UNBLOCK_ALL
 }
 

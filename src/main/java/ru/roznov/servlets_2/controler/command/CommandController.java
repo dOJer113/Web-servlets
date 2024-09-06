@@ -1,13 +1,13 @@
 package ru.roznov.servlets_2.controler.command;
 
 import ru.roznov.servlets_2.controler.global.FrontController;
+import ru.roznov.servlets_2.model.CarManager;
+import ru.roznov.servlets_2.model.ExceptionHandler;
 import ru.roznov.servlets_2.model.ProductManager;
+import ru.roznov.servlets_2.model.StoreManager;
 import ru.roznov.servlets_2.model.activity.UserAndActivityManager;
 import ru.roznov.servlets_2.model.block.ClientBlocker;
-import ru.roznov.servlets_2.model.CarManager;
 import ru.roznov.servlets_2.model.client.ClientActivityManager;
-import ru.roznov.servlets_2.model.ExceptionHandler;
-import ru.roznov.servlets_2.model.StoreManager;
 import ru.roznov.servlets_2.model.user.UserManager;
 import ru.roznov.servlets_2.objects.requests.RequestController;
 
@@ -66,6 +66,7 @@ public class CommandController {
         commandMap.put(CommandName.GET_CARS_DRIVERS, CarManager::getCarsIdByDriversIdFromDB);
         commandMap.put(CommandName.GET_STORAGES, StoreManager::getStorages);
         commandMap.put(CommandName.GET_STORAGES_STOREKEEPERS, StoreManager::getStoragesIdByKeepersIdFromDB);
+        commandMap.put(CommandName.UNBLOCK_ALL, ClientBlocker::unBlockAll);
     }
 
     public static void executeCommand(CommandName name, CommandParameters commandParameters) {

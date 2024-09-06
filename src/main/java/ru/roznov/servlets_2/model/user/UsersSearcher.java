@@ -18,6 +18,7 @@ public class UsersSearcher {
 
 
     public static Client getClientByLogin(String login) {
+        CommandController.executeCommand(CommandName.GET_USERS_FROM_ORACLE_DB, new CommandParameters());
         if (result.containsField("LOGIN")) {
             Iterator<BigDecimal> ids = result.getField("ID").iterator();
             Iterator<String> logins = result.getField("LOGIN").iterator();

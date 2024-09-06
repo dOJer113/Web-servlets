@@ -1,10 +1,5 @@
 package ru.roznov.servlets_2.servlets.admin;
 
-import ru.roznov.servlets_2.controler.command.CommandController;
-import ru.roznov.servlets_2.controler.command.CommandName;
-import ru.roznov.servlets_2.controler.command.CommandParameters;
-import ru.roznov.servlets_2.model.activity.UserAndActivityManager;
-import ru.roznov.servlets_2.model.user.UserManager;
 import ru.roznov.servlets_2.model.user.UsersSearcher;
 import ru.roznov.servlets_2.objects.clients.Client;
 
@@ -27,10 +22,9 @@ public class SearchUserToChangeServlet extends HttpServlet {
         Client client = new Client();
         try {
             if (UsersSearcher.isExistsUser(login)) {
+                req.getSession().setAttribute("oldLogin",login);
                 client = UsersSearcher.getClientByLogin(login);
-                CommandParameters commandParameters = new CommandParameters();
-                commandParameters.addParameter("client", client);
-                CommandController.executeCommand(CommandName.UNBLOCK_CLIENT, commandParameters);
+
             } else {
                 System.err.println("No such user in db");
             }
