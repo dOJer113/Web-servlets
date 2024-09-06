@@ -4,6 +4,8 @@ import ru.roznov.servlets_2.controler.command.CommandController;
 import ru.roznov.servlets_2.controler.command.CommandName;
 import ru.roznov.servlets_2.controler.command.CommandParameters;
 import ru.roznov.servlets_2.model.ExceptionHandler;
+import ru.roznov.servlets_2.model.user.UsersSearcher;
+import ru.roznov.servlets_2.objects.clients.Client;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,6 +16,8 @@ import java.io.IOException;
 
 @WebServlet("/update")
 public class ChangeUserServlet extends HttpServlet {
+
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         try {
@@ -23,6 +27,8 @@ public class ChangeUserServlet extends HttpServlet {
             commandParameters.addParameter("password", Integer.parseInt(req.getParameter("password")));
             commandParameters.addParameter("role", req.getParameter("role"));
             CommandController.executeCommand(CommandName.UPDATE_USER, commandParameters);
+            commandParameters.addParameter("client", UsersSearcher.getClientByLogin(req.getParameter("login")));
+            CommandController.executeCommand(CommandName.BLOCK_CLIENT, commandParameters);
             req.getRequestDispatcher("/WEB-INF/view/adm.jsp").forward(req, resp);
         } catch (ServletException | IOException e) {
             ExceptionHandler.handleException("Error updating user", e);

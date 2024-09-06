@@ -26,6 +26,8 @@ public class AuthFilter implements Filter {
     public void doFilter(final ServletRequest request,
                          final ServletResponse response,
                          final FilterChain filterChain) throws ServletException, IOException {
+        //todo не совсем понятно что прроисходи при авторизации
+        //  сначала три раза проверка авторизации, а потом уже открывается login
 
         final HttpServletRequest req = (HttpServletRequest) request;
         CommandParameters moveParameters = new CommandParameters();

@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ProductsBase {
-    //todo сделать заполнение из таблицы бд продкуты, для этого написать новый дао
     private static List<Product> products = new CopyOnWriteArrayList<>();
 
     private ProductsBase() {

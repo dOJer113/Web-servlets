@@ -22,12 +22,14 @@ public class OracleProductsDAO implements ProductDAO {
     @Override
     public List<Product> getProducts() {
         List<Product> list = new ArrayList<>();
-        String sql = "sselect * from PRODUCTS";
+        String sql = "select * from PRODUCTS";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             try (ResultSet resultSet = statement.executeQuery(sql)) {
-                int id = resultSet.getInt(1);
-                ProductEnum name = ProductEnum.valueOf(resultSet.getString(2));
-                list.add(new Product(id, name));
+                while (resultSet.next()) {
+                    int id = resultSet.getInt(1);
+                    ProductEnum name = ProductEnum.valueOf(resultSet.getString(2));
+                    list.add(new Product(id, name));
+                }
             }
         } catch (SQLException e) {
             ExceptionHandler.handleException("Error selecting products", e);

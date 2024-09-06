@@ -52,7 +52,7 @@ public class UsersSearcher {
     }
 
     public static boolean isExistsUser(String login) {
-        //CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
+        CommandController.executeCommand(CommandName.GET_USERS_FROM_ORACLE_DB, new CommandParameters());
         if (result.containsField("LOGIN")) {
             List logins = result.getField("LOGIN");
             return logins.contains(login);
@@ -61,7 +61,7 @@ public class UsersSearcher {
     }
 
     public static boolean isExistsUser(int id) {
-        //CommandController.executeCommand(CommandName.GET_VALUES_FROM_ORACLE_DB, new CommandParameters());
+        CommandController.executeCommand(CommandName.GET_USERS_FROM_ORACLE_DB, new CommandParameters());
         if (result.containsField("ID")) {
             List ids = result.getField("ID");
             return ids.contains(id);

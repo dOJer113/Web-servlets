@@ -33,7 +33,6 @@ public class StoreManager {
     public static void addNewKeeperWithStore(CommandParameters commandParameters) {
         int keeperId = commandParameters.getParameter("id", Integer.class);
         DAOFactory.getInstance(DBType.ORACLE).getStorageDAO().addNewKeeperWithStore(keeperId);
-        //todo не уверен, нужно ли мне в статический класс закидывать кладовщика с пустым классом
     }
 
     public static void addCarToStore(CommandParameters commandParameters) {

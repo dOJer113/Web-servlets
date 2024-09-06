@@ -1,5 +1,10 @@
 package ru.roznov.servlets_2.servlets.admin;
 
+import ru.roznov.servlets_2.controler.command.CommandController;
+import ru.roznov.servlets_2.controler.command.CommandName;
+import ru.roznov.servlets_2.controler.command.CommandParameters;
+import ru.roznov.servlets_2.model.activity.UserAndActivityManager;
+import ru.roznov.servlets_2.model.user.UserManager;
 import ru.roznov.servlets_2.model.user.UsersSearcher;
 import ru.roznov.servlets_2.objects.clients.Client;
 
@@ -13,12 +18,19 @@ import java.io.IOException;
 @WebServlet("/searchUser")
 public class SearchUserToChangeServlet extends HttpServlet {
     @Override
+    public void init() {
+    }
+
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String login = req.getParameter("login");
         Client client = new Client();
         try {
             if (UsersSearcher.isExistsUser(login)) {
                 client = UsersSearcher.getClientByLogin(login);
+                CommandParameters commandParameters = new CommandParameters();
+                commandParameters.addParameter("client", client);
+                CommandController.executeCommand(CommandName.UNBLOCK_CLIENT, commandParameters);
             } else {
                 System.err.println("No such user in db");
             }

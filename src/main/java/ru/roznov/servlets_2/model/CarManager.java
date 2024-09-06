@@ -31,7 +31,6 @@ public class CarManager {
     public static void addNewDriverWithCar(CommandParameters commandParameters) {
         int driverId = commandParameters.getParameter("id", Integer.class);
         DAOFactory.getInstance(DBType.ORACLE).getCarDAO().addNewDriverWithCar(driverId);
-        //todo не уверен, нужно ли мне в статический класс закидывать водителя с пустой машиной
     }
 
     public static void changeCountProductsAtCar(CommandParameters commandParameters) {

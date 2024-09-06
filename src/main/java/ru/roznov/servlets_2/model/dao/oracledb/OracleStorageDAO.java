@@ -35,10 +35,12 @@ public class OracleStorageDAO implements StorageDAO {
         String sql = "select *\n" +
                 "from STORE_STOREKEEPER\n";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            try (ResultSet resultSet = statement.executeQuery(sql)) {
-                int storageId = resultSet.getInt(1);
-                int keeperId = resultSet.getInt(2);
-                map.put(keeperId, storageId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    int storageId = resultSet.getInt(1);
+                    int keeperId = resultSet.getInt(2);
+                    map.put(keeperId, storageId);
+                }
             }
         } catch (SQLException e) {
             ExceptionHandler.handleException("Error selecting storage by keeper ", e);
@@ -56,10 +58,12 @@ public class OracleStorageDAO implements StorageDAO {
                         "where STOREID = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, storeId);
-            try (ResultSet resultSet = statement.executeQuery(sql)) {
-                ProductEnum productName = ProductEnum.valueOf(resultSet.getString(1));
-                int count = resultSet.getInt(2);
-                map.put(productName, count);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    ProductEnum productName = ProductEnum.valueOf(resultSet.getString(1));
+                    int count = resultSet.getInt(2);
+                    map.put(productName, count);
+                }
             }
         } catch (SQLException e) {
             ExceptionHandler.handleException("Error selecting products by store id ", e);
@@ -73,12 +77,16 @@ public class OracleStorageDAO implements StorageDAO {
         Map<Integer, Store> map = new HashMap<>();
         String sql = "select STOREID from STORAGES";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            try (ResultSet resultSet = statement.executeQuery(sql)) {
-                int storeId = resultSet.getInt(1);
-                Store store = new Store();
-                store.setProductsFromMap(this.getProductsByStoreId(storeId));
-                store.setCarsAtStorageFromSetIds(this.getCarIdsAtStore(storeId));
-                map.put(storeId, store);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    int storeId = resultSet.getInt(1);
+                    Store store = new Store();
+                    if (storeId != 0) {
+                        store.setProductsFromMap(this.getProductsByStoreId(storeId));
+                        store.setCarsAtStorageFromSetIds(this.getCarIdsAtStore(storeId));
+                        map.put(storeId, store);
+                    }
+                }
             }
         } catch (SQLException e) {
             ExceptionHandler.handleException("Error selecting storages with products ", e);
@@ -131,8 +139,10 @@ public class OracleStorageDAO implements StorageDAO {
         String sql = "SELECT * FROM CARS_AT_STORE WHERE STOREID = 1";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             try (ResultSet resultSet = statement.executeQuery(sql)) {
-                int carId = resultSet.getInt(1);
-                cars.add(carId);
+                while (resultSet.next()) {
+                    int carId = resultSet.getInt(1);
+                    cars.add(carId);
+                }
             }
         } catch (SQLException e) {
             ExceptionHandler.handleException("Error getting cars at store", e);
@@ -145,7 +155,7 @@ public class OracleStorageDAO implements StorageDAO {
         String sql = "insert into CARS_AT_STORE(storeid, carid) values (?,?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, storeId);
-            statement.setInt(2,carId);
+            statement.setInt(2, carId);
             statement.executeUpdate();
         } catch (SQLException e) {
             ExceptionHandler.handleException("Error loading car to store", e);
@@ -157,7 +167,7 @@ public class OracleStorageDAO implements StorageDAO {
         String sql = "delete from CARS_AT_STORE where CARID = ? and STOREID = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, storeId);
-            statement.setInt(2,carId);
+            statement.setInt(2, carId);
             statement.executeUpdate();
         } catch (SQLException e) {
             ExceptionHandler.handleException("Error loading car from store", e);

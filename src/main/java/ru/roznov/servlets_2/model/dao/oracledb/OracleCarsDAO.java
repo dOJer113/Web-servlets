@@ -48,10 +48,12 @@ public class OracleCarsDAO implements CarDAO {
         Map<Integer, Integer> map = new HashMap<>();
         String sql = "select * from CAR_DRIVER";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            try (ResultSet resultSet = statement.executeQuery(sql)) {
-                int carId = resultSet.getInt(1);
-                int driverId = resultSet.getInt(2);
-                map.put(carId, driverId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    int carId = resultSet.getInt(1);
+                    int driverId = resultSet.getInt(2);
+                    map.put(carId, driverId);
+                }
             }
         } catch (SQLException e) {
             ExceptionHandler.handleException("Error selecting cars by drivers ", e);
@@ -66,10 +68,12 @@ public class OracleCarsDAO implements CarDAO {
                 "WHERE CARID = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, carId);
-            try (ResultSet resultSet = statement.executeQuery(sql)) {
-                ProductEnum productName = ProductEnum.valueOf(resultSet.getString(1));
-                int count = resultSet.getInt(2);
-                map.put(productName, count);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    ProductEnum productName = ProductEnum.valueOf(resultSet.getString(1));
+                    int count = resultSet.getInt(2);
+                    map.put(productName, count);
+                }
             }
         } catch (SQLException e) {
             ExceptionHandler.handleException("Error selecting products by car id ", e);
@@ -82,11 +86,15 @@ public class OracleCarsDAO implements CarDAO {
         Map<Integer, Car> map = new HashMap<>();
         String sql = "select id from CARS";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            try (ResultSet resultSet = statement.executeQuery(sql)) {
-                int id = resultSet.getInt(1);
-                Car car = new Car();
-                car.setProductsFromMap((this.getProductsByCarId(id)));
-                map.put(id, car);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    int id = resultSet.getInt(1);
+                    Car car = new Car();
+                    if (id != 0) {
+                        car.setProductsFromMap((this.getProductsByCarId(id)));
+                        map.put(id, car);
+                    }
+                }
             }
         } catch (SQLException e) {
             ExceptionHandler.handleException("Error selecting cars with products ", e);
