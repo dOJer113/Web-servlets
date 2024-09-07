@@ -31,7 +31,7 @@ public class OracleDBDAOFactory extends DAOFactory {
         return factory;
     }
 
-    private void connected() throws ClassNotFoundException, SQLException {
+    private void connected() throws SQLException {
         Locale.setDefault(Locale.ENGLISH);
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");

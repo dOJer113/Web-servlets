@@ -9,6 +9,7 @@ import ru.roznov.servlets_2.model.activity.UserAndActivityManager;
 import ru.roznov.servlets_2.model.block.ClientBlocker;
 import ru.roznov.servlets_2.model.client.ClientActivityManager;
 import ru.roznov.servlets_2.model.user.UserManager;
+import ru.roznov.servlets_2.objects.cars.DriverUtils;
 import ru.roznov.servlets_2.objects.requests.RequestController;
 
 import javax.servlet.ServletException;
@@ -67,6 +68,9 @@ public class CommandController {
         commandMap.put(CommandName.GET_STORAGES, StoreManager::getStorages);
         commandMap.put(CommandName.GET_STORAGES_STOREKEEPERS, StoreManager::getStoragesIdByKeepersIdFromDB);
         commandMap.put(CommandName.UNBLOCK_ALL, ClientBlocker::unBlockAll);
+        commandMap.put(CommandName.MAKE_ENTRY_REQUEST, DriverUtils::makeNewEntryRequest);
+        commandMap.put(CommandName.MAKE_HANDLING_REQUEST, DriverUtils::makeNewHandlingRequest);
+        commandMap.put(CommandName.REJECT_REQUEST, RequestController::rejectRequest);
     }
 
     public static void executeCommand(CommandName name, CommandParameters commandParameters) {

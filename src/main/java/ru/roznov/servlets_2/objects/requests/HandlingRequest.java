@@ -20,12 +20,14 @@ public class HandlingRequest extends AbstractRequest {
         this.productCount = productCount;
     }
 
-    public ProductEnum getProduct() {
+    public ProductEnum getProductEnum() {
         return this.productEnum;
     }
 
-    public void setProduct(ProductEnum productEnum) {
+    public void setProductEnum(ProductEnum productEnum) {
         this.productEnum = productEnum;
     }
+
+
 
 }

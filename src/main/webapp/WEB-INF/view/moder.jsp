@@ -17,6 +17,11 @@
 </form>
 <br>
 
+<form action="${pageContext.request.contextPath}/addProduct" method="get">
+    <input type="submit" value="Add products to store">
+</form>
+<br>
+
 <form action="${pageContext.request.contextPath}/delogin" method="get">
     <input type="submit" value="Logout">
 </form>

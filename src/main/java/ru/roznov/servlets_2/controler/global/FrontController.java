@@ -21,7 +21,6 @@ public class FrontController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-
     }
 
     public static void moveToMenu(CommandParameters commandParameters)
@@ -35,6 +34,10 @@ public class FrontController extends HttpServlet {
             req.getRequestDispatcher("/WEB-INF/view/moder.jsp").forward(req, res);
         } else if (role.equals(RoleEnum.BLOCKED)) {
             req.getRequestDispatcher("/WEB-INF/view/pageBlockedClient.jsp").forward(req, res);
+        } else if (role.equals(RoleEnum.DRIVER)) {
+            req.getRequestDispatcher("/WEB-INF/view/driver.jsp").forward(req, res);
+        } else if (role.equals(RoleEnum.STOREKEEPER)) {
+            req.getRequestDispatcher("/WEB-INF/view/keeper.jsp").forward(req, res);
         } else {
             req.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, res);
         }
@@ -68,7 +71,7 @@ public class FrontController extends HttpServlet {
         CommandController.executeCommand(CommandName.MOVE_TO_MENU, parameters);
     }
 
-    public static void startListenerTimer(CommandParameters commandParameters) {
+  public static void startListenerTimer(CommandParameters commandParameters) {
         HttpServletRequest req = commandParameters.getParameter("request", HttpServletRequest.class);
         String login = req.getParameter("login");
         AppListener appListener = (AppListener) req.getServletContext().getAttribute("appListener");

@@ -3,11 +3,14 @@ package ru.roznov.servlets_2.objects.requests;
 import ru.roznov.servlets_2.controler.command.CommandController;
 import ru.roznov.servlets_2.controler.command.CommandName;
 import ru.roznov.servlets_2.controler.command.CommandParameters;
-import ru.roznov.servlets_2.objects.products.ProductEnum;
 import ru.roznov.servlets_2.objects.cars.Car;
 import ru.roznov.servlets_2.objects.cars.CarBase;
 import ru.roznov.servlets_2.objects.cars.DriverIdByCarId;
-import ru.roznov.servlets_2.objects.store.*;
+import ru.roznov.servlets_2.objects.products.ProductEnum;
+import ru.roznov.servlets_2.objects.store.KeeperByStoreId;
+import ru.roznov.servlets_2.objects.store.ProductsBase;
+import ru.roznov.servlets_2.objects.store.StorageBase;
+import ru.roznov.servlets_2.objects.store.Store;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +33,7 @@ public class RequestController {
 
     public static void confirmHandlingRequest(CommandParameters commandParameters) {
         HandlingRequest fundedRequest = (HandlingRequest) RequestController.getRequestById(commandParameters.getParameter("requestId", Integer.class));
-        commandParameters.addParameter("productId", ProductsBase.getIdByProductName(fundedRequest.getProduct()));
+        commandParameters.addParameter("productId", ProductsBase.getIdByProductName(fundedRequest.getProductEnum()));
         commandParameters.addParameter("productCount", fundedRequest.getProductCount());
         commandParameters.addParameter("storeId", KeeperByStoreId.getStoreIdByKeeperId(commandParameters.getParameter("keeperId", Integer.class)));
         commandParameters.addParameter("carId", DriverIdByCarId.getCarIdByDriverId(fundedRequest.getDriverId()));
@@ -58,7 +61,7 @@ public class RequestController {
             System.err.println("Error not enough product at car");
         }
 
-        RequestController.deleteRequest(requestId);
+        RequestController.deleteRequest(commandParameters);
     }
 
     public static void confirmLoadingToCarRequest(CommandParameters commandParameters) {
@@ -77,29 +80,32 @@ public class RequestController {
             System.err.println("Error not enough product at store");
         }
 
-        RequestController.deleteRequest(requestId);
+        RequestController.deleteRequest(commandParameters);
     }
 
     public static void confirmEntryRequest(CommandParameters commandParameters) {
         int requestId = commandParameters.getParameter("requestId", Integer.class);
-        RequestController.deleteRequest(requestId);
         EntryRequest fundedRequest = (EntryRequest) RequestController.getRequestById(requestId);
         commandParameters.addParameter("storeId", fundedRequest.getStoreId());
         commandParameters.addParameter("carId", DriverIdByCarId.getCarIdByDriverId(fundedRequest.getDriverId()));
         CommandController.executeCommand(CommandName.ADD_CAR_TO_STORE, commandParameters);
+        RequestController.deleteRequest(commandParameters);
     }
 
     public static AbstractRequest getRequestById(int id) {
         return RequestController.requests.stream().filter(request -> request.getRequestId() == id).findFirst().orElse(new NullRequest());
     }
 
-    public static void rejectRequest(int requestId) {
-        RequestController.deleteRequest(requestId);
+    public static void rejectRequest(CommandParameters commandParameters) {
+        RequestController.deleteRequest(commandParameters);
     }
 
 
-    public static void deleteRequest(int id) {
-        AbstractRequest fundedRequest = RequestController.requests.stream().filter(request -> request.getRequestId() == id).findFirst().orElse(new NullRequest());
+    public static void deleteRequest(CommandParameters commandParameters) {
+        AbstractRequest fundedRequest = RequestController.requests.stream()
+                .filter(request -> request.getRequestId() == commandParameters.getParameter("requestId", Integer.class))
+                .findFirst()
+                .orElse(new NullRequest());
         fundedRequest.deleteRequest();
         RequestController.requests.remove(fundedRequest);
     }

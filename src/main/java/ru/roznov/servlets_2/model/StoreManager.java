@@ -5,11 +5,11 @@ import ru.roznov.servlets_2.model.dao.DAOinterfeices.DAOFactory;
 import ru.roznov.servlets_2.model.dao.DBType;
 import ru.roznov.servlets_2.objects.cars.Car;
 import ru.roznov.servlets_2.objects.cars.CarBase;
+import ru.roznov.servlets_2.objects.products.ProductEnum;
+import ru.roznov.servlets_2.objects.store.KeeperByStoreId;
 import ru.roznov.servlets_2.objects.store.ProductsBase;
 import ru.roznov.servlets_2.objects.store.StorageBase;
 import ru.roznov.servlets_2.objects.store.Store;
-import ru.roznov.servlets_2.objects.store.KeeperByStoreId;
-import ru.roznov.servlets_2.objects.products.ProductEnum;
 
 
 public class StoreManager {
@@ -57,7 +57,7 @@ public class StoreManager {
 
     public static void changeCountProductsAtStore(CommandParameters commandParameters) {
         int storeId = commandParameters.getParameter("storeId", Integer.class);
-        int productId = ProductsBase.getIdByProductName(ProductEnum.valueOf(commandParameters.getParameter("productId", String.class)));
+        int productId = ProductsBase.getIdByProductName(commandParameters.getParameter("productName", ProductEnum.class));
         int productCount = commandParameters.getParameter("productCount", Integer.class);
         ProductEnum productName = ProductsBase.getProductNameById(productId);
         if (StoreManager.checkProductCountToRemove(storeId, productId, productCount)) {
@@ -70,6 +70,9 @@ public class StoreManager {
                 }
                 store.loadProducts(productName, productCount);
             }
+        }
+        else{
+            System.err.println("Error changing count products at store");
         }
     }
 
