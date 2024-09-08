@@ -35,7 +35,7 @@ public class CarManager {
 
     public static void changeCountProductsAtCar(CommandParameters commandParameters) {
         int carId = commandParameters.getParameter("carId", Integer.class);
-        int productId = ProductsBase.getIdByProductName(ProductEnum.valueOf(commandParameters.getParameter("productId", String.class)));
+        int productId = commandParameters.getParameter("productId", Integer.class);
         int productCount = commandParameters.getParameter("productCount", Integer.class);
         ProductEnum productName = ProductsBase.getProductNameById(productId);
         if (CarBase.isCarExists(carId)) {
@@ -45,7 +45,6 @@ public class CarManager {
             } else {
                 DAOFactory.getInstance(DBType.ORACLE).getCarDAO().addNewProduct(carId, productId, productCount);
             }
-            car.loadProducts(productName, productCount);
         }
 
     }

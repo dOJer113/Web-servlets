@@ -28,20 +28,27 @@ public class RequestController {
     }
 
     public static List<AbstractRequest> getAllRequests() {
-        return new ArrayList<>(RequestController.requests);
+        if (requests.size() != 0) {
+            return new ArrayList<>(RequestController.requests);
+        }
+        return new ArrayList<>();
+
     }
 
     public static void confirmHandlingRequest(CommandParameters commandParameters) {
-        HandlingRequest fundedRequest = (HandlingRequest) RequestController.getRequestById(commandParameters.getParameter("requestId", Integer.class));
-        commandParameters.addParameter("productId", ProductsBase.getIdByProductName(fundedRequest.getProductEnum()));
-        commandParameters.addParameter("productCount", fundedRequest.getProductCount());
-        commandParameters.addParameter("storeId", KeeperByStoreId.getStoreIdByKeeperId(commandParameters.getParameter("keeperId", Integer.class)));
-        commandParameters.addParameter("carId", DriverIdByCarId.getCarIdByDriverId(fundedRequest.getDriverId()));
-        RequestType requestType = fundedRequest.getRequestType();
-        if (requestType.equals(RequestType.LOADING_TO_CAR)) {
-            RequestController.confirmLoadingToCarRequest(commandParameters);
-        } else if (requestType.equals(RequestType.LOADING_TO_STORE)) {
-            RequestController.confirmLoadingToStoreRequest(commandParameters);
+        AbstractRequest request = RequestController.getRequestById(commandParameters.getParameter("requestId", Integer.class));
+        if (!request.equals(new NullRequest())) {
+            HandlingRequest fundedRequest = (HandlingRequest) request;
+            commandParameters.addParameter("productId", ProductsBase.getIdByProductName(fundedRequest.getProductEnum()));
+            commandParameters.addParameter("productCount", fundedRequest.getProductCount());
+            commandParameters.addParameter("storeId", KeeperByStoreId.getStoreIdByKeeperId(commandParameters.getParameter("keeperId", Integer.class)));
+            commandParameters.addParameter("carId", DriverIdByCarId.getCarIdByDriverId(fundedRequest.getDriverId()));
+            RequestType requestType = fundedRequest.getRequestType();
+            if (requestType.equals(RequestType.LOADING_TO_CAR)) {
+                RequestController.confirmLoadingToCarRequest(commandParameters);
+            } else if (requestType.equals(RequestType.LOADING_TO_STORE)) {
+                RequestController.confirmLoadingToStoreRequest(commandParameters);
+            }
         }
     }
 
@@ -50,7 +57,9 @@ public class RequestController {
         ProductEnum product = ProductsBase.getProductNameById(commandParameters.getParameter("productId", Integer.class));
         Store store = StorageBase.getStoreById(commandParameters.getParameter("storeId", Integer.class));
         int requestId = commandParameters.getParameter("requestId", Integer.class);
-        CommandParameters negativeCommandParameters = commandParameters;
+        CommandParameters negativeCommandParameters = new CommandParameters();
+        negativeCommandParameters.addParameter("carId", commandParameters.getParameter("carId", Integer.class));
+        negativeCommandParameters.addParameter("productId", commandParameters.getParameter("productId", Integer.class));
         int productCount = commandParameters.getParameter("productCount", Integer.class);
         negativeCommandParameters.addParameter("productCount", -productCount);
         if (car.unLoadProduct(product, productCount)) {
@@ -65,12 +74,13 @@ public class RequestController {
     }
 
     public static void confirmLoadingToCarRequest(CommandParameters commandParameters) {
-        CommandParameters negativeCommandParameters = commandParameters;
+        CommandParameters negativeCommandParameters = new CommandParameters();
+        negativeCommandParameters.addParameter("storeId", commandParameters.getParameter("storeId", Integer.class));
+        negativeCommandParameters.addParameter("productId", commandParameters.getParameter("productId", Integer.class));
         Car car = CarBase.getCarById(commandParameters.getParameter("carId", Integer.class));
         ProductEnum product = ProductsBase.getProductNameById(commandParameters.getParameter("productId", Integer.class));
         Store store = StorageBase.getStoreById(commandParameters.getParameter("storeId", Integer.class));
         int productCount = commandParameters.getParameter("productCount", Integer.class);
-        int requestId = commandParameters.getParameter("requestId", Integer.class);
         negativeCommandParameters.addParameter("productCount", -productCount);
         if (store.unLoadProduct(product, productCount)) {
             CommandController.executeCommand(CommandName.CHANGE_COUNT_PRODUCT_AT_STORE, negativeCommandParameters);
@@ -84,12 +94,14 @@ public class RequestController {
     }
 
     public static void confirmEntryRequest(CommandParameters commandParameters) {
-        int requestId = commandParameters.getParameter("requestId", Integer.class);
-        EntryRequest fundedRequest = (EntryRequest) RequestController.getRequestById(requestId);
-        commandParameters.addParameter("storeId", fundedRequest.getStoreId());
-        commandParameters.addParameter("carId", DriverIdByCarId.getCarIdByDriverId(fundedRequest.getDriverId()));
-        CommandController.executeCommand(CommandName.ADD_CAR_TO_STORE, commandParameters);
-        RequestController.deleteRequest(commandParameters);
+        AbstractRequest request = RequestController.getRequestById(commandParameters.getParameter("requestId", Integer.class));
+        if (!request.equals(new NullRequest())) {
+            EntryRequest fundedRequest = (EntryRequest) request;
+            commandParameters.addParameter("storeId", fundedRequest.getStoreId());
+            commandParameters.addParameter("carId", DriverIdByCarId.getCarIdByDriverId(fundedRequest.getDriverId()));
+            CommandController.executeCommand(CommandName.ADD_CAR_TO_STORE, commandParameters);
+            RequestController.deleteRequest(commandParameters);
+        }
     }
 
     public static AbstractRequest getRequestById(int id) {

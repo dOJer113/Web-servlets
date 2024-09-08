@@ -70,7 +70,7 @@ public class Store {
     }
 
     public boolean isStorageHaveProductAndCount(ProductEnum product, int count) {
-        return this.storage.containsKey(product) && this.storage.get(product) >= count;
+        return this.storage.containsKey(product) && this.storage.get(product) >= Math.abs(count);
     }
 
 

@@ -1,7 +1,5 @@
 package ru.roznov.servlets_2.objects.store;
 
-import ru.roznov.servlets_2.objects.cars.DriverIdByCarId;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,8 +19,8 @@ public class KeeperByStoreId {
 
     public static int getStoreIdByKeeperId(int keeperId) {
         for (Map.Entry<Integer, Integer> entry : keeperByStoreId.entrySet()) {
-            if (entry.getValue().equals(keeperId)) {
-                return entry.getKey();
+            if (entry.getKey().equals(keeperId)) {
+                return entry.getValue();
             }
         }
         return 0;

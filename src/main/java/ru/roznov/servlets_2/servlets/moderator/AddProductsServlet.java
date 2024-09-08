@@ -4,7 +4,9 @@ import ru.roznov.servlets_2.controler.command.CommandController;
 import ru.roznov.servlets_2.controler.command.CommandName;
 import ru.roznov.servlets_2.controler.command.CommandParameters;
 import ru.roznov.servlets_2.objects.products.ProductEnum;
+import ru.roznov.servlets_2.objects.store.ProductsBase;
 import ru.roznov.servlets_2.objects.store.StorageBase;
+import ru.roznov.servlets_2.objects.store.Store;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,10 +27,16 @@ public class AddProductsServlet extends HttpServlet {
         CommandParameters commandParameters = new CommandParameters();
         int storeId = Integer.parseInt(req.getParameter("storeId"));
         commandParameters.addParameter("storeId", storeId);
-        commandParameters.addParameter("productName", ProductEnum.valueOf(req.getParameter("productName")));
-        commandParameters.addParameter("productCount", Integer.parseInt(req.getParameter("count")));
+        ProductEnum name = ProductEnum.valueOf(req.getParameter("productName"));
+        commandParameters.addParameter("productId", ProductsBase.getIdByProductName(name));
+        int count = Integer.parseInt(req.getParameter("count"));
+        commandParameters.addParameter("productCount", count);
         if (StorageBase.isStoreExists(storeId)) {
-            CommandController.executeCommand(CommandName.CHANGE_COUNT_PRODUCT_AT_STORE, commandParameters);
+            Store store = StorageBase.getStoreById(storeId);
+            if (count >= 0 ||store.isStorageHaveProductAndCount(name, count)) {
+                CommandController.executeCommand(CommandName.CHANGE_COUNT_PRODUCT_AT_STORE, commandParameters);
+                store.loadProducts(name,count);
+            }
         } else {
             System.err.println("No such store to add products");
         }

@@ -27,7 +27,7 @@
 </form>
 <br>
 
-<form action="${pageContext.request.contextPath}/delogin" method="get">
+<form action="${pageContext.request.contextPath}/logout" method="get">
     <input type="submit" value="Logout">
 </form>
 

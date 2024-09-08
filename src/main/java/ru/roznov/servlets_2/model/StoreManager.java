@@ -57,36 +57,21 @@ public class StoreManager {
 
     public static void changeCountProductsAtStore(CommandParameters commandParameters) {
         int storeId = commandParameters.getParameter("storeId", Integer.class);
-        int productId = ProductsBase.getIdByProductName(commandParameters.getParameter("productName", ProductEnum.class));
+        int productId = commandParameters.getParameter("productId", Integer.class);
         int productCount = commandParameters.getParameter("productCount", Integer.class);
         ProductEnum productName = ProductsBase.getProductNameById(productId);
-        if (StoreManager.checkProductCountToRemove(storeId, productId, productCount)) {
-            if (StorageBase.isStoreExists(storeId)) {
-                Store store = StorageBase.getStoreById(storeId);
-                if (store.isProductAtStore(productName)) {
-                    DAOFactory.getInstance(DBType.ORACLE).getStorageDAO().updateProductCount(storeId, productId, productCount);
-                } else {
-                    DAOFactory.getInstance(DBType.ORACLE).getStorageDAO().addNewProduct(storeId, productId, productCount);
-                }
-                store.loadProducts(productName, productCount);
+        if (StorageBase.isStoreExists(storeId)) {
+            Store store = StorageBase.getStoreById(storeId);
+            if (store.isProductAtStore(productName)) {
+                DAOFactory.getInstance(DBType.ORACLE).getStorageDAO().updateProductCount(storeId, productId, productCount);
+            } else {
+                DAOFactory.getInstance(DBType.ORACLE).getStorageDAO().addNewProduct(storeId, productId, productCount);
             }
-        }
-        else{
+        } else {
             System.err.println("Error changing count products at store");
         }
     }
 
-    private static boolean checkProductCountToRemove(int storeId, int productId, int productCountChanges) {
-        Store store = StorageBase.getStoreById(storeId);
-        ProductEnum productName = ProductsBase.getProductNameById(productId);
-        if (productCountChanges > 1) {
-            return true;
-        }
-        if (!store.isProductAtStore(productName)) {
-            return false;
-        }
-        return Math.abs(productCountChanges) <= store.getProductMap().get(productName);
-    }
 
 
 }
