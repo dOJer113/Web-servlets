@@ -56,18 +56,22 @@ public class RequestController {
         Car car = CarBase.getCarById(commandParameters.getParameter("carId", Integer.class));
         ProductEnum product = ProductsBase.getProductNameById(commandParameters.getParameter("productId", Integer.class));
         Store store = StorageBase.getStoreById(commandParameters.getParameter("storeId", Integer.class));
-        int requestId = commandParameters.getParameter("requestId", Integer.class);
         CommandParameters negativeCommandParameters = new CommandParameters();
         negativeCommandParameters.addParameter("carId", commandParameters.getParameter("carId", Integer.class));
         negativeCommandParameters.addParameter("productId", commandParameters.getParameter("productId", Integer.class));
         int productCount = commandParameters.getParameter("productCount", Integer.class);
         negativeCommandParameters.addParameter("productCount", -productCount);
-        if (car.unLoadProduct(product, productCount)) {
-            CommandController.executeCommand(CommandName.CHANGE_COUNT_PRODUCT_AT_CAR, negativeCommandParameters);
-            CommandController.executeCommand(CommandName.CHANGE_COUNT_PRODUCT_AT_STORE, commandParameters);
-            store.loadProducts(product, productCount);
+        if (store.isCarAtStore(car)) {
+            if (car.unLoadProduct(product, productCount)) {
+                CommandController.executeCommand(CommandName.CHANGE_COUNT_PRODUCT_AT_CAR, negativeCommandParameters);
+                CommandController.executeCommand(CommandName.CHANGE_COUNT_PRODUCT_AT_STORE, commandParameters);
+                store.loadProducts(product, productCount);
+                CommandController.executeCommand(CommandName.REMOVE_CAR_FROM_STORE, commandParameters);
+            } else {
+                System.err.println("Error not enough product at car");
+            }
         } else {
-            System.err.println("Error not enough product at car");
+            System.err.println("Error no car at store");
         }
 
         RequestController.deleteRequest(commandParameters);
@@ -82,12 +86,17 @@ public class RequestController {
         Store store = StorageBase.getStoreById(commandParameters.getParameter("storeId", Integer.class));
         int productCount = commandParameters.getParameter("productCount", Integer.class);
         negativeCommandParameters.addParameter("productCount", -productCount);
-        if (store.unLoadProduct(product, productCount)) {
-            CommandController.executeCommand(CommandName.CHANGE_COUNT_PRODUCT_AT_STORE, negativeCommandParameters);
-            CommandController.executeCommand(CommandName.CHANGE_COUNT_PRODUCT_AT_CAR, commandParameters);
-            car.loadProducts(product, productCount);
+        if (store.isCarAtStore(car)) {
+            if (store.unLoadProduct(product, productCount)) {
+                CommandController.executeCommand(CommandName.CHANGE_COUNT_PRODUCT_AT_STORE, negativeCommandParameters);
+                CommandController.executeCommand(CommandName.CHANGE_COUNT_PRODUCT_AT_CAR, commandParameters);
+                car.loadProducts(product, productCount);
+                CommandController.executeCommand(CommandName.REMOVE_CAR_FROM_STORE, commandParameters);
+            } else {
+                System.err.println("Error not enough product at store");
+            }
         } else {
-            System.err.println("Error not enough product at store");
+            System.err.println("Error no car at store");
         }
 
         RequestController.deleteRequest(commandParameters);

@@ -22,7 +22,9 @@ public class EntryRequestServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         CommandParameters commandParameters = new CommandParameters();
-        commandParameters.addParameter("storeId", Integer.parseInt(req.getParameter("storeId")));
+        int storeId = Integer.parseInt(req.getParameter("storeId"));
+        req.getSession().setAttribute("storeId", storeId);
+        commandParameters.addParameter("storeId", storeId);
         commandParameters.addParameter("driverId", Integer.parseInt(req.getSession().getAttribute("id").toString()));
         CommandController.executeCommand(CommandName.MAKE_ENTRY_REQUEST, commandParameters);
         req.getRequestDispatcher("/WEB-INF/view/driver.jsp").forward(req, resp);

@@ -1,7 +1,7 @@
 package ru.roznov.servlets_2.model.dao.oracledb;
 
-import ru.roznov.servlets_2.model.dao.DAOinterfeices.StorageDAO;
 import ru.roznov.servlets_2.model.ExceptionHandler;
+import ru.roznov.servlets_2.model.dao.DAOinterfeices.StorageDAO;
 import ru.roznov.servlets_2.objects.products.ProductEnum;
 import ru.roznov.servlets_2.objects.store.Store;
 
@@ -9,7 +9,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class OracleStorageDAO implements StorageDAO {
     private Connection connection;
@@ -98,9 +101,9 @@ public class OracleStorageDAO implements StorageDAO {
     public void addNewProduct(int storeId, int productId, int countProduct) {
         String sql = "insert into STORE_PRODUCTS (storeid, productid, countproduct)  values ?, ?, ? ";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, countProduct);
+            statement.setInt(1, storeId);
             statement.setInt(2, productId);
-            statement.setInt(3, storeId);
+            statement.setInt(3, countProduct);
             statement.executeUpdate();
         } catch (SQLException e) {
             ExceptionHandler.handleException("Error inserting new product at store", e);

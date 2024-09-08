@@ -22,5 +22,10 @@
     <input type="number" id="count" name="count" required><br><br>
     <input type="submit" value="Make request">
 </form>
+<c:if test="${not empty error}">
+    <div style="color: red;">
+        <p>${error}</p>
+    </div>
+</c:if>
 </body>
 </html>
