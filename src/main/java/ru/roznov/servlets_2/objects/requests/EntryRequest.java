@@ -4,7 +4,7 @@ public class EntryRequest extends AbstractRequest {
     private int storeId;
 
     public EntryRequest(int driverId, int storeId) {
-        super(driverId, RequestType.ENTRY);
+        super(driverId, RequestType.ENTRY, storeId);
         this.storeId = storeId;
     }
 

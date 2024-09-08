@@ -41,6 +41,7 @@ public class HandlingRequestServlet extends HttpServlet {
                 commandParameters.addParameter("product", ProductEnum.valueOf(req.getParameter("productName")));
                 commandParameters.addParameter("count", Integer.parseInt(req.getParameter("count")));
                 commandParameters.addParameter("requestType", RequestType.valueOf(req.getParameter("requestType")));
+                commandParameters.addParameter("storeId", storeId);
                 CommandController.executeCommand(CommandName.MAKE_HANDLING_REQUEST, commandParameters);
             } else {
                 req.setAttribute("error", "Car is not at the store, make entry request");

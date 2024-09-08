@@ -6,8 +6,9 @@ public class HandlingRequest extends AbstractRequest {
     private int productCount;
     private ProductEnum productEnum;
 
-    public HandlingRequest(int driverId, RequestType requestType, int productCount, ProductEnum productEnum) {
-        super(driverId, requestType);
+
+    public HandlingRequest(int driverId, RequestType requestType, int productCount, ProductEnum productEnum, int storeId) {
+        super(driverId, requestType, storeId);
         this.productCount = productCount;
         this.productEnum = productEnum;
     }
@@ -27,7 +28,6 @@ public class HandlingRequest extends AbstractRequest {
     public void setProductEnum(ProductEnum productEnum) {
         this.productEnum = productEnum;
     }
-
 
 
 }

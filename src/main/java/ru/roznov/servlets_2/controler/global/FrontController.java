@@ -71,7 +71,7 @@ public class FrontController extends HttpServlet {
         CommandController.executeCommand(CommandName.MOVE_TO_MENU, parameters);
     }
 
-  public static void startListenerTimer(CommandParameters commandParameters) {
+    public static void startListenerTimer(CommandParameters commandParameters) {
         HttpServletRequest req = commandParameters.getParameter("request", HttpServletRequest.class);
         String login = req.getParameter("login");
         AppListener appListener = (AppListener) req.getServletContext().getAttribute("appListener");

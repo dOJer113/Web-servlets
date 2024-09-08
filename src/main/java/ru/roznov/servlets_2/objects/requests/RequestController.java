@@ -13,6 +13,7 @@ import ru.roznov.servlets_2.objects.store.StorageBase;
 import ru.roznov.servlets_2.objects.store.Store;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
@@ -27,11 +28,17 @@ public class RequestController {
         RequestController.requests.add(request);
     }
 
-    public static List<AbstractRequest> getAllRequests() {
-        if (requests.size() != 0) {
-            return new ArrayList<>(RequestController.requests);
+    public static List<AbstractRequest> getAllRequestsForKeeper(int keeperId) {
+        List<AbstractRequest> requests = new ArrayList<>();
+        int storeId = KeeperByStoreId.getStoreIdByKeeperId(keeperId);
+        Iterator<AbstractRequest> iterator = RequestController.requests.iterator();
+        while (iterator.hasNext()) {
+            AbstractRequest request = iterator.next();
+            if (request.getStoreId() == storeId) {
+                requests.add(request);
+            }
         }
-        return new ArrayList<>();
+        return requests;
 
     }
 

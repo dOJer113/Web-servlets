@@ -9,15 +9,17 @@ public abstract class AbstractRequest implements Comparable<AbstractRequest> {
     private RequestType requestType;
 
     private int requestId;
+    private int storeId;
 
     private static List<AbstractRequest> requestList = new ArrayList<>();
 
 
-    public AbstractRequest(int driverId, RequestType requestType) {
+    public AbstractRequest(int driverId, RequestType requestType, int storeId) {
         this.driverId = driverId;
         this.requestType = requestType;
         AbstractRequest.requestList.add(this);
         this.requestId = AbstractRequest.requestList.indexOf(this);
+        this.storeId = storeId;
     }
 
     public int getDriverId() {
@@ -34,6 +36,14 @@ public abstract class AbstractRequest implements Comparable<AbstractRequest> {
 
     public void setRequestType(RequestType requestType) {
         this.requestType = requestType;
+    }
+
+    public int getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(int storeId) {
+        this.storeId = storeId;
     }
 
     public int getRequestId() {

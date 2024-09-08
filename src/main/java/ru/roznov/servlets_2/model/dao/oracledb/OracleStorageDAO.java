@@ -99,7 +99,7 @@ public class OracleStorageDAO implements StorageDAO {
 
     @Override
     public void addNewProduct(int storeId, int productId, int countProduct) {
-        String sql = "insert into STORE_PRODUCTS (storeid, productid, countproduct)  values ?, ?, ? ";
+        String sql = "insert into STORE_PRODUCTS (storeid, productid, countproduct)  values( ?, ?, ?) ";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, storeId);
             statement.setInt(2, productId);

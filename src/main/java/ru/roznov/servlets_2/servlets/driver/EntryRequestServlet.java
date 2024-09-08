@@ -28,5 +28,5 @@ public class EntryRequestServlet extends HttpServlet {
         commandParameters.addParameter("driverId", Integer.parseInt(req.getSession().getAttribute("id").toString()));
         CommandController.executeCommand(CommandName.MAKE_ENTRY_REQUEST, commandParameters);
         req.getRequestDispatcher("/WEB-INF/view/driver.jsp").forward(req, resp);
-    }
+        }
 }

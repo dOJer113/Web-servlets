@@ -45,7 +45,6 @@ public enum CommandName {
     UNBLOCK_ALL,
     MAKE_ENTRY_REQUEST,
     MAKE_HANDLING_REQUEST,
-    REJECT_REQUEST,
-
+    REJECT_REQUEST
 }
 
