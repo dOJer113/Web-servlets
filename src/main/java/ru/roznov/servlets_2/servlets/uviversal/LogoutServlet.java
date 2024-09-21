@@ -1,11 +1,5 @@
 package ru.roznov.servlets_2.servlets.uviversal;
 
-import ru.roznov.servlets_2.controler.command.CommandController;
-import ru.roznov.servlets_2.controler.command.CommandName;
-import ru.roznov.servlets_2.controler.command.CommandParameters;
-import ru.roznov.servlets_2.model.ExceptionHandler;
-import ru.roznov.servlets_2.model.user.UsersSearcher;
-
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +15,7 @@ public class LogoutServlet extends HttpServlet {
             throws IOException {
 
         final HttpSession session = req.getSession();
-        try {
+      /*  try {
             if (!req.getSession().getAttribute("role").toString().equals("BLOCKED")) {
                 final String login = session.getAttribute("login").toString();
                 CommandParameters commandParameters = new CommandParameters();
@@ -34,7 +28,8 @@ public class LogoutServlet extends HttpServlet {
         session.removeAttribute("password");
         session.removeAttribute("login");
         session.removeAttribute("role");
-
+*/
+        session.invalidate();
         resp.sendRedirect(resp.encodeRedirectURL(req.getContextPath() + "/"));
     }
 

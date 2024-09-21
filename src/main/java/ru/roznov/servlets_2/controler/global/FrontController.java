@@ -44,7 +44,7 @@ public class FrontController extends HttpServlet {
     }
 
     public static void authorizeClient(CommandParameters commandParameters) {
-        CommandController.executeCommand(CommandName.START_LISTENER_TIMER, commandParameters);
+
         HttpServletRequest req = commandParameters.getParameter("request", HttpServletRequest.class);
         String login = req.getParameter("login");
         HttpSession session = req.getSession();
@@ -67,14 +67,8 @@ public class FrontController extends HttpServlet {
         CommandParameters activateParameters = new CommandParameters();
         activateParameters.addParameter("id", UsersSearcher.getIdByLogin(session.getAttribute("login").toString()));
         CommandController.executeCommand(CommandName.MAKE_CLIENT_ACTIVE, activateParameters);
-        CommandController.executeCommand(CommandName.START_LISTENER_TIMER, parameters);
         CommandController.executeCommand(CommandName.MOVE_TO_MENU, parameters);
     }
 
-    public static void startListenerTimer(CommandParameters commandParameters) {
-        HttpServletRequest req = commandParameters.getParameter("request", HttpServletRequest.class);
-        String login = req.getParameter("login");
-        AppListener appListener = (AppListener) req.getServletContext().getAttribute("appListener");
-        appListener.scheduleTask(new LogOutTimerTask(login), FrontController.LOG_OUT_TIMER);
-    }
+
 }

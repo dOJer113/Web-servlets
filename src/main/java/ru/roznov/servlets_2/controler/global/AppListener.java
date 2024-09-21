@@ -11,10 +11,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.Timer;
-import java.util.TimerTask;
 
 @WebListener
-public class AppListener implements ServletContextListener {
+    public class AppListener implements ServletContextListener {
 
     private Timer timer;
 
@@ -32,11 +31,6 @@ public class AppListener implements ServletContextListener {
         sce.getServletContext().setAttribute("appListener", this);
         System.out.println("Application started.");
     }
-
-    public void scheduleTask(TimerTask task, long delay) {
-        timer.schedule(task, delay);
-    }
-
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         if (timer != null) {

@@ -3,21 +3,16 @@ package ru.roznov.servlets_2.controler.global;
 import ru.roznov.servlets_2.controler.command.CommandController;
 import ru.roznov.servlets_2.controler.command.CommandName;
 import ru.roznov.servlets_2.controler.command.CommandParameters;
-import ru.roznov.servlets_2.model.user.UsersSearcher;
 
-import java.util.TimerTask;
-
-public class LogOutTimerTask extends TimerTask {
-    private String login;
-
-    public LogOutTimerTask(String login) {
-        this.login = login;
-    }
-
+import javax.servlet.annotation.WebListener;
+import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionListener;
+@WebListener
+public class SessionListener implements HttpSessionListener {
     @Override
-    public void run() {
+    public void sessionDestroyed(HttpSessionEvent se) {
         CommandParameters commandParameters = new CommandParameters();
-        commandParameters.addParameter("id", UsersSearcher.getIdByLogin(this.login));
+        commandParameters.addParameter("id", Integer.parseInt(se.getSession().getAttribute("id").toString()));
         CommandController.executeCommand(CommandName.MAKE_CLIENT_UNACTIVE, commandParameters);
     }
 }

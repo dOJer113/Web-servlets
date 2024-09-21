@@ -46,7 +46,6 @@ public class CommandController {
         commandMap.put(CommandName.AUTHORIZE_CLIENT, FrontController::authorizeClient);
         commandMap.put(CommandName.MAKE_ALL_UN_ACTIVE, ClientActivityManager::makeAllClientsUnActive);
         commandMap.put(CommandName.RE_AUTHORIZE_CLIENT, FrontController::reAuthorizeClient);
-        commandMap.put(CommandName.START_LISTENER_TIMER, FrontController::startListenerTimer);
         commandMap.put(CommandName.IS_CLIENT_BLOCKED, ClientBlocker::isClientBlocked);
         commandMap.put(CommandName.DELETE_KEEPER, StoreManager::deleteKeeper);
         commandMap.put(CommandName.DELETE_DRIVER, CarManager::deleteDriver);

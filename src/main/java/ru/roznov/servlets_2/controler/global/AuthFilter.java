@@ -1,6 +1,5 @@
 package ru.roznov.servlets_2.controler.global;
 
-import jakarta.servlet.annotation.WebFilter;
 import ru.roznov.servlets_2.controler.command.CommandController;
 import ru.roznov.servlets_2.controler.command.CommandName;
 import ru.roznov.servlets_2.controler.command.CommandParameters;
@@ -14,7 +13,6 @@ import java.io.IOException;
 
 import static java.util.Objects.nonNull;
 
-@WebFilter("/*")
 public class AuthFilter implements Filter {
 
     @Override
@@ -32,12 +30,7 @@ public class AuthFilter implements Filter {
         String login = req.getParameter("login");
         final String password = req.getParameter("password");
         moveParameters.addParameter("login", login);
-        CommandController.executeCommand(CommandName.IS_CLIENT_BLOCKED, moveParameters);
-        if (moveParameters.getParameter("block", Boolean.class)) {
-            moveParameters.addParameter("role", RoleEnum.BLOCKED);
-            CommandController.executeCommand(CommandName.MOVE_TO_MENU, moveParameters);
-            req.getSession().setAttribute("role", RoleEnum.valueOf("BLOCKED"));
-        } else if (AuthFilter.isUserAuthed(request)) {
+        if (AuthFilter.isUserAuthed(request)) {
             CommandParameters parameters = new CommandParameters();
             parameters.addParameter("request", req);
             parameters.addParameter("role", RoleEnum.valueOf(req.getSession().getAttribute("role").toString()));
