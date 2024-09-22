@@ -6,9 +6,10 @@
 </head>
 <body>
 <h2>Enter store id for entry request</h2>
-<form action="entryRequest" method="post">
+<form action="${pageContext.request.contextPath}/controller" method="post">
     <label for="storeId">Store id:</label>
     <input type="number" id="storeId" name="storeId" required><br>
+    <input type="hidden" name="command" value="ENTRY_REQUEST">
     <input type="submit" value="Make request">
 </form>
 </body>

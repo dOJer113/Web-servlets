@@ -1,8 +1,9 @@
+/*
 package ru.roznov.servlets_2.servlets.driver;
 
-import ru.roznov.servlets_2.controler.command.CommandController;
-import ru.roznov.servlets_2.controler.command.CommandName;
-import ru.roznov.servlets_2.controler.command.CommandParameters;
+import ru.roznov.servlets_2.controler.businesCommand.CommandController;
+import ru.roznov.servlets_2.controler.businesCommand.CommandName;
+import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
 import ru.roznov.servlets_2.objects.cars.Car;
 import ru.roznov.servlets_2.objects.cars.CarBase;
 import ru.roznov.servlets_2.objects.cars.DriverIdByCarId;
@@ -22,10 +23,14 @@ import java.io.IOException;
 @WebServlet("/handlingRequest")
 public class HandlingRequestServlet extends HttpServlet {
 
+*/
+/*
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher("/WEB-INF/view/handlingRequest.jsp").forward(req, resp);
     }
+*//*
+
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -56,3 +61,4 @@ public class HandlingRequestServlet extends HttpServlet {
     }
 
 }
+*/

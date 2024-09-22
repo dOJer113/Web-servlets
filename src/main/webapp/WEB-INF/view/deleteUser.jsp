@@ -6,9 +6,10 @@
 </head>
 <body>
 <h2>Deleting user</h2>
-<form action="deleteUser" method="post">
+<form action="${pageContext.request.contextPath}/controller" method="post">
     <label for="login">LOGIN:</label>
     <input type="text" id="login" name="login" required><br>
+    <input type="hidden" name="command" value="DELETE_USER">
     <input type="submit" value="Delete ">
 </form>
 </body>

@@ -31,13 +31,15 @@
             </c:when>
         </c:choose>
 
-        <form method="post" action="<c:url value='/confirm'/>">
+        <form method="post" action="${pageContext.request.contextPath}/controller">
             <input type="submit" name="confirm" value="Confirm"/>
             <input type="number" hidden name="requestId" value="${request.requestId}"/>
+            <input type="hidden" name="command" value="CONFIRM_REQUEST">
             <input type="text" hidden name="requestType" value="${request.requestType}"/>
         </form>
-        <form method="post" action="<c:url value='/reject'/>">
+        <form method="post" action="${pageContext.request.contextPath}/controller">
             <input type="submit" name="reject" value="Reject"/>
+            <input type="hidden" name="command" value="REJECT_REQUEST">
             <input type="number" hidden name="requestId" value="${request.requestId}"/>
         </form>
 

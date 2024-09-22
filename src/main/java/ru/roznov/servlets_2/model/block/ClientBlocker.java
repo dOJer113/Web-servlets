@@ -1,6 +1,6 @@
 package ru.roznov.servlets_2.model.block;
 
-import ru.roznov.servlets_2.controler.command.CommandParameters;
+import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
 import ru.roznov.servlets_2.objects.clients.Client;
 
 import java.util.ArrayList;

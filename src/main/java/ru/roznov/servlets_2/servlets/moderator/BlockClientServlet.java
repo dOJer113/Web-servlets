@@ -1,8 +1,9 @@
+/*
 package ru.roznov.servlets_2.servlets.moderator;
 
-import ru.roznov.servlets_2.controler.command.CommandController;
-import ru.roznov.servlets_2.controler.command.CommandName;
-import ru.roznov.servlets_2.controler.command.CommandParameters;
+import ru.roznov.servlets_2.controler.businesCommand.CommandController;
+import ru.roznov.servlets_2.controler.businesCommand.CommandName;
+import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
 import ru.roznov.servlets_2.model.user.UsersSearcher;
 
 import javax.servlet.ServletException;
@@ -43,3 +44,4 @@ public class BlockClientServlet extends HttpServlet {
         req.getRequestDispatcher("/WEB-INF/view/moder.jsp").forward(req, resp);
     }
 }
+*/

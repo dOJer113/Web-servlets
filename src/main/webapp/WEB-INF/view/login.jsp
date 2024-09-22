@@ -12,8 +12,8 @@
     <form method="post" action="">
         <input type="text" required placeholder="login" name="login"><br>
         <input type="password" required placeholder="password" name="password"><br><br>
+        <%--<input type="hidden" name="command" value="LOGIN">--%>
         <input class="button" type="submit" value="Login">
-
     </form>
 </div>
 </body>

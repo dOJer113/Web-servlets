@@ -1,8 +1,8 @@
 package ru.roznov.servlets_2.controler.global;
 
-import ru.roznov.servlets_2.controler.command.CommandController;
-import ru.roznov.servlets_2.controler.command.CommandName;
-import ru.roznov.servlets_2.controler.command.CommandParameters;
+import ru.roznov.servlets_2.controler.businesCommand.CommandController;
+import ru.roznov.servlets_2.controler.businesCommand.CommandName;
+import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
 import ru.roznov.servlets_2.objects.clients.RoleEnum;
 
 import javax.servlet.*;
@@ -30,8 +30,6 @@ public class BlockFilter implements Filter {
             commandParameters.addParameter("response", response);
             CommandController.executeCommand(CommandName.MOVE_TO_MENU, commandParameters);
             req.getSession().setAttribute("role", RoleEnum.valueOf("BLOCKED"));
-        } else {
-
         }
         chain.doFilter(request, response);
     }

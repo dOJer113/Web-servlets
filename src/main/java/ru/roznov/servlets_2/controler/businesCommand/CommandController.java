@@ -1,6 +1,6 @@
-package ru.roznov.servlets_2.controler.command;
+package ru.roznov.servlets_2.controler.businesCommand;
 
-import ru.roznov.servlets_2.controler.global.FrontController;
+import ru.roznov.servlets_2.controler.global.LoginController;
 import ru.roznov.servlets_2.model.CarManager;
 import ru.roznov.servlets_2.model.ExceptionHandler;
 import ru.roznov.servlets_2.model.ProductManager;
@@ -13,6 +13,7 @@ import ru.roznov.servlets_2.objects.cars.DriverUtils;
 import ru.roznov.servlets_2.objects.requests.RequestController;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -42,10 +43,10 @@ public class CommandController {
         commandMap.put(CommandName.GET_USERS_FROM_ORACLE_DB, UserManager::getValuesFromOracleDB);
         commandMap.put(CommandName.BLOCK_CLIENT, ClientBlocker::blockClient);
         commandMap.put(CommandName.UNBLOCK_CLIENT, ClientBlocker::unblockClient);
-        commandMap.put(CommandName.MOVE_TO_MENU, FrontController::moveToMenu);
-        commandMap.put(CommandName.AUTHORIZE_CLIENT, FrontController::authorizeClient);
+        commandMap.put(CommandName.MOVE_TO_MENU, LoginController::moveToMenu);
+        commandMap.put(CommandName.AUTHORIZE_CLIENT, LoginController::authorizeClient);
         commandMap.put(CommandName.MAKE_ALL_UN_ACTIVE, ClientActivityManager::makeAllClientsUnActive);
-        commandMap.put(CommandName.RE_AUTHORIZE_CLIENT, FrontController::reAuthorizeClient);
+        commandMap.put(CommandName.RE_AUTHORIZE_CLIENT, LoginController::reAuthorizeClient);
         commandMap.put(CommandName.IS_CLIENT_BLOCKED, ClientBlocker::isClientBlocked);
         commandMap.put(CommandName.DELETE_KEEPER, StoreManager::deleteKeeper);
         commandMap.put(CommandName.DELETE_DRIVER, CarManager::deleteDriver);
@@ -72,6 +73,11 @@ public class CommandController {
         commandMap.put(CommandName.REJECT_REQUEST, RequestController::rejectRequest);
     }
 
+    public static CommandName getCommandNameFromRequest(HttpServletRequest request) {
+        CommandName name = CommandName.valueOf(request.getParameter("command"));
+        return name;
+    }
+
     public static void executeCommand(CommandName name, CommandParameters commandParameters) {
         Command command = commandMap.get(name);
         if (command != null) {
@@ -85,6 +91,7 @@ public class CommandController {
         }
         commandLog.add(name);
     }
+
 
     public static List<CommandName> getCommandLog() {
         return CommandController.commandLog;

@@ -1,3 +1,4 @@
+/*
 package ru.roznov.servlets_2.servlets.admin;
 
 
@@ -25,3 +26,4 @@ public class ViewClientsServlet extends HttpServlet {
         req.getRequestDispatcher("/WEB-INF/view/viewClients.jsp").forward(req, resp);
     }
 }
+*/

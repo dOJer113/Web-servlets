@@ -1,8 +1,9 @@
+/*
 package ru.roznov.servlets_2.servlets.driver;
 
-import ru.roznov.servlets_2.controler.command.CommandController;
-import ru.roznov.servlets_2.controler.command.CommandName;
-import ru.roznov.servlets_2.controler.command.CommandParameters;
+import ru.roznov.servlets_2.controler.businesCommand.CommandController;
+import ru.roznov.servlets_2.controler.businesCommand.CommandName;
+import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,10 +15,12 @@ import java.io.IOException;
 @WebServlet("/entryRequest")
 public class EntryRequestServlet extends HttpServlet {
 
-    @Override
+  */
+/*  @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher("/WEB-INF/view/enterStoreId.jsp").forward(req, resp);
-    }
+    }*//*
+
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -30,3 +33,4 @@ public class EntryRequestServlet extends HttpServlet {
         req.getRequestDispatcher("/WEB-INF/view/driver.jsp").forward(req, resp);
         }
 }
+*/

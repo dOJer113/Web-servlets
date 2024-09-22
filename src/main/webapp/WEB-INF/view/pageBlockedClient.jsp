@@ -7,12 +7,11 @@
 <body>
 <h2>Blocked!</h2>
 
-<form action="blocked" method="get">
-    You was blocked! Write to moderator.
-</form>
+You was blocked! Write to moderator.
 
-<form action="${pageContext.request.contextPath}/logout" method="get">
+<form action="${pageContext.request.contextPath}/controller" method="get">
     <input type="submit" value="Logout">
+    <input type="hidden" name="command" value="LOGOUT">
 </form>
 
 </body>

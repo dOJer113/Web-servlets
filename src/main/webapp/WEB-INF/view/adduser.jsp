@@ -6,7 +6,7 @@
 </head>
 <body>
 <h2>Adding new user</h2>
-<form action="addUser" method="post">
+<form action="${pageContext.request.contextPath}/controller" method="post">
     <label for="id">ID:</label>
     <input type="number" id="id" name="id" required><br>
     <label for="login">LOGIN:</label>
@@ -20,6 +20,7 @@
         <option value="driver">DRIVER</option>
         <option value="storekeeper">KEEPER</option>
     </select><br>
+    <input type="hidden" name="command" value="ADD_USER">
     <input type="submit" value="ADD ">
 </form>
 </body>

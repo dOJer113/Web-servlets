@@ -1,8 +1,9 @@
+/*
 package ru.roznov.servlets_2.servlets.keeper;
 
-import ru.roznov.servlets_2.controler.command.CommandController;
-import ru.roznov.servlets_2.controler.command.CommandName;
-import ru.roznov.servlets_2.controler.command.CommandParameters;
+import ru.roznov.servlets_2.controler.businesCommand.CommandController;
+import ru.roznov.servlets_2.controler.businesCommand.CommandName;
+import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,3 +22,4 @@ public class RejectServlet extends HttpServlet {
         req.getRequestDispatcher("/handleRequests").forward(req, resp);
     }
 }
+*/

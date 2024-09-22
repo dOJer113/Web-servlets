@@ -1,8 +1,8 @@
 package ru.roznov.servlets_2.controler.global;
 
-import ru.roznov.servlets_2.controler.command.CommandController;
-import ru.roznov.servlets_2.controler.command.CommandName;
-import ru.roznov.servlets_2.controler.command.CommandParameters;
+import ru.roznov.servlets_2.controler.businesCommand.CommandController;
+import ru.roznov.servlets_2.controler.businesCommand.CommandName;
+import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -10,19 +10,16 @@ import javax.servlet.annotation.WebListener;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Iterator;
-import java.util.Timer;
 
 @WebListener
     public class AppListener implements ServletContextListener {
 
-    private Timer timer;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        timer = new Timer();
         CommandController.init();
         CommandParameters commandParameters = new CommandParameters();
-        CommandController.executeCommand(CommandName.GET_USERS_FROM_ORACLE_DB, commandParameters);
+            CommandController.executeCommand(CommandName.GET_USERS_FROM_ORACLE_DB, commandParameters);
         CommandController.executeCommand(CommandName.GET_PRODUCTS, commandParameters);
         CommandController.executeCommand(CommandName.GET_STORAGES_STOREKEEPERS, commandParameters);
         CommandController.executeCommand(CommandName.GET_CARS, commandParameters);
@@ -33,9 +30,6 @@ import java.util.Timer;
     }
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        if (timer != null) {
-            timer.cancel();
-        }
         CommandController.executeCommand(CommandName.MAKE_ALL_UN_ACTIVE, new CommandParameters());
         try {
             while (DriverManager.getDrivers().hasMoreElements()) {

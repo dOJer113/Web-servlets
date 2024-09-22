@@ -1,6 +1,6 @@
 package ru.roznov.servlets_2.objects.cars;
 
-import ru.roznov.servlets_2.controler.command.CommandParameters;
+import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
 import ru.roznov.servlets_2.objects.products.ProductEnum;
 import ru.roznov.servlets_2.objects.requests.*;
 import ru.roznov.servlets_2.objects.store.StorageBase;

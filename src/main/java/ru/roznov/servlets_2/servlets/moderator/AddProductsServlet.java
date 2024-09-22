@@ -1,8 +1,9 @@
+/*
 package ru.roznov.servlets_2.servlets.moderator;
 
-import ru.roznov.servlets_2.controler.command.CommandController;
-import ru.roznov.servlets_2.controler.command.CommandName;
-import ru.roznov.servlets_2.controler.command.CommandParameters;
+import ru.roznov.servlets_2.controler.businesCommand.CommandController;
+import ru.roznov.servlets_2.controler.businesCommand.CommandName;
+import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
 import ru.roznov.servlets_2.objects.products.ProductEnum;
 import ru.roznov.servlets_2.objects.store.ProductsBase;
 import ru.roznov.servlets_2.objects.store.StorageBase;
@@ -43,3 +44,4 @@ public class AddProductsServlet extends HttpServlet {
         req.getRequestDispatcher("/WEB-INF/view/moder.jsp").forward(req, resp);
     }
 }
+*/

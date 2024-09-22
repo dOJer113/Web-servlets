@@ -1,9 +1,9 @@
 package ru.roznov.servlets_2.model.client;
 
-import ru.roznov.servlets_2.controler.command.CommandParameters;
+import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
+import ru.roznov.servlets_2.model.ExceptionHandler;
 import ru.roznov.servlets_2.model.dao.DAOinterfeices.DAOFactory;
 import ru.roznov.servlets_2.model.dao.DBType;
-import ru.roznov.servlets_2.model.ExceptionHandler;
 
 import java.sql.SQLException;
 

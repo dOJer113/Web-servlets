@@ -1,4 +1,4 @@
-package ru.roznov.servlets_2.controler.command;
+package ru.roznov.servlets_2.controler.businesCommand;
 
 public enum CommandName {
     DELETE_USER_AND_ACTIVITY,
@@ -44,6 +44,6 @@ public enum CommandName {
     UNBLOCK_ALL,
     MAKE_ENTRY_REQUEST,
     MAKE_HANDLING_REQUEST,
-    REJECT_REQUEST
+    REJECT_REQUEST,
 }
 

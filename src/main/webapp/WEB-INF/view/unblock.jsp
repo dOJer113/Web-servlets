@@ -6,10 +6,11 @@
 </head>
 <body>
 <h2>Blocking client</h2>
-<form action="unBlockClient" method="post">
+<form action="${pageContext.request.contextPath}/controller" method="post">
     <label for="login">LOGIN:</label>
     <input type="text" id="login" name="login" required><br>
     <input type="submit" value="UnBlock">
+    <input type="hidden" name="command" value="UNBLOCK_CLIENT">
 </form>
 </body>
 </html>

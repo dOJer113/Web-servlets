@@ -6,7 +6,7 @@
 </head>
 <body>
 <h2>Loading products to car</h2>
-<form action="handlingRequest" method="post">
+<form action="${pageContext.request.contextPath}/controller" method="post">
     <label for="productName">Product Name:</label>
     <select id="productName" name="productName">
         <option value="HORSES">HORSES</option>
@@ -21,6 +21,7 @@
     <label for="count">Count:</label>
     <input type="number" id="count" name="count" required><br><br>
     <input type="submit" value="Make request">
+    <input type="hidden" name="command" value="HANDLING_REQUEST">
 </form>
 <c:if test="${not empty error}">
     <div style="color: red;">

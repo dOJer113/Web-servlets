@@ -1,4 +1,4 @@
-package ru.roznov.servlets_2.controler.command;
+package ru.roznov.servlets_2.controler.businesCommand;
 
 import javax.servlet.ServletException;
 import java.io.IOException;

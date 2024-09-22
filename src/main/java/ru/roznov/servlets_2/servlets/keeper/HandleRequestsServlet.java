@@ -1,3 +1,4 @@
+/*
 package ru.roznov.servlets_2.servlets.keeper;
 
 import ru.roznov.servlets_2.objects.requests.AbstractRequest;
@@ -21,8 +22,11 @@ public class HandleRequestsServlet extends HttpServlet {
         req.getRequestDispatcher("/WEB-INF/view/storekeeperHandleRequests.jsp").forward(req, resp);
     }
 
-    @Override
+*/
+/*    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         this.doGet(req, resp);
-    }
+    }*//*
+
 }
+*/

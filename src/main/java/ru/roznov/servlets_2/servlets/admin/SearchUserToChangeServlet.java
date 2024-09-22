@@ -1,3 +1,4 @@
+/*
 package ru.roznov.servlets_2.servlets.admin;
 
 import ru.roznov.servlets_2.model.user.UsersSearcher;
@@ -35,3 +36,4 @@ public class SearchUserToChangeServlet extends HttpServlet {
         req.getRequestDispatcher("/WEB-INF/view/fundedClient.jsp").forward(req, resp);
     }
 }
+*/

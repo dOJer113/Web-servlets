@@ -1,27 +1,20 @@
 package ru.roznov.servlets_2.controler.global;
 
-import ru.roznov.servlets_2.controler.command.CommandController;
-import ru.roznov.servlets_2.controler.command.CommandName;
-import ru.roznov.servlets_2.controler.command.CommandParameters;
+import ru.roznov.servlets_2.controler.businesCommand.CommandController;
+import ru.roznov.servlets_2.controler.businesCommand.CommandName;
+import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
 import ru.roznov.servlets_2.model.user.UsersSearcher;
 import ru.roznov.servlets_2.objects.clients.Client;
 import ru.roznov.servlets_2.objects.clients.RoleEnum;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet("/")
-public class FrontController extends HttpServlet {
-    public static final int LOG_OUT_TIMER = 2_999_999;
+public class LoginController {
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-    }
 
     public static void moveToMenu(CommandParameters commandParameters)
             throws ServletException, IOException {
@@ -44,7 +37,6 @@ public class FrontController extends HttpServlet {
     }
 
     public static void authorizeClient(CommandParameters commandParameters) {
-
         HttpServletRequest req = commandParameters.getParameter("request", HttpServletRequest.class);
         String login = req.getParameter("login");
         HttpSession session = req.getSession();
