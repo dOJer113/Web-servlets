@@ -5,6 +5,7 @@ import ru.roznov.servlets_2.controler.businesCommand.CommandName;
 import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
 import ru.roznov.servlets_2.controler.command.FrontControllerCommand;
 import ru.roznov.servlets_2.model.user.UsersSearcher;
+import ru.roznov.servlets_2.objects.clients.Client;
 import ru.roznov.servlets_2.objects.clients.RoleEnum;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,8 +23,11 @@ public class BlockClientCommand implements FrontControllerCommand {
                     CommandController.executeCommand(CommandName.IS_CLIENT_BLOCKED, blockParameters);
                     if (!blockParameters.getParameter("block", Boolean.class)) {
                         CommandParameters commandParameters = new CommandParameters();
-                        commandParameters.addParameter("client", UsersSearcher.getClientByLogin(login));
-                        CommandController.executeCommand(CommandName.BLOCK_CLIENT, commandParameters);
+                        Client client = UsersSearcher.getClientByLogin(login);
+                        if (client.getId() != 0) {
+                            commandParameters.addParameter("client", UsersSearcher.getClientByLogin(login));
+                            CommandController.executeCommand(CommandName.BLOCK_CLIENT, commandParameters);
+                        }
                     } else {
                         System.err.println("Client already blocked");
                     }
@@ -35,6 +39,6 @@ public class BlockClientCommand implements FrontControllerCommand {
             }
             return "/WEB-INF/view/moder.jsp";
         }
-        return request.getContextPath()+"/controller?command=LOGIN";
+        return request.getContextPath() + "/controller?command=LOGIN";
     }
 }

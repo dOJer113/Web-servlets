@@ -1,12 +1,15 @@
 package ru.roznov.servlets_2.model.dao.oracledb;
 
 
-import ru.roznov.servlets_2.model.user.UsersSearcher;
 import ru.roznov.servlets_2.model.dao.DAOinterfeices.UsersDAO;
-import ru.roznov.servlets_2.model.dao.DynamicResult;
+import ru.roznov.servlets_2.model.user.UsersSearcher;
+import ru.roznov.servlets_2.objects.clients.Client;
+import ru.roznov.servlets_2.objects.clients.RoleEnum;
 
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 
 public class OracleUsersDAO implements UsersDAO {
@@ -18,17 +21,45 @@ public class OracleUsersDAO implements UsersDAO {
 
 
     @Override
-    public DynamicResult getUsers() {
-        DynamicResult dynamicResult = new DynamicResult();
+    public Client getUserByLogin(String loginToSearch) {
         String sql = "select * from users";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             try (ResultSet resultSet = statement.executeQuery(sql)) {
-                dynamicResult = DynamicResult.containDynamicResult(resultSet);
+                while (resultSet.next()) {
+                    String login = resultSet.getString(2);
+                    if (login.equals(loginToSearch)) {
+                        int id = resultSet.getInt(1);
+                        int password = resultSet.getInt(3);
+                        RoleEnum role = RoleEnum.valueOf(resultSet.getString(4).toUpperCase());
+                        return new Client(id, login, password, role);
+                    }
+                }
             }
         } catch (SQLException e) {
-            System.err.println("Error selecting user " + e.getMessage());
+            System.err.println("Error getting user by login " + e.getMessage());
         }
-        return dynamicResult;
+        return new Client();
+    }
+
+    @Override
+    public Client getUserById(int id) {
+        String sql = "select * from users";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            try (ResultSet resultSet = statement.executeQuery(sql)) {
+                while (resultSet.next()) {
+                    int userId = resultSet.getInt(1);
+                    if (id == userId) {
+                        String login = resultSet.getString(2);
+                        int password = resultSet.getInt(3);
+                        RoleEnum role = RoleEnum.valueOf(resultSet.getString(4).toUpperCase());
+                        return new Client(id, login, password, role);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting user by id " + e.getMessage());
+        }
+        return new Client();
     }
 
     @Override

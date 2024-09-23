@@ -24,6 +24,7 @@ public class ChangeUserCommand implements FrontControllerCommand {
             if (block) {
                 commandParametersForOldLogin.addParameter("client", UsersSearcher.getClientByLogin(oldLogin));
                 CommandController.executeCommand(CommandName.UNBLOCK_CLIENT, commandParametersForOldLogin);
+
             }
             commandParameters.addParameter("id", Integer.parseInt(request.getParameter("id")));
             commandParameters.addParameter("login", request.getParameter("login"));
@@ -36,6 +37,6 @@ public class ChangeUserCommand implements FrontControllerCommand {
             }
             return "/WEB-INF/view/adm.jsp";
         }
-        return request.getContextPath()+"/controller?command=LOGIN";
+        return request.getContextPath() + "/controller?command=LOGIN";
     }
 }

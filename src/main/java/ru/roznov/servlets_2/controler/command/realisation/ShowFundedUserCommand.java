@@ -25,9 +25,11 @@ public class ShowFundedUserCommand implements FrontControllerCommand {
             } catch (Exception e) {
                 System.err.println("Error" + e.getMessage());
             }
-            request.setAttribute("client", client);
-            return "/WEB-INF/view/fundedClient.jsp";
+            if (client.getId() != 0) {
+                request.setAttribute("client", client);
+                return "/WEB-INF/view/fundedClient.jsp";
+            }
         }
-        return request.getContextPath()+"/controller?command=LOGIN";
+        return request.getContextPath() + "/controller?command=LOGIN";
     }
 }

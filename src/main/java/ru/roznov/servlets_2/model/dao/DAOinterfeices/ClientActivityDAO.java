@@ -1,12 +1,11 @@
 package ru.roznov.servlets_2.model.dao.DAOinterfeices;
 
-import ru.roznov.servlets_2.model.dao.DynamicResult;
+import ru.roznov.servlets_2.objects.clients.UserWithActivity;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public interface ClientActivityDAO {
-    DynamicResult getClients() throws SQLException;
-
     void insertNewClient(int id) throws SQLException;
 
     void deleteClient(int id);
@@ -15,6 +14,6 @@ public interface ClientActivityDAO {
 
     void makeAllUnActive();
 
-    DynamicResult getUsersWithActivity();
+    List<UserWithActivity> getUsersWithActivity();
 
 }

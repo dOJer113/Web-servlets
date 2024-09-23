@@ -35,12 +35,9 @@ public class CommandController {
         commandMap.put(CommandName.MAKE_CLIENT_ACTIVE, ClientActivityManager::makeClientActive);
         commandMap.put(CommandName.ADD_CLIENT, ClientActivityManager::addClient);
         commandMap.put(CommandName.DELETE_CLIENT, ClientActivityManager::deleteClient);
-        commandMap.put(CommandName.GET_CLIENTS_FROM_ORACLE_DB, ClientActivityManager::getClientsFromOracleDB);
-        commandMap.put(CommandName.GET_VALUES_BY_TWO_TABLES, ClientActivityManager::getValuesByTwoTables);
         commandMap.put(CommandName.ADD_USER, UserManager::addUser);
         commandMap.put(CommandName.UPDATE_USER, UserManager::updateUser);
         commandMap.put(CommandName.DELETE_USER, UserManager::deleteUser);
-        commandMap.put(CommandName.GET_USERS_FROM_ORACLE_DB, UserManager::getValuesFromOracleDB);
         commandMap.put(CommandName.BLOCK_CLIENT, ClientBlocker::blockClient);
         commandMap.put(CommandName.UNBLOCK_CLIENT, ClientBlocker::unblockClient);
         commandMap.put(CommandName.MOVE_TO_MENU, LoginController::moveToMenu);

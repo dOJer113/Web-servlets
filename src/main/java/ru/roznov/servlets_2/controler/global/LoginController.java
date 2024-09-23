@@ -39,9 +39,12 @@ public class LoginController {
         HttpServletRequest req = parameters.getParameter("request", HttpServletRequest.class);
         HttpSession session = req.getSession();
         CommandParameters activateParameters = new CommandParameters();
-        activateParameters.addParameter("id", UsersSearcher.getIdByLogin(session.getAttribute("login").toString()));
-        CommandController.executeCommand(CommandName.MAKE_CLIENT_ACTIVE, activateParameters);
-        CommandController.executeCommand(CommandName.MOVE_TO_MENU, parameters);
+        int id = UsersSearcher.getIdByLogin(session.getAttribute("login").toString());
+        if (id != 0) {
+            activateParameters.addParameter("id", id);
+            CommandController.executeCommand(CommandName.MAKE_CLIENT_ACTIVE, activateParameters);
+            CommandController.executeCommand(CommandName.MOVE_TO_MENU, parameters);
+        }
     }
 
 

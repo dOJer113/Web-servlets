@@ -27,8 +27,8 @@ public class UserManager {
         String login = commandParameters.getParameter("login", String.class);
         DAOFactory.getInstance(DBType.ORACLE).getUsersDAO().deleteUser(login);
     }
-
-    public static void getValuesFromOracleDB(CommandParameters commandParameters) {
+    //todo убрать запись в память
+/*    public static void getValuesFromOracleDB(CommandParameters commandParameters) {
         UsersSearcher.result = DAOFactory.getInstance(DBType.ORACLE).getUsersDAO().getUsers();
-    }
+    }*/
 }

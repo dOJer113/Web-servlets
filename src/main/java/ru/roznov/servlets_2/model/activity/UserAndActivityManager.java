@@ -9,10 +9,13 @@ import ru.roznov.servlets_2.objects.clients.RoleEnum;
 public class UserAndActivityManager {
     public static void deleteUserAndActivity(CommandParameters commandParameters) {
         String login = commandParameters.getParameter("login", String.class);
-        commandParameters.addParameter("id", UsersSearcher.getIdByLogin(login));
-        CommandController.executeCommand(CommandName.DELETE_CLIENT, commandParameters);
-        CommandController.executeCommand(CommandName.DELETE_KEEPER_OR_DRIVER, commandParameters);
-        CommandController.executeCommand(CommandName.DELETE_USER, commandParameters);
+        int id = UsersSearcher.getIdByLogin(login);
+        if (id != 0) {
+            commandParameters.addParameter("id", id);
+            CommandController.executeCommand(CommandName.DELETE_CLIENT, commandParameters);
+            CommandController.executeCommand(CommandName.DELETE_KEEPER_OR_DRIVER, commandParameters);
+            CommandController.executeCommand(CommandName.DELETE_USER, commandParameters);
+        }
     }
 
     public static void addUserAndActivity(CommandParameters commandParameters) {

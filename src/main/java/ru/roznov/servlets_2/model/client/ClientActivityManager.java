@@ -1,13 +1,18 @@
 package ru.roznov.servlets_2.model.client;
 
 import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
-import ru.roznov.servlets_2.model.ExceptionHandler;
 import ru.roznov.servlets_2.model.dao.DAOinterfeices.DAOFactory;
 import ru.roznov.servlets_2.model.dao.DBType;
+import ru.roznov.servlets_2.objects.clients.UserWithActivity;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class ClientActivityManager {
+
+    public static List<UserWithActivity> getUserWithActivity() {
+        return DAOFactory.getInstance(DBType.ORACLE).getClientActivityDAO().getUsersWithActivity();
+    }
 
     public static void makeClientUnActive(CommandParameters parameters) throws SQLException {
         int id = parameters.getParameter("id", Integer.class);
@@ -28,18 +33,6 @@ public class ClientActivityManager {
     public static void deleteClient(CommandParameters parameters) throws SQLException {
         int id = parameters.getParameter("id", Integer.class);
         DAOFactory.getInstance(DBType.ORACLE).getClientActivityDAO().deleteClient(id);
-    }
-
-    public static void getClientsFromOracleDB(CommandParameters parameters) {
-        try {
-            ClientActivitySearcher.result = DAOFactory.getInstance(DBType.ORACLE).getClientActivityDAO().getClients();
-        } catch (SQLException e) {
-            ExceptionHandler.handleException("Error getting clients activity", e);
-        }
-    }
-
-    public static void getValuesByTwoTables(CommandParameters parameters) {
-        ClientActivitySearcher.result = DAOFactory.getInstance(DBType.ORACLE).getClientActivityDAO().getUsersWithActivity();
     }
 
     public static void makeAllClientsUnActive(CommandParameters parameters) {
