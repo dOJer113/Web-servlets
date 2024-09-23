@@ -11,7 +11,7 @@
 
     <filter-mapping>
         <filter-name>BlockFilter</filter-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/controller</url-pattern>
     </filter-mapping>
     <filter>
         <filter-name>AuthFilter</filter-name>
