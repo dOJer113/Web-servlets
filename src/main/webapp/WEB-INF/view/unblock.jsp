@@ -5,7 +5,7 @@
     <title>Block User</title>
 </head>
 <body>
-<h2>Blocking client</h2>
+<h2>UnBlocking client</h2>
 <form action="${pageContext.request.contextPath}/controller" method="post">
     <label for="login">LOGIN:</label>
     <input type="text" id="login" name="login" required><br>

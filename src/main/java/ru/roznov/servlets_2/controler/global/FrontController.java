@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/controller")
-public class FrontControllerNew extends HttpServlet {
+public class FrontController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response) throws ServletException, IOException {
@@ -26,7 +26,6 @@ public class FrontControllerNew extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response) {
         String page;
         String commandParam = request.getParameter("command");
-
         if (commandParam != null && !commandParam.isEmpty()) {
             FrontCommandNames commandName = FrontCommandNames.valueOf(commandParam);
             FrontControllerCommand command = commandName.getCommand();

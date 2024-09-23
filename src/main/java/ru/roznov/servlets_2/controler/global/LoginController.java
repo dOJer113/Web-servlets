@@ -4,7 +4,6 @@ import ru.roznov.servlets_2.controler.businesCommand.CommandController;
 import ru.roznov.servlets_2.controler.businesCommand.CommandName;
 import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
 import ru.roznov.servlets_2.model.user.UsersSearcher;
-import ru.roznov.servlets_2.objects.clients.Client;
 import ru.roznov.servlets_2.objects.clients.RoleEnum;
 
 import javax.servlet.ServletException;
@@ -34,23 +33,6 @@ public class LoginController {
         } else {
             req.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(req, res);
         }
-    }
-
-    public static void authorizeClient(CommandParameters commandParameters) {
-        HttpServletRequest req = commandParameters.getParameter("request", HttpServletRequest.class);
-        String login = req.getParameter("login");
-        HttpSession session = req.getSession();
-        Client client = UsersSearcher.getClientByLogin(login);
-        final RoleEnum role = client.getRole();
-        session.setAttribute("password", commandParameters.getParameter("password", String.class));
-        session.setAttribute("login", login);
-        session.setAttribute("role", role);
-        session.setAttribute("id", client.getId());
-        commandParameters.addParameter("role", role);
-        CommandParameters activateParameters = new CommandParameters();
-        activateParameters.addParameter("id", client.getId());
-        CommandController.executeCommand(CommandName.MAKE_CLIENT_ACTIVE, activateParameters);
-        CommandController.executeCommand(CommandName.MOVE_TO_MENU, commandParameters);
     }
 
     public static void reAuthorizeClient(CommandParameters parameters) {

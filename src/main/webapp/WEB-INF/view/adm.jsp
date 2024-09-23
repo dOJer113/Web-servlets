@@ -33,7 +33,7 @@
 
 <br>
 
-<form action="${pageContext.request.contextPath}/controller" method="post">
+<form action="${pageContext.request.contextPath}/controller" method="get">
     <input type="hidden" name="command" value="LOGOUT">
     <input type="submit" value="Logout">
 </form>

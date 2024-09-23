@@ -44,7 +44,6 @@ public class CommandController {
         commandMap.put(CommandName.BLOCK_CLIENT, ClientBlocker::blockClient);
         commandMap.put(CommandName.UNBLOCK_CLIENT, ClientBlocker::unblockClient);
         commandMap.put(CommandName.MOVE_TO_MENU, LoginController::moveToMenu);
-        commandMap.put(CommandName.AUTHORIZE_CLIENT, LoginController::authorizeClient);
         commandMap.put(CommandName.MAKE_ALL_UN_ACTIVE, ClientActivityManager::makeAllClientsUnActive);
         commandMap.put(CommandName.RE_AUTHORIZE_CLIENT, LoginController::reAuthorizeClient);
         commandMap.put(CommandName.IS_CLIENT_BLOCKED, ClientBlocker::isClientBlocked);

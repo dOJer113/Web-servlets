@@ -73,6 +73,9 @@ public enum FrontCommandNames {
     SHOW_UNBLOCK_CLIENT {{
         this.command = new ShowUnBlockClientCommand();
     }},
+    LOGIN {{
+        this.command = new LoginCommand();
+    }},
     UNBLOCK_CLIENT {{
         this.command = new UnBlockClientCommand();
     }};
