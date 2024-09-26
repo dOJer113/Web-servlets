@@ -32,6 +32,8 @@ public class OracleClientActivityDAO implements ClientActivityDAO {
                     int password = resultSet.getInt(3);
                     RoleEnum roleEnum = RoleEnum.valueOf(resultSet.getString(4).toUpperCase());
                     int activity = resultSet.getInt(5);
+                    UserWithActivity user = new UserWithActivity(id, login, password, roleEnum, activity);
+                    users.add(user);
                 }
             }
         } catch (SQLException e) {

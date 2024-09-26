@@ -4,30 +4,22 @@ import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
 import ru.roznov.servlets_2.model.dao.DAOinterfeices.DAOFactory;
 import ru.roznov.servlets_2.model.dao.DBType;
 import ru.roznov.servlets_2.objects.cars.Car;
-import ru.roznov.servlets_2.objects.cars.CarBase;
 import ru.roznov.servlets_2.objects.products.ProductEnum;
-import ru.roznov.servlets_2.objects.store.KeeperByStoreId;
-import ru.roznov.servlets_2.objects.store.ProductsBase;
-import ru.roznov.servlets_2.objects.store.StorageBase;
+import ru.roznov.servlets_2.objects.products.ProductsBase;
 import ru.roznov.servlets_2.objects.store.Store;
+
+import java.util.Iterator;
+import java.util.Map;
 
 
 public class StoreManager {
     private StoreManager() {
     }
 
-    public static void getStoragesIdByKeepersIdFromDB(CommandParameters commandParameters) {
-        KeeperByStoreId.setStoresFromMap(DAOFactory.getInstance(DBType.ORACLE).getStorageDAO().getStoragesIdByKeepersId());
-    }
-
-    public static void getStorages(CommandParameters commandParameters) {
-        StorageBase.setStoragesFromMap(DAOFactory.getInstance(DBType.ORACLE).getStorageDAO().getStorages());
-    }
 
     public static void deleteKeeper(CommandParameters commandParameters) {
         int keeperId = commandParameters.getParameter("id", Integer.class);
         DAOFactory.getInstance(DBType.ORACLE).getStorageDAO().deleteStorekeeperFromStoreStorekeeper(keeperId);
-        KeeperByStoreId.deleteStoreKeeperPair(keeperId);
     }
 
     public static void addNewKeeperWithStore(CommandParameters commandParameters) {
@@ -39,17 +31,15 @@ public class StoreManager {
         int carId = commandParameters.getParameter("carId", Integer.class);
         int storeId = commandParameters.getParameter("storeId", Integer.class);
         DAOFactory.getInstance(DBType.ORACLE).getStorageDAO().addCarToStore(storeId, carId);
-        StorageBase.getStoreById(storeId).addCarToStorage(CarBase.getCarById(carId));
     }
 
     public static void removeCarFromStore(CommandParameters commandParameters) {
         int carId = commandParameters.getParameter("carId", Integer.class);
         int storeId = commandParameters.getParameter("storeId", Integer.class);
-        Store store = StorageBase.getStoreById(storeId);
-        Car car = CarBase.getCarById(carId);
+        Store store = getStoreById(storeId);
+        Car car = CarManager.getCarById(carId);
         if (store.isCarAtStore(car)) {
             DAOFactory.getInstance(DBType.ORACLE).getStorageDAO().removeCarFromStore(storeId, carId);
-            store.removeCarFromStorage(car);
         } else {
             System.err.println("No car at store");
         }
@@ -60,8 +50,8 @@ public class StoreManager {
         int productId = commandParameters.getParameter("productId", Integer.class);
         int productCount = commandParameters.getParameter("productCount", Integer.class);
         ProductEnum productName = ProductsBase.getProductNameById(productId);
-        if (StorageBase.isStoreExists(storeId)) {
-            Store store = StorageBase.getStoreById(storeId);
+        if (isStoreExists(storeId)) {
+            Store store = getStoreById(storeId);
             if (store.isProductAtStore(productName)) {
                 DAOFactory.getInstance(DBType.ORACLE).getStorageDAO().updateProductCount(storeId, productId, productCount);
             } else {
@@ -73,5 +63,32 @@ public class StoreManager {
     }
 
 
+    public static int getStoreIdByKeeperId(int keeperId) {
+        for (Map.Entry<Integer, Integer> entry : DAOFactory.getInstance(DBType.ORACLE).getStorageDAO().getStoragesIdByKeepersId().entrySet()) {
+            if (entry.getKey().equals(keeperId)) {
+                return entry.getValue();
+            }
+        }
+        return 0;
+    }
 
+    public static boolean isCarAtAnyStore(Car car) {
+        Map<Integer, Store> storeById = DAOFactory.getInstance(DBType.ORACLE).getStorageDAO().getStorages();
+        Iterator<Integer> iterator = storeById.keySet().iterator();
+        while (iterator.hasNext()) {
+            Store store = storeById.get(iterator.next());
+            if (store.isCarAtStore(car)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static Store getStoreById(int id) {
+        return DAOFactory.getInstance(DBType.ORACLE).getStorageDAO().getStorages().get(id);
+    }
+
+    public static boolean isStoreExists(int id) {
+        return DAOFactory.getInstance(DBType.ORACLE).getStorageDAO().getStorages().containsKey(id);
+    }
 }

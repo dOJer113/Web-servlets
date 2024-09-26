@@ -1,7 +1,7 @@
 package ru.roznov.servlets_2.objects.store;
 
+import ru.roznov.servlets_2.model.CarManager;
 import ru.roznov.servlets_2.objects.cars.Car;
-import ru.roznov.servlets_2.objects.cars.CarBase;
 import ru.roznov.servlets_2.objects.products.ProductEnum;
 
 import java.util.Iterator;
@@ -62,7 +62,7 @@ public class Store {
     public void setCarsAtStorageFromSetIds(Set<Integer> carIds) {
         Iterator<Integer> iterator = carIds.iterator();
         while (iterator.hasNext()) {
-            Car car = CarBase.getCarById(iterator.next());
+            Car car = CarManager.getCarById(iterator.next());
             if (car != null) {
                 this.carsAtStorage.add(car);
             }

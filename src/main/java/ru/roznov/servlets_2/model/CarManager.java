@@ -4,28 +4,28 @@ import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
 import ru.roznov.servlets_2.model.dao.DAOinterfeices.DAOFactory;
 import ru.roznov.servlets_2.model.dao.DBType;
 import ru.roznov.servlets_2.objects.cars.Car;
-import ru.roznov.servlets_2.objects.cars.CarBase;
-import ru.roznov.servlets_2.objects.cars.DriverIdByCarId;
 import ru.roznov.servlets_2.objects.products.ProductEnum;
-import ru.roznov.servlets_2.objects.store.ProductsBase;
+import ru.roznov.servlets_2.objects.products.ProductsBase;
+
+import java.util.Map;
 
 
 public class CarManager {
     private CarManager() {
     }
 
-    public static void getCarsIdByDriversIdFromDB(CommandParameters commandParameters) {
-        DriverIdByCarId.getCarsFromMap(DAOFactory.getInstance(DBType.ORACLE).getCarDAO().getCarsIdsByDriversIds());
-    }
-
-    public static void getCars(CommandParameters commandParameters) {
-        CarBase.setCarsFromMap(DAOFactory.getInstance(DBType.ORACLE).getCarDAO().getCars());
+    public static int getCarIdByDriverId(int driverId) {
+        for (Map.Entry<Integer, Integer> entry : DAOFactory.getInstance(DBType.ORACLE).getCarDAO().getCarsIdsByDriversIds().entrySet()) {
+            if (entry.getValue().equals(driverId)) {
+                return entry.getKey();
+            }
+        }
+        return 0;
     }
 
     public static void deleteDriver(CommandParameters commandParameters) {
         int driverId = commandParameters.getParameter("id", Integer.class);
         DAOFactory.getInstance(DBType.ORACLE).getCarDAO().deleteDriverFromCarDriver(driverId);
-        DriverIdByCarId.deleteCarDriverPair(driverId);
     }
 
     public static void addNewDriverWithCar(CommandParameters commandParameters) {
@@ -38,8 +38,8 @@ public class CarManager {
         int productId = commandParameters.getParameter("productId", Integer.class);
         int productCount = commandParameters.getParameter("productCount", Integer.class);
         ProductEnum productName = ProductsBase.getProductNameById(productId);
-        if (CarBase.isCarExists(carId)) {
-            Car car = CarBase.getCarById(carId);
+        if (isCarExists(carId)) {
+            Car car = getCarById(carId);
             if (car.isProductAtCar(productName)) {
                 DAOFactory.getInstance(DBType.ORACLE).getCarDAO().updateProductCount(carId, productId, productCount);
             } else {
@@ -50,4 +50,11 @@ public class CarManager {
     }
 
 
+    public static Car getCarById(int id) {
+        return DAOFactory.getInstance(DBType.ORACLE).getCarDAO().getCars().get(id);
+    }
+
+    public static boolean isCarExists(int id) {
+        return DAOFactory.getInstance(DBType.ORACLE).getCarDAO().getCars().containsKey(id);
+    }
 }

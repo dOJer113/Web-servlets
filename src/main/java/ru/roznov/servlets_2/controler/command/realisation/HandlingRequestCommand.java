@@ -4,13 +4,12 @@ import ru.roznov.servlets_2.controler.businesCommand.CommandController;
 import ru.roznov.servlets_2.controler.businesCommand.CommandName;
 import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
 import ru.roznov.servlets_2.controler.command.FrontControllerCommand;
+import ru.roznov.servlets_2.model.CarManager;
+import ru.roznov.servlets_2.model.StoreManager;
 import ru.roznov.servlets_2.objects.cars.Car;
-import ru.roznov.servlets_2.objects.cars.CarBase;
-import ru.roznov.servlets_2.objects.cars.DriverIdByCarId;
 import ru.roznov.servlets_2.objects.clients.RoleEnum;
 import ru.roznov.servlets_2.objects.products.ProductEnum;
 import ru.roznov.servlets_2.objects.requests.RequestType;
-import ru.roznov.servlets_2.objects.store.StorageBase;
 import ru.roznov.servlets_2.objects.store.Store;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,8 +25,8 @@ public class HandlingRequestCommand implements FrontControllerCommand {
             HttpSession session = request.getSession();
             if (session.getAttribute("storeId") != null) {
                 int storeId = Integer.parseInt(request.getSession().getAttribute("storeId").toString());
-                Store store = StorageBase.getStoreById(storeId);
-                Car car = CarBase.getCarById(DriverIdByCarId.getCarIdByDriverId(driverId));
+                Store store = StoreManager.getStoreById(storeId);
+                Car car = CarManager.getCarById(CarManager.getCarIdByDriverId(driverId));
                 if (store.isCarAtStore(car)) {
                     commandParameters.addParameter("driverId", driverId);
                     commandParameters.addParameter("product", ProductEnum.valueOf(request.getParameter("productName")));

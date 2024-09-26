@@ -3,13 +3,11 @@ package ru.roznov.servlets_2.objects.requests;
 import ru.roznov.servlets_2.controler.businesCommand.CommandController;
 import ru.roznov.servlets_2.controler.businesCommand.CommandName;
 import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
+import ru.roznov.servlets_2.model.CarManager;
+import ru.roznov.servlets_2.model.StoreManager;
 import ru.roznov.servlets_2.objects.cars.Car;
-import ru.roznov.servlets_2.objects.cars.CarBase;
-import ru.roznov.servlets_2.objects.cars.DriverIdByCarId;
 import ru.roznov.servlets_2.objects.products.ProductEnum;
-import ru.roznov.servlets_2.objects.store.KeeperByStoreId;
-import ru.roznov.servlets_2.objects.store.ProductsBase;
-import ru.roznov.servlets_2.objects.store.StorageBase;
+import ru.roznov.servlets_2.objects.products.ProductsBase;
 import ru.roznov.servlets_2.objects.store.Store;
 
 import java.util.ArrayList;
@@ -30,7 +28,7 @@ public class RequestController {
 
     public static List<AbstractRequest> getAllRequestsForKeeper(int keeperId) {
         List<AbstractRequest> requests = new ArrayList<>();
-        int storeId = KeeperByStoreId.getStoreIdByKeeperId(keeperId);
+        int storeId = StoreManager.getStoreIdByKeeperId(keeperId);
         Iterator<AbstractRequest> iterator = RequestController.requests.iterator();
         while (iterator.hasNext()) {
             AbstractRequest request = iterator.next();
@@ -48,8 +46,8 @@ public class RequestController {
             HandlingRequest fundedRequest = (HandlingRequest) request;
             commandParameters.addParameter("productId", ProductsBase.getIdByProductName(fundedRequest.getProductEnum()));
             commandParameters.addParameter("productCount", fundedRequest.getProductCount());
-            commandParameters.addParameter("storeId", KeeperByStoreId.getStoreIdByKeeperId(commandParameters.getParameter("keeperId", Integer.class)));
-            commandParameters.addParameter("carId", DriverIdByCarId.getCarIdByDriverId(fundedRequest.getDriverId()));
+            commandParameters.addParameter("storeId", StoreManager.getStoreIdByKeeperId(commandParameters.getParameter("keeperId", Integer.class)));
+            commandParameters.addParameter("carId", CarManager.getCarIdByDriverId(fundedRequest.getDriverId()));
             RequestType requestType = fundedRequest.getRequestType();
             if (requestType.equals(RequestType.LOADING_TO_CAR)) {
                 RequestController.confirmLoadingToCarRequest(commandParameters);
@@ -60,9 +58,9 @@ public class RequestController {
     }
 
     public static void confirmLoadingToStoreRequest(CommandParameters commandParameters) {
-        Car car = CarBase.getCarById(commandParameters.getParameter("carId", Integer.class));
+        Car car = CarManager.getCarById(commandParameters.getParameter("carId", Integer.class));
         ProductEnum product = ProductsBase.getProductNameById(commandParameters.getParameter("productId", Integer.class));
-        Store store = StorageBase.getStoreById(commandParameters.getParameter("storeId", Integer.class));
+        Store store = StoreManager.getStoreById(commandParameters.getParameter("storeId", Integer.class));
         CommandParameters negativeCommandParameters = new CommandParameters();
         negativeCommandParameters.addParameter("carId", commandParameters.getParameter("carId", Integer.class));
         negativeCommandParameters.addParameter("productId", commandParameters.getParameter("productId", Integer.class));
@@ -88,9 +86,9 @@ public class RequestController {
         CommandParameters negativeCommandParameters = new CommandParameters();
         negativeCommandParameters.addParameter("storeId", commandParameters.getParameter("storeId", Integer.class));
         negativeCommandParameters.addParameter("productId", commandParameters.getParameter("productId", Integer.class));
-        Car car = CarBase.getCarById(commandParameters.getParameter("carId", Integer.class));
+        Car car = CarManager.getCarById(commandParameters.getParameter("carId", Integer.class));
         ProductEnum product = ProductsBase.getProductNameById(commandParameters.getParameter("productId", Integer.class));
-        Store store = StorageBase.getStoreById(commandParameters.getParameter("storeId", Integer.class));
+        Store store = StoreManager.getStoreById(commandParameters.getParameter("storeId", Integer.class));
         int productCount = commandParameters.getParameter("productCount", Integer.class);
         negativeCommandParameters.addParameter("productCount", -productCount);
         if (store.isCarAtStore(car)) {
@@ -114,7 +112,7 @@ public class RequestController {
         if (!request.equals(new NullRequest())) {
             EntryRequest fundedRequest = (EntryRequest) request;
             commandParameters.addParameter("storeId", fundedRequest.getStoreId());
-            commandParameters.addParameter("carId", DriverIdByCarId.getCarIdByDriverId(fundedRequest.getDriverId()));
+            commandParameters.addParameter("carId", CarManager.getCarIdByDriverId(fundedRequest.getDriverId()));
             CommandController.executeCommand(CommandName.ADD_CAR_TO_STORE, commandParameters);
             RequestController.deleteRequest(commandParameters);
         }

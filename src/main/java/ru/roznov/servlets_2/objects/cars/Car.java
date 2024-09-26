@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class Car implements Comparable {
+public class Car implements Comparable<Car> {
     private Map<ProductEnum, Integer> storage = new ConcurrentHashMap<>();
 
     public void loadProducts(ProductEnum product, int count) {
@@ -25,10 +25,6 @@ public class Car implements Comparable {
         return false;
     }
 
-
-    public Map<ProductEnum, Integer> getProductMap() {
-        return this.storage;
-    }
 
     public void setProductsFromMap(Map<ProductEnum, Integer> productCountMap) {
         productCountMap.forEach(this::loadProducts);
@@ -57,10 +53,9 @@ public class Car implements Comparable {
 
 
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(Car o) {
         int thisTotal = this.storage.values().stream().mapToInt(Integer::intValue).sum();
-        Car other = (Car) o;
-        int otherTotal = other.storage.values().stream().mapToInt(Integer::intValue).sum();
+        int otherTotal = o.storage.values().stream().mapToInt(Integer::intValue).sum();
         return Integer.compare(thisTotal, otherTotal);
     }
 }
