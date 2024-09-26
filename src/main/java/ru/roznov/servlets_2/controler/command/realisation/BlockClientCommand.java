@@ -4,6 +4,8 @@ import ru.roznov.servlets_2.controler.businesCommand.CommandController;
 import ru.roznov.servlets_2.controler.businesCommand.CommandName;
 import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
 import ru.roznov.servlets_2.controler.command.FrontControllerCommand;
+import ru.roznov.servlets_2.controler.command.Page;
+import ru.roznov.servlets_2.controler.command.RedirectEnum;
 import ru.roznov.servlets_2.model.user.UsersSearcher;
 import ru.roznov.servlets_2.objects.clients.Client;
 import ru.roznov.servlets_2.objects.clients.RoleEnum;
@@ -12,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public class BlockClientCommand implements FrontControllerCommand {
     @Override
-    public String execute(HttpServletRequest request) {
+    public Page execute(HttpServletRequest request) {
         RoleEnum role = RoleEnum.valueOf(request.getSession().getAttribute("role").toString());
         if (role == RoleEnum.MODERATOR) {
             String login = request.getParameter("login");
@@ -37,8 +39,8 @@ public class BlockClientCommand implements FrontControllerCommand {
             } catch (Exception e) {
                 System.err.println("Error" + e.getMessage());
             }
-            return "/WEB-INF/view/moder.jsp";
+            return new Page(RedirectEnum.SEND_REDIRECT, "?command=SHOW_SUCCESS");
         }
-        return request.getContextPath() + "/controller?command=LOGIN";
+        return new Page(RedirectEnum.FORWARD, request.getContextPath() + "/controller?command=LOGIN");
     }
 }

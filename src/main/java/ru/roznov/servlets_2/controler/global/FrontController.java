@@ -2,6 +2,8 @@ package ru.roznov.servlets_2.controler.global;
 
 import ru.roznov.servlets_2.controler.command.FrontCommandNames;
 import ru.roznov.servlets_2.controler.command.FrontControllerCommand;
+import ru.roznov.servlets_2.controler.command.Page;
+import ru.roznov.servlets_2.controler.command.RedirectEnum;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,8 +25,8 @@ public class FrontController extends HttpServlet {
         this.processRequest(req, resp);
     }
 
-    private void processRequest(HttpServletRequest request, HttpServletResponse response) {
-        String page;
+    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Page page;
         String commandParam = request.getParameter("command");
         if (commandParam != null && !commandParam.isEmpty()) {
             FrontCommandNames commandName = FrontCommandNames.valueOf(commandParam);
@@ -32,15 +34,17 @@ public class FrontController extends HttpServlet {
             page = command.execute(request);
             if (page != null) {
                 try {
-                    request.getRequestDispatcher(page).forward(request, response);
+                    if (page.getRedirectEnum() == RedirectEnum.FORWARD) {
+                        request.getRequestDispatcher(page.getUrl()).forward(request, response);
+                    } else {
+                        response.sendRedirect("/controller" + page.getUrl());
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } /*else {
-                request.getRequestDispatcher("/WEB-INF/view/error.jsp").forward(request, response);
-            }*/
-        } /*else {
+            }
+        } else {
             request.getRequestDispatcher("/WEB-INF/view/error.jsp").forward(request, response);
-        }*/
+        }
     }
 }

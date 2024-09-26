@@ -76,12 +76,21 @@ public enum FrontCommandNames {
     LOGIN {{
         this.command = new LoginCommand();
     }},
-    UNBLOCK_CLIENT {{
-        this.command = new UnBlockClientCommand();
-    }};
-    FrontControllerCommand command;
+    SHOW_SUCCESS {{
+        this.command = new ShowSuccessCommand();
+
+    }},
+
+    UNBLOCK_CLIENT {
+        {
+            this.command = new UnBlockClientCommand();
+        }
+    }
+
+    ;
+    public FrontControllerCommand command;
 
     public FrontControllerCommand getCommand() {
-        return command;
+        return this.command;
     }
-}
+    }

@@ -4,6 +4,8 @@ import ru.roznov.servlets_2.controler.businesCommand.CommandController;
 import ru.roznov.servlets_2.controler.businesCommand.CommandName;
 import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
 import ru.roznov.servlets_2.controler.command.FrontControllerCommand;
+import ru.roznov.servlets_2.controler.command.Page;
+import ru.roznov.servlets_2.controler.command.RedirectEnum;
 import ru.roznov.servlets_2.model.StoreManager;
 import ru.roznov.servlets_2.objects.clients.RoleEnum;
 import ru.roznov.servlets_2.objects.products.ProductEnum;
@@ -14,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public class AddProductCommand implements FrontControllerCommand {
     @Override
-    public String execute(HttpServletRequest request) {
+    public Page execute(HttpServletRequest request) {
         RoleEnum role = RoleEnum.valueOf(request.getSession().getAttribute("role").toString());
         if (role == RoleEnum.MODERATOR) {
             CommandParameters commandParameters = new CommandParameters();
@@ -33,8 +35,8 @@ public class AddProductCommand implements FrontControllerCommand {
             } else {
                 System.err.println("No such store to add products");
             }
-            return "/WEB-INF/view/moder.jsp";
+            return new Page(RedirectEnum.SEND_REDIRECT, "?command=SHOW_SUCCESS");
         }
-        return request.getContextPath()+"/controller?command=LOGIN";
+        return new Page(RedirectEnum.FORWARD, request.getContextPath() + "/controller?command=LOGIN");
     }
 }

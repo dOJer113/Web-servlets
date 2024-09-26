@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Block User</title>
+    <title>UnBlock User</title>
 </head>
 <body>
 <h2>UnBlocking client</h2>

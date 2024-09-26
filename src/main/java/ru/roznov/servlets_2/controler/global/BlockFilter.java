@@ -21,15 +21,16 @@ public class BlockFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         CommandParameters commandParameters = new CommandParameters();
-        commandParameters.addParameter("login", request.getParameter("login"));
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        String login = httpRequest.getSession().getAttribute("login").toString();
+        commandParameters.addParameter("login", login);
         CommandController.executeCommand(CommandName.IS_CLIENT_BLOCKED, commandParameters);
-        final HttpServletRequest req = (HttpServletRequest) request;
         if (commandParameters.getParameter("block", Boolean.class)) {
             commandParameters.addParameter("role", RoleEnum.BLOCKED);
             commandParameters.addParameter("request", request);
             commandParameters.addParameter("response", response);
             CommandController.executeCommand(CommandName.MOVE_TO_MENU, commandParameters);
-            req.getSession().setAttribute("role", RoleEnum.valueOf("BLOCKED"));
+            httpRequest.getSession().setAttribute("role", RoleEnum.valueOf("BLOCKED"));
         }
         chain.doFilter(request, response);
     }
