@@ -22,7 +22,12 @@ public class BlockFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         CommandParameters commandParameters = new CommandParameters();
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String login = httpRequest.getSession().getAttribute("login").toString();
+        String login = null;
+        try {
+
+            login = httpRequest.getSession().getAttribute("login").toString();
+        } catch (NullPointerException ignored) {
+        }
         commandParameters.addParameter("login", login);
         CommandController.executeCommand(CommandName.IS_CLIENT_BLOCKED, commandParameters);
         if (commandParameters.getParameter("block", Boolean.class)) {
