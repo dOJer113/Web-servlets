@@ -28,5 +28,7 @@ public interface StorageDAO {
 
     void removeCarFromStore(int storeId, int carId);
 
+    int getStoreIdByCarId(int carId);
+
 
 }

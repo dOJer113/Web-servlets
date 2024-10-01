@@ -6,6 +6,8 @@ import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
 import ru.roznov.servlets_2.controler.command.FrontControllerCommand;
 import ru.roznov.servlets_2.controler.command.Page;
 import ru.roznov.servlets_2.controler.command.RedirectEnum;
+import ru.roznov.servlets_2.model.dao.DAOinterfeices.ClientActivityDAO;
+import ru.roznov.servlets_2.model.dao.DAOinterfeices.UsersDAO;
 import ru.roznov.servlets_2.model.user.UsersSearcher;
 import ru.roznov.servlets_2.objects.clients.Client;
 import ru.roznov.servlets_2.objects.clients.RoleEnum;
@@ -18,6 +20,7 @@ import static java.util.Objects.nonNull;
 public class LoginCommand implements FrontControllerCommand {
     @Override
     public Page execute(HttpServletRequest request) {
+        UsersDAO usersDAO = (UsersDAO) request.getServletContext().getAttribute("UsersDAO");
         String login = request.getParameter("login");
         if (login == null) {
             HttpSession session = request.getSession();
@@ -26,7 +29,7 @@ public class LoginCommand implements FrontControllerCommand {
             }
         }
         HttpSession session = request.getSession();
-        Client client = UsersSearcher.getClientByLogin(login);
+        Client client = UsersSearcher.getClientByLogin(login, usersDAO);
         if (client.getId() != 0) {
             final RoleEnum role = client.getRole();
             session.setAttribute("password", request.getParameter("password"));
@@ -34,6 +37,8 @@ public class LoginCommand implements FrontControllerCommand {
             session.setAttribute("role", role);
             session.setAttribute("id", client.getId());
             CommandParameters activateParameters = new CommandParameters();
+            ClientActivityDAO activityDAO = (ClientActivityDAO) request.getServletContext().getAttribute("ActivityDAO");
+            activateParameters.addParameter("ActivityDAO",activityDAO);
             activateParameters.addParameter("id", client.getId());
             CommandController.executeCommand(CommandName.MAKE_CLIENT_ACTIVE, activateParameters);
             return role.getPage();

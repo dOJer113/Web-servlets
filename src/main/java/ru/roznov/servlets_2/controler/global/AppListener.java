@@ -3,6 +3,7 @@ package ru.roznov.servlets_2.controler.global;
 import ru.roznov.servlets_2.controler.businesCommand.CommandController;
 import ru.roznov.servlets_2.controler.businesCommand.CommandName;
 import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
+import ru.roznov.servlets_2.model.dao.DAOinterfeices.ClientActivityDAO;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -24,7 +25,10 @@ public class AppListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        CommandController.executeCommand(CommandName.MAKE_ALL_UN_ACTIVE, new CommandParameters());
+        ClientActivityDAO activityDAO = (ClientActivityDAO) sce.getServletContext().getAttribute("ActivityDAO");
+        CommandParameters commandParameters = new CommandParameters();
+        commandParameters.addParameter("ActivityDAO", activityDAO);
+        CommandController.executeCommand(CommandName.MAKE_ALL_UN_ACTIVE, commandParameters);
         try {
             while (DriverManager.getDrivers().hasMoreElements()) {
                 DriverManager.deregisterDriver(DriverManager.getDrivers().nextElement());

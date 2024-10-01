@@ -5,6 +5,9 @@ import ru.roznov.servlets_2.controler.businesCommand.CommandName;
 import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
 import ru.roznov.servlets_2.model.CarManager;
 import ru.roznov.servlets_2.model.StoreManager;
+import ru.roznov.servlets_2.model.dao.DAOinterfeices.CarDAO;
+import ru.roznov.servlets_2.model.dao.DAOinterfeices.ProductDAO;
+import ru.roznov.servlets_2.model.dao.DAOinterfeices.StorageDAO;
 import ru.roznov.servlets_2.objects.cars.Car;
 import ru.roznov.servlets_2.objects.products.ProductEnum;
 import ru.roznov.servlets_2.objects.products.ProductsBase;
@@ -26,9 +29,9 @@ public class RequestController {
         RequestController.requests.add(request);
     }
 
-    public static List<AbstractRequest> getAllRequestsForKeeper(int keeperId) {
+    public static List<AbstractRequest> getAllRequestsForKeeper(int keeperId, StorageDAO storageDAO) {
         List<AbstractRequest> requests = new ArrayList<>();
-        int storeId = StoreManager.getStoreIdByKeeperId(keeperId);
+        int storeId = StoreManager.getStoreIdByKeeperId(keeperId, storageDAO);
         Iterator<AbstractRequest> iterator = RequestController.requests.iterator();
         while (iterator.hasNext()) {
             AbstractRequest request = iterator.next();
@@ -41,13 +44,16 @@ public class RequestController {
     }
 
     public static void confirmHandlingRequest(CommandParameters commandParameters) {
+        StorageDAO storageDAO = commandParameters.getParameter("StoreDAO", StorageDAO.class);
+        CarDAO carDAO = commandParameters.getParameter("CarDAO", CarDAO.class);
+        ProductDAO productDAO = commandParameters.getParameter("ProductDAO", ProductDAO.class);
         AbstractRequest request = RequestController.getRequestById(commandParameters.getParameter("requestId", Integer.class));
         if (!request.equals(new NullRequest())) {
             HandlingRequest fundedRequest = (HandlingRequest) request;
-            commandParameters.addParameter("productId", ProductsBase.getIdByProductName(fundedRequest.getProductEnum()));
+            commandParameters.addParameter("productId", ProductsBase.getIdByProductName(fundedRequest.getProductEnum(), productDAO));
             commandParameters.addParameter("productCount", fundedRequest.getProductCount());
-            commandParameters.addParameter("storeId", StoreManager.getStoreIdByKeeperId(commandParameters.getParameter("keeperId", Integer.class)));
-            commandParameters.addParameter("carId", CarManager.getCarIdByDriverId(fundedRequest.getDriverId()));
+            commandParameters.addParameter("storeId", StoreManager.getStoreIdByKeeperId(commandParameters.getParameter("keeperId", Integer.class), storageDAO));
+            commandParameters.addParameter("carId", CarManager.getCarIdByDriverId(fundedRequest.getDriverId(), carDAO));
             RequestType requestType = fundedRequest.getRequestType();
             if (requestType.equals(RequestType.LOADING_TO_CAR)) {
                 RequestController.confirmLoadingToCarRequest(commandParameters);
@@ -58,12 +64,18 @@ public class RequestController {
     }
 
     public static void confirmLoadingToStoreRequest(CommandParameters commandParameters) {
-        Car car = CarManager.getCarById(commandParameters.getParameter("carId", Integer.class));
-        ProductEnum product = ProductsBase.getProductNameById(commandParameters.getParameter("productId", Integer.class));
-        Store store = StoreManager.getStoreById(commandParameters.getParameter("storeId", Integer.class));
+        StorageDAO storageDAO = commandParameters.getParameter("StoreDAO", StorageDAO.class);
+        CarDAO carDAO = commandParameters.getParameter("CarDAO", CarDAO.class);
+        ProductDAO productDAO = commandParameters.getParameter("ProductDAO", ProductDAO.class);
+        Car car = CarManager.getCarById(commandParameters.getParameter("carId", Integer.class), carDAO);
+        ProductEnum product = ProductsBase.getProductNameById(commandParameters.getParameter("productId", Integer.class), productDAO);
+        Store store = StoreManager.getStoreById(commandParameters.getParameter("storeId", Integer.class), storageDAO);
         CommandParameters negativeCommandParameters = new CommandParameters();
         negativeCommandParameters.addParameter("carId", commandParameters.getParameter("carId", Integer.class));
         negativeCommandParameters.addParameter("productId", commandParameters.getParameter("productId", Integer.class));
+        negativeCommandParameters.addParameter("StoreDAO",storageDAO);
+        negativeCommandParameters.addParameter("ProductDAO",productDAO);
+        negativeCommandParameters.addParameter("CarDAO",carDAO);
         int productCount = commandParameters.getParameter("productCount", Integer.class);
         negativeCommandParameters.addParameter("productCount", -productCount);
         if (store.isCarAtStore(car)) {
@@ -83,12 +95,18 @@ public class RequestController {
     }
 
     public static void confirmLoadingToCarRequest(CommandParameters commandParameters) {
+        StorageDAO storageDAO = commandParameters.getParameter("StoreDAO", StorageDAO.class);
+        CarDAO carDAO = commandParameters.getParameter("CarDAO", CarDAO.class);
+        ProductDAO productDAO = commandParameters.getParameter("ProductDAO", ProductDAO.class);
         CommandParameters negativeCommandParameters = new CommandParameters();
         negativeCommandParameters.addParameter("storeId", commandParameters.getParameter("storeId", Integer.class));
         negativeCommandParameters.addParameter("productId", commandParameters.getParameter("productId", Integer.class));
-        Car car = CarManager.getCarById(commandParameters.getParameter("carId", Integer.class));
-        ProductEnum product = ProductsBase.getProductNameById(commandParameters.getParameter("productId", Integer.class));
-        Store store = StoreManager.getStoreById(commandParameters.getParameter("storeId", Integer.class));
+        negativeCommandParameters.addParameter("StoreDAO",storageDAO);
+        negativeCommandParameters.addParameter("ProductDAO",productDAO);
+        negativeCommandParameters.addParameter("CarDAO",carDAO);
+        Car car = CarManager.getCarById(commandParameters.getParameter("carId", Integer.class), carDAO);
+        ProductEnum product = ProductsBase.getProductNameById(commandParameters.getParameter("productId", Integer.class), productDAO);
+        Store store = StoreManager.getStoreById(commandParameters.getParameter("storeId", Integer.class), storageDAO);
         int productCount = commandParameters.getParameter("productCount", Integer.class);
         negativeCommandParameters.addParameter("productCount", -productCount);
         if (store.isCarAtStore(car)) {
@@ -108,11 +126,12 @@ public class RequestController {
     }
 
     public static void confirmEntryRequest(CommandParameters commandParameters) {
+        CarDAO carDAO = commandParameters.getParameter("CarDAO", CarDAO.class);
         AbstractRequest request = RequestController.getRequestById(commandParameters.getParameter("requestId", Integer.class));
         if (!request.equals(new NullRequest())) {
             EntryRequest fundedRequest = (EntryRequest) request;
             commandParameters.addParameter("storeId", fundedRequest.getStoreId());
-            commandParameters.addParameter("carId", CarManager.getCarIdByDriverId(fundedRequest.getDriverId()));
+            commandParameters.addParameter("carId", CarManager.getCarIdByDriverId(fundedRequest.getDriverId(), carDAO));
             CommandController.executeCommand(CommandName.ADD_CAR_TO_STORE, commandParameters);
             RequestController.deleteRequest(commandParameters);
         }

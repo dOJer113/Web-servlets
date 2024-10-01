@@ -33,6 +33,25 @@ public class OracleStorageDAO implements StorageDAO {
     }
 
     @Override
+    public int getStoreIdByCarId(int carId) {
+        String sql = "select STOREID from CARS_AT_STORE where CARID = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, carId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    return resultSet.getInt(1);
+                }
+            } catch (NullPointerException e) {
+                ExceptionHandler.handleException("No store with this car", e);
+            }
+        } catch (SQLException e) {
+            ExceptionHandler.handleException("Error getting store id by car id", e);
+        }
+        return 0;
+    }
+
+
+    @Override
     public Map<Integer, Integer> getStoragesIdByKeepersId() {
         Map<Integer, Integer> map = new HashMap<>();
         String sql = "select *\n" +
@@ -139,9 +158,10 @@ public class OracleStorageDAO implements StorageDAO {
     @Override
     public Set<Integer> getCarIdsAtStore(int storeID) {
         Set<Integer> cars = new HashSet<>();
-        String sql = "SELECT * FROM CARS_AT_STORE WHERE STOREID = 1";
+        String sql = "SELECT * FROM CARS_AT_STORE WHERE STOREID = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            try (ResultSet resultSet = statement.executeQuery(sql)) {
+            statement.setInt(1, storeID);
+            try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     int carId = resultSet.getInt(1);
                     cars.add(carId);
@@ -159,10 +179,12 @@ public class OracleStorageDAO implements StorageDAO {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, storeId);
             statement.setInt(2, carId);
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
             statement.executeUpdate();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             ExceptionHandler.handleException("Error loading car to store", e);
         }
+
     }
 
     @Override

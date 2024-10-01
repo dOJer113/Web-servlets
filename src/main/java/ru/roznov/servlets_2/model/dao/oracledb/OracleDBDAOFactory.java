@@ -44,7 +44,6 @@ public class OracleDBDAOFactory extends DAOFactory {
         connection = DriverManager.getConnection(OracleDBDAOFactory.URL, props);
     }
 
-
     @Override
     public UsersDAO getUsersDAO() {
         return new OracleUsersDAO(connection);

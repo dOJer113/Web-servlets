@@ -64,7 +64,7 @@ public class OracleUsersDAO implements UsersDAO {
 
     @Override
     public void insertNewUser(int id, String login, int password, String role) throws SQLException {
-        if (UsersSearcher.isExistsUser(login)) {
+        if (UsersSearcher.isExistsUser(login,this)) {
             throw new SQLException("This login already used");
         }
         String sql = "INSERT INTO users (id,login, password, role) VALUES ( ?, ?, ?,?)";

@@ -1,31 +1,17 @@
 package ru.roznov.servlets_2.objects.store;
 
 import ru.roznov.servlets_2.model.CarManager;
+import ru.roznov.servlets_2.model.dao.DAOinterfeices.DAOFactory;
+import ru.roznov.servlets_2.model.dao.DBType;
 import ru.roznov.servlets_2.objects.cars.Car;
 import ru.roznov.servlets_2.objects.products.ProductEnum;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.*;
 
 
 public class Store {
-    private Map<ProductEnum, Integer> storage = new ConcurrentHashMap<>();
-    private Set<Car> carsAtStorage = new ConcurrentSkipListSet<>();
-
-    public Set<Car> getCarsAtThisStorage() {
-        return this.carsAtStorage;
-    }
-
-    public void addCarToStorage(Car car) {
-        this.carsAtStorage.add(car);
-    }
-
-    public void removeCarFromStorage(Car car) {
-        this.carsAtStorage.remove(car);
-    }
+    private Map<ProductEnum, Integer> storage = new HashMap<>();
+    private Set<Car> carsAtStorage = new HashSet<>();
 
     public void loadProducts(ProductEnum product, int count) {
         if (this.storage.containsKey(product)) {
@@ -44,7 +30,7 @@ public class Store {
     }
 
     public boolean isCarAtStore(Car car) {
-        return this.carsAtStorage.contains(car);
+         return this.carsAtStorage.contains(car);
     }
 
     public Map<ProductEnum, Integer> getProductMap() {
@@ -62,7 +48,7 @@ public class Store {
     public void setCarsAtStorageFromSetIds(Set<Integer> carIds) {
         Iterator<Integer> iterator = carIds.iterator();
         while (iterator.hasNext()) {
-            Car car = CarManager.getCarById(iterator.next());
+            Car car = CarManager.getCarById(iterator.next(), DAOFactory.getInstance(DBType.ORACLE).getCarDAO());
             if (car != null) {
                 this.carsAtStorage.add(car);
             }

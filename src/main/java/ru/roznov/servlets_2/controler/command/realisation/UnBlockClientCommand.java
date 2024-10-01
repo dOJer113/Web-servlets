@@ -6,6 +6,7 @@ import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
 import ru.roznov.servlets_2.controler.command.FrontControllerCommand;
 import ru.roznov.servlets_2.controler.command.Page;
 import ru.roznov.servlets_2.controler.command.RedirectEnum;
+import ru.roznov.servlets_2.model.dao.DAOinterfeices.UsersDAO;
 import ru.roznov.servlets_2.model.user.UsersSearcher;
 import ru.roznov.servlets_2.objects.clients.RoleEnum;
 
@@ -15,6 +16,7 @@ public class UnBlockClientCommand implements FrontControllerCommand {
     @Override
     public Page execute(HttpServletRequest request) {
         RoleEnum role = RoleEnum.valueOf(request.getSession().getAttribute("role").toString());
+        UsersDAO usersDAO = (UsersDAO) request.getServletContext().getAttribute("UsersDAO");
         if (role == RoleEnum.MODERATOR) {
             String login = request.getParameter("login");
             try {
@@ -22,10 +24,10 @@ public class UnBlockClientCommand implements FrontControllerCommand {
                 blockParameters.addParameter("login", login);
                 CommandController.executeCommand(CommandName.IS_CLIENT_BLOCKED, blockParameters);
                 boolean block = blockParameters.getParameter("block", Boolean.class);
-                if (UsersSearcher.isExistsUser(login) || block) {
+                if (UsersSearcher.isExistsUser(login, usersDAO) || block) {
                     if (block) {
                         CommandParameters commandParameters = new CommandParameters();
-                        commandParameters.addParameter("client", UsersSearcher.getClientByLogin(login));
+                        commandParameters.addParameter("client", UsersSearcher.getClientByLogin(login, usersDAO));
                         CommandController.executeCommand(CommandName.UNBLOCK_CLIENT, commandParameters);
                     } else {
                         System.err.println("Client already not blocked");

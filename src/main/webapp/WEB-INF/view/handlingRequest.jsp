@@ -2,10 +2,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Load products to car</title>
+    <title>Products loading</title>
 </head>
 <body>
-<h2>Loading products to car</h2>
+<h2>Products loading</h2>
 <form action="${pageContext.request.contextPath}/controller" method="post">
     <label for="productName">Product Name:</label>
     <select id="productName" name="productName">

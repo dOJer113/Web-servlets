@@ -2,12 +2,12 @@ package ru.roznov.servlets_2.objects.cars;
 
 import ru.roznov.servlets_2.objects.products.ProductEnum;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class Car implements Comparable<Car> {
-    private Map<ProductEnum, Integer> storage = new ConcurrentHashMap<>();
+    private final Map<ProductEnum, Integer> storage = new HashMap<>();
 
     public void loadProducts(ProductEnum product, int count) {
         if (this.storage.containsKey(product)) {
@@ -38,17 +38,18 @@ public class Car implements Comparable<Car> {
         return storage.containsKey(product) && storage.get(product) >= count;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Car)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Car car = (Car) o;
-        return Objects.equals(storage, car.storage);
+        return Objects.equals(this.storage, car.storage);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(storage);
+        return Objects.hash(this.storage);
     }
 
 

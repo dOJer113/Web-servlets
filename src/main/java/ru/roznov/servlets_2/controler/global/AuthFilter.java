@@ -3,6 +3,8 @@ package ru.roznov.servlets_2.controler.global;
 import ru.roznov.servlets_2.controler.businesCommand.CommandController;
 import ru.roznov.servlets_2.controler.businesCommand.CommandName;
 import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
+import ru.roznov.servlets_2.model.dao.DAOinterfeices.DAOFactory;
+import ru.roznov.servlets_2.model.dao.DBType;
 import ru.roznov.servlets_2.objects.clients.RoleEnum;
 
 import javax.servlet.*;
@@ -14,14 +16,17 @@ import static java.util.Objects.nonNull;
 
 public class AuthFilter implements Filter {
 
-    @Override
-    public void init(FilterConfig filterConfig) {
-    }
 
     @Override
     public void doFilter(final ServletRequest request,
                          final ServletResponse response,
                          final FilterChain filterChain) throws ServletException, IOException {
+        DAOFactory daoFactory = DAOFactory.getInstance(DBType.ORACLE);
+        request.getServletContext().setAttribute("UsersDAO", daoFactory.getUsersDAO());
+        request.getServletContext().setAttribute("ActivityDAO", daoFactory.getClientActivityDAO());
+        request.getServletContext().setAttribute("ProductDAO", daoFactory.getProductDAO());
+        request.getServletContext().setAttribute("CarDAO", daoFactory.getCarDAO());
+        request.getServletContext().setAttribute("StoreDAO", daoFactory.getStorageDAO());
         final HttpServletRequest req = (HttpServletRequest) request;
         CommandParameters moveParameters = new CommandParameters();
         moveParameters.addParameter("response", response);

@@ -1,8 +1,9 @@
 package ru.roznov.servlets_2.model;
 
 import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
-import ru.roznov.servlets_2.model.dao.DAOinterfeices.DAOFactory;
-import ru.roznov.servlets_2.model.dao.DBType;
+import ru.roznov.servlets_2.model.dao.DAOinterfeices.CarDAO;
+import ru.roznov.servlets_2.model.dao.DAOinterfeices.ProductDAO;
+import ru.roznov.servlets_2.model.dao.DAOinterfeices.StorageDAO;
 import ru.roznov.servlets_2.objects.cars.Car;
 import ru.roznov.servlets_2.objects.products.ProductEnum;
 import ru.roznov.servlets_2.objects.products.ProductsBase;
@@ -18,44 +19,51 @@ public class StoreManager {
 
 
     public static void deleteKeeper(CommandParameters commandParameters) {
+        StorageDAO storageDAO = commandParameters.getParameter("StoreDAO", StorageDAO.class);
         int keeperId = commandParameters.getParameter("id", Integer.class);
-        DAOFactory.getInstance(DBType.ORACLE).getStorageDAO().deleteStorekeeperFromStoreStorekeeper(keeperId);
+        storageDAO.deleteStorekeeperFromStoreStorekeeper(keeperId);
     }
 
     public static void addNewKeeperWithStore(CommandParameters commandParameters) {
+        StorageDAO storageDAO = commandParameters.getParameter("StoreDAO", StorageDAO.class);
         int keeperId = commandParameters.getParameter("id", Integer.class);
-        DAOFactory.getInstance(DBType.ORACLE).getStorageDAO().addNewKeeperWithStore(keeperId);
+        storageDAO.addNewKeeperWithStore(keeperId);
     }
 
     public static void addCarToStore(CommandParameters commandParameters) {
+        StorageDAO storageDAO = commandParameters.getParameter("StoreDAO", StorageDAO.class);
         int carId = commandParameters.getParameter("carId", Integer.class);
         int storeId = commandParameters.getParameter("storeId", Integer.class);
-        DAOFactory.getInstance(DBType.ORACLE).getStorageDAO().addCarToStore(storeId, carId);
+        storageDAO.addCarToStore(storeId, carId);
     }
 
     public static void removeCarFromStore(CommandParameters commandParameters) {
+        StorageDAO storageDAO = commandParameters.getParameter("StoreDAO", StorageDAO.class);
+        CarDAO carDAO = commandParameters.getParameter("CarDAO", CarDAO.class);
         int carId = commandParameters.getParameter("carId", Integer.class);
         int storeId = commandParameters.getParameter("storeId", Integer.class);
-        Store store = getStoreById(storeId);
-        Car car = CarManager.getCarById(carId);
+        Store store = getStoreById(storeId, storageDAO);
+        Car car = CarManager.getCarById(carId, carDAO);
         if (store.isCarAtStore(car)) {
-            DAOFactory.getInstance(DBType.ORACLE).getStorageDAO().removeCarFromStore(storeId, carId);
+            storageDAO.removeCarFromStore(storeId, carId);
         } else {
             System.err.println("No car at store");
         }
     }
 
     public static void changeCountProductsAtStore(CommandParameters commandParameters) {
+        ProductDAO productDAO = commandParameters.getParameter("ProductDAO", ProductDAO.class);
+        StorageDAO storageDAO = commandParameters.getParameter("StoreDAO", StorageDAO.class);
         int storeId = commandParameters.getParameter("storeId", Integer.class);
         int productId = commandParameters.getParameter("productId", Integer.class);
         int productCount = commandParameters.getParameter("productCount", Integer.class);
-        ProductEnum productName = ProductsBase.getProductNameById(productId);
-        if (isStoreExists(storeId)) {
-            Store store = getStoreById(storeId);
+        ProductEnum productName = ProductsBase.getProductNameById(productId, productDAO);
+        if (isStoreExists(storeId, storageDAO)) {
+            Store store = getStoreById(storeId, storageDAO);
             if (store.isProductAtStore(productName)) {
-                DAOFactory.getInstance(DBType.ORACLE).getStorageDAO().updateProductCount(storeId, productId, productCount);
+                storageDAO.updateProductCount(storeId, productId, productCount);
             } else {
-                DAOFactory.getInstance(DBType.ORACLE).getStorageDAO().addNewProduct(storeId, productId, productCount);
+                storageDAO.addNewProduct(storeId, productId, productCount);
             }
         } else {
             System.err.println("Error changing count products at store");
@@ -63,8 +71,8 @@ public class StoreManager {
     }
 
 
-    public static int getStoreIdByKeeperId(int keeperId) {
-        for (Map.Entry<Integer, Integer> entry : DAOFactory.getInstance(DBType.ORACLE).getStorageDAO().getStoragesIdByKeepersId().entrySet()) {
+    public static int getStoreIdByKeeperId(int keeperId, StorageDAO storageDAO) {
+        for (Map.Entry<Integer, Integer> entry : storageDAO.getStoragesIdByKeepersId().entrySet()) {
             if (entry.getKey().equals(keeperId)) {
                 return entry.getValue();
             }
@@ -72,8 +80,12 @@ public class StoreManager {
         return 0;
     }
 
-    public static boolean isCarAtAnyStore(Car car) {
-        Map<Integer, Store> storeById = DAOFactory.getInstance(DBType.ORACLE).getStorageDAO().getStorages();
+    public static int getStoreIdByCarId(int carId, StorageDAO storageDAO) {
+        return storageDAO.getStoreIdByCarId(carId);
+    }
+
+    public static boolean isCarAtAnyStore(Car car, StorageDAO storageDAO) {
+        Map<Integer, Store> storeById = storageDAO.getStorages();
         Iterator<Integer> iterator = storeById.keySet().iterator();
         while (iterator.hasNext()) {
             Store store = storeById.get(iterator.next());
@@ -84,11 +96,11 @@ public class StoreManager {
         return false;
     }
 
-    public static Store getStoreById(int id) {
-        return DAOFactory.getInstance(DBType.ORACLE).getStorageDAO().getStorages().get(id);
+    public static Store getStoreById(int id, StorageDAO storageDAO) {
+        return storageDAO.getStorages().get(id);
     }
 
-    public static boolean isStoreExists(int id) {
-        return DAOFactory.getInstance(DBType.ORACLE).getStorageDAO().getStorages().containsKey(id);
+    public static boolean isStoreExists(int id, StorageDAO storageDAO) {
+        return storageDAO.getStorages().containsKey(id);
     }
 }

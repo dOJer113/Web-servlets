@@ -8,6 +8,7 @@ public abstract class DAOFactory {
         return dbType.getDAOFactory();
     }
 
+
     public abstract UsersDAO getUsersDAO();
 
     public abstract ClientActivityDAO getClientActivityDAO();

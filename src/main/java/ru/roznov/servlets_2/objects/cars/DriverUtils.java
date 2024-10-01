@@ -1,8 +1,6 @@
 package ru.roznov.servlets_2.objects.cars;
 
 import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
-import ru.roznov.servlets_2.model.CarManager;
-import ru.roznov.servlets_2.model.StoreManager;
 import ru.roznov.servlets_2.objects.products.ProductEnum;
 import ru.roznov.servlets_2.objects.requests.*;
 
@@ -13,11 +11,9 @@ public class DriverUtils {
 
     public static void makeNewEntryRequest(CommandParameters commandParameters) {
         int driverId = commandParameters.getParameter("driverId", Integer.class);
-        Car car = CarManager.getCarById(CarManager.getCarIdByDriverId(driverId));
-        if (!StoreManager.isCarAtAnyStore(car)) {
-            AbstractRequest request = new EntryRequest(driverId, commandParameters.getParameter("storeId", Integer.class));
-            RequestController.addNewRequest(request);
-        }
+        int storeId = commandParameters.getParameter("storeId", Integer.class);
+        AbstractRequest request = new EntryRequest(driverId, storeId);
+        RequestController.addNewRequest(request);
     }
 
     public static void makeNewHandlingRequest(CommandParameters commandParameters) {

@@ -12,5 +12,10 @@
     <input type="hidden" name="command" value="ENTRY_REQUEST">
     <input type="submit" value="Make request">
 </form>
+<% if (request.getAttribute("errorMessage") != null) { %>
+<div style="color: red;">
+    <%= request.getAttribute("errorMessage") %>
+</div>
+<% } %>
 </body>
 </html>

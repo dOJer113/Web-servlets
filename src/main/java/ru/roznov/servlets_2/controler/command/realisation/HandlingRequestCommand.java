@@ -8,6 +8,8 @@ import ru.roznov.servlets_2.controler.command.Page;
 import ru.roznov.servlets_2.controler.command.RedirectEnum;
 import ru.roznov.servlets_2.model.CarManager;
 import ru.roznov.servlets_2.model.StoreManager;
+import ru.roznov.servlets_2.model.dao.DAOinterfeices.CarDAO;
+import ru.roznov.servlets_2.model.dao.DAOinterfeices.StorageDAO;
 import ru.roznov.servlets_2.objects.cars.Car;
 import ru.roznov.servlets_2.objects.clients.RoleEnum;
 import ru.roznov.servlets_2.objects.products.ProductEnum;
@@ -21,14 +23,16 @@ public class HandlingRequestCommand implements FrontControllerCommand {
     @Override
     public Page execute(HttpServletRequest request) {
         RoleEnum role = RoleEnum.valueOf(request.getSession().getAttribute("role").toString());
+        StorageDAO storeDAO = (StorageDAO) request.getServletContext().getAttribute("StoreDAO");
+        CarDAO carDAO = (CarDAO) request.getServletContext().getAttribute("CarDAO");
         if (role == RoleEnum.DRIVER) {
             CommandParameters commandParameters = new CommandParameters();
             int driverId = Integer.parseInt(request.getSession().getAttribute("id").toString());
             HttpSession session = request.getSession();
             if (session.getAttribute("storeId") != null) {
                 int storeId = Integer.parseInt(request.getSession().getAttribute("storeId").toString());
-                Store store = StoreManager.getStoreById(storeId);
-                Car car = CarManager.getCarById(CarManager.getCarIdByDriverId(driverId));
+                Store store = StoreManager.getStoreById(storeId, storeDAO);
+                Car car = CarManager.getCarById(CarManager.getCarIdByDriverId(driverId, carDAO), carDAO);
                 if (store.isCarAtStore(car)) {
                     commandParameters.addParameter("driverId", driverId);
                     commandParameters.addParameter("product", ProductEnum.valueOf(request.getParameter("productName")));
@@ -46,6 +50,6 @@ public class HandlingRequestCommand implements FrontControllerCommand {
             }
             return new Page(RedirectEnum.SEND_REDIRECT, "?command=SHOW_SUCCESS");
         }
-        return new Page(RedirectEnum.FORWARD, request.getContextPath()+"/controller?command=LOGIN");
+        return new Page(RedirectEnum.FORWARD, request.getContextPath() + "/controller?command=LOGIN");
     }
 }

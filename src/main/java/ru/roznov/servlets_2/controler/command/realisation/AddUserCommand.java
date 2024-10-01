@@ -6,6 +6,10 @@ import ru.roznov.servlets_2.controler.businesCommand.CommandParameters;
 import ru.roznov.servlets_2.controler.command.FrontControllerCommand;
 import ru.roznov.servlets_2.controler.command.Page;
 import ru.roznov.servlets_2.controler.command.RedirectEnum;
+import ru.roznov.servlets_2.model.dao.DAOinterfeices.CarDAO;
+import ru.roznov.servlets_2.model.dao.DAOinterfeices.ClientActivityDAO;
+import ru.roznov.servlets_2.model.dao.DAOinterfeices.StorageDAO;
+import ru.roznov.servlets_2.model.dao.DAOinterfeices.UsersDAO;
 import ru.roznov.servlets_2.model.user.UsersSearcher;
 import ru.roznov.servlets_2.objects.clients.RoleEnum;
 
@@ -15,6 +19,9 @@ public class AddUserCommand implements FrontControllerCommand {
     @Override
     public Page execute(HttpServletRequest request) {
         RoleEnum role = RoleEnum.valueOf(request.getSession().getAttribute("role").toString());
+        UsersDAO usersDAO = (UsersDAO) request.getServletContext().getAttribute("UsersDAO");
+        StorageDAO storageDAO = (StorageDAO) request.getServletContext().getAttribute("StoreDAO");
+        CarDAO carDAO = (CarDAO) request.getServletContext().getAttribute("CarDAO");
         if (role == RoleEnum.ADMIN) {
             int id = Integer.parseInt(request.getParameter("id"));
             String login = request.getParameter("login");
@@ -23,7 +30,12 @@ public class AddUserCommand implements FrontControllerCommand {
             commandParameters.addParameter("login", login);
             commandParameters.addParameter("password", Integer.parseInt(request.getParameter("password")));
             commandParameters.addParameter("role", request.getParameter("role"));
-            if (!UsersSearcher.isExistsUser(login) && !UsersSearcher.isExistsUser(id)) {
+            if (!UsersSearcher.isExistsUser(login, usersDAO) && !UsersSearcher.isExistsUser(id, usersDAO)) {
+                commandParameters.addParameter("UsersDAO", usersDAO);
+                ClientActivityDAO activityDAO = (ClientActivityDAO) request.getServletContext().getAttribute("ActivityDAO");
+                commandParameters.addParameter("ActivityDAO", activityDAO);
+                commandParameters.addParameter("StoreDAO", storageDAO);
+                commandParameters.addParameter("CarDAO", carDAO);
                 CommandController.executeCommand(CommandName.ADD_USER_AND_ACTIVITY, commandParameters);
             } else {
                 System.err.println("User already exists");
@@ -31,6 +43,6 @@ public class AddUserCommand implements FrontControllerCommand {
 
             return new Page(RedirectEnum.SEND_REDIRECT, "?command=SHOW_SUCCESS");
         }
-        return new Page( RedirectEnum.FORWARD,request.getContextPath()+"/controller?command=LOGIN");
+        return new Page(RedirectEnum.FORWARD, request.getContextPath() + "/controller?command=LOGIN");
     }
 }
